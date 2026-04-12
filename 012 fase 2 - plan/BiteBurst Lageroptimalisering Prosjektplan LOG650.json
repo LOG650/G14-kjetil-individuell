@@ -1,0 +1,586 @@
+[
+  {
+    "sid": "/sammendrag",
+    "title": "Sammendrag",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/behov",
+        "title": "Behov",
+        "level": 2,
+        "parent": "/sammendrag",
+        "children": []
+      },
+      {
+        "sid": "/sponsor",
+        "title": "Sponsor",
+        "level": 2,
+        "parent": "/sammendrag",
+        "children": []
+      },
+      {
+        "sid": "/kunde",
+        "title": "Kunde",
+        "level": 2,
+        "parent": "/sammendrag",
+        "children": []
+      },
+      {
+        "sid": "/forretningscase",
+        "title": "Forretningscase",
+        "level": 2,
+        "parent": "/sammendrag",
+        "children": [
+          {
+            "sid": "/alternativer",
+            "title": "Alternativer",
+            "level": 3,
+            "parent": "/forretningscase",
+            "children": [
+              {
+                "sid": "/a-status-quo-fortsette-som-før-med-ukjent-lagerbehov-og-fare-for-stockouts-alternativet-er-forkastet",
+                "title": "a) Status quo: fortsette som før med ukjent lagerbehov og fare for stockouts. Alternativet er forkastet.",
+                "level": 4,
+                "parent": "/alternativer",
+                "children": []
+              },
+              {
+                "sid": "/b-ki-støttet-optimalisering-gjennomføre-en-analyse-av-historisk-salgsdata-med-henblikk-på-å-optimalisere-lagerhold-på-utsalgssteder-forslaget-har-en-lav-kostnad-med-potensial-for-innsparinger-forslaget-er-valgt",
+                "title": "b) KI-støttet optimalisering: gjennomføre en analyse av historisk salgsdata med henblikk på å optimalisere lagerhold på utsalgssteder. Forslaget har en lav kostnad, med potensial for innsparinger. Forslaget er valgt.",
+                "level": 4,
+                "parent": "/alternativer",
+                "children": []
+              },
+              {
+                "sid": "/c-full-simulering-av-all-erp-data-med-manuell-modellering-for-optimal-drift-forslaget-er-forkastet-som-dyrt-og-tidkrevende",
+                "title": "c) Full simulering av all ERP-data med manuell modellering for optimal drift. Forslaget er forkastet som dyrt og tidkrevende.",
+                "level": 4,
+                "parent": "/alternativer",
+                "children": []
+              }
+            ]
+          },
+          {
+            "sid": "/forutsetninger",
+            "title": "Forutsetninger",
+            "level": 3,
+            "parent": "/forretningscase",
+            "children": []
+          },
+          {
+            "sid": "/gevinster",
+            "title": "Gevinster",
+            "level": 3,
+            "parent": "/forretningscase",
+            "children": []
+          },
+          {
+            "sid": "/kostnader",
+            "title": "Kostnader",
+            "level": 3,
+            "parent": "/forretningscase",
+            "children": []
+          },
+          {
+            "sid": "/analyse",
+            "title": "Analyse",
+            "level": 3,
+            "parent": "/forretningscase",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "sid": "/omfang",
+    "title": "Omfang",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/mål",
+        "title": "Mål",
+        "level": 2,
+        "parent": "/omfang",
+        "children": []
+      },
+      {
+        "sid": "/krav",
+        "title": "Krav",
+        "level": 2,
+        "parent": "/omfang",
+        "children": []
+      },
+      {
+        "sid": "/løsning",
+        "title": "Løsning",
+        "level": 2,
+        "parent": "/omfang",
+        "children": []
+      },
+      {
+        "sid": "/arbeidsnedbrytningsstruktur",
+        "title": "Arbeidsnedbrytningsstruktur",
+        "level": 2,
+        "parent": "/omfang",
+        "children": []
+      },
+      {
+        "sid": "/omfangsverifikasjon",
+        "title": "Omfangsverifikasjon",
+        "level": 2,
+        "parent": "/omfang",
+        "children": []
+      }
+    ]
+  },
+  {
+    "sid": "/fremdrift",
+    "title": "Fremdrift",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/avhengighetsdiagram",
+        "title": "Avhengighetsdiagram",
+        "level": 2,
+        "parent": "/fremdrift",
+        "children": []
+      },
+      {
+        "sid": "/gantt-plan",
+        "title": "Gantt-plan",
+        "level": 2,
+        "parent": "/fremdrift",
+        "children": []
+      },
+      {
+        "sid": "/kritisk-linje",
+        "title": "Kritisk linje",
+        "level": 2,
+        "parent": "/fremdrift",
+        "children": []
+      },
+      {
+        "sid": "/milepæler",
+        "title": "Milepæler",
+        "level": 2,
+        "parent": "/fremdrift",
+        "children": []
+      }
+    ]
+  },
+  {
+    "sid": "/budsjett",
+    "title": "~~Budsjett~~",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/kostnadsfordeling-per-leveranse",
+        "title": "~~Kostnadsfordeling per leveranse~~",
+        "level": 2,
+        "parent": "/budsjett",
+        "children": []
+      },
+      {
+        "sid": "/ressurskostnader",
+        "title": "~~Ressurskostnader~~",
+        "level": 2,
+        "parent": "/budsjett",
+        "children": []
+      },
+      {
+        "sid": "/kostnadskurve",
+        "title": "~~Kostnadskurve~~",
+        "level": 2,
+        "parent": "/budsjett",
+        "children": []
+      }
+    ]
+  },
+  {
+    "sid": "/risiko",
+    "title": "Risiko",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/prosess-for-risikostyring",
+        "title": "Prosess for risikostyring",
+        "level": 2,
+        "parent": "/risiko",
+        "children": []
+      },
+      {
+        "sid": "/risikoregister",
+        "title": "Risikoregister",
+        "level": 2,
+        "parent": "/risiko",
+        "children": []
+      }
+    ]
+  },
+  {
+    "sid": "/saker",
+    "title": "Saker",
+    "level": 1,
+    "children": []
+  },
+  {
+    "sid": "/interessenter",
+    "title": "Interessenter",
+    "level": 1,
+    "children": []
+  },
+  {
+    "sid": "/ressurser",
+    "title": "Ressurser",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/prosjektteam",
+        "title": "Prosjektteam",
+        "level": 2,
+        "parent": "/ressurser",
+        "children": []
+      },
+      {
+        "sid": "/ressursbelastning",
+        "title": "Ressursbelastning",
+        "level": 2,
+        "parent": "/ressurser",
+        "children": []
+      },
+      {
+        "sid": "/kritiske-ressurser",
+        "title": "Kritiske ressurser",
+        "level": 2,
+        "parent": "/ressurser",
+        "children": []
+      }
+    ]
+  },
+  {
+    "sid": "/kommunikasjon",
+    "title": "Kommunikasjon",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/ukentlige-saksstatusmøter",
+        "title": "Ukentlige saksstatusmøter",
+        "level": 2,
+        "parent": "/kommunikasjon",
+        "children": []
+      },
+      {
+        "sid": "/månedlige-prosjektgjennomganger",
+        "title": "Månedlige prosjektgjennomganger",
+        "level": 2,
+        "parent": "/kommunikasjon",
+        "children": []
+      },
+      {
+        "sid": "/møter-i-endringskontrollstyret",
+        "title": "Møter i endringskontrollstyret",
+        "level": 2,
+        "parent": "/kommunikasjon",
+        "children": []
+      },
+      {
+        "sid": "/annen-kommunikasjon",
+        "title": "Annen kommunikasjon",
+        "level": 2,
+        "parent": "/kommunikasjon",
+        "children": []
+      }
+    ]
+  },
+  {
+    "sid": "/kvalitet",
+    "title": "Kvalitet",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/1-planlegging-kvalitet-må-planlegges-inn-ikke-inspiseres-inn-selv-om-alt-prosjektarbeid-skal-inspiseres-og-testes-ved-ferdigstillelse-skal-kvalitet-bygges-inn-i-arbeidet-av-teamene-mens-det-utføres",
+        "title": "1. Planlegging. «Kvalitet må planlegges inn, ikke inspiseres inn». Selv om alt prosjektarbeid skal inspiseres og testes ved ferdigstillelse, skal kvalitet bygges inn i arbeidet av teamene mens det utføres.",
+        "level": 2,
+        "parent": "/kvalitet",
+        "children": []
+      },
+      {
+        "sid": "/2-gevinst-kvalitetsmessig-gode-deler-og-prosesser-reduserer-samlet-kostnad-og-tidsbruk-fordi-de-øker-effektiviteten-reduserer-behovet-for-testing-reduserer-akseptanse--og-sertifiseringsutfordringer-og-reduserer-uforutsette-problemer-når-løsningen-er-i-drift",
+        "title": "2. Gevinst. Kvalitetsmessig gode deler og prosesser reduserer samlet kostnad og tidsbruk, fordi de øker effektiviteten, reduserer behovet for testing, reduserer akseptanse- og sertifiseringsutfordringer, og reduserer uforutsette problemer når løsningen er i drift.",
+        "level": 2,
+        "parent": "/kvalitet",
+        "children": []
+      },
+      {
+        "sid": "/3-kontinuerlig-forbedring-the-team-will-gather-lessons-learned-throughout-the-prosjekt-to-continuously-build-on-incremental-improvement-as-the-work-progresses",
+        "title": "3. Kontinuerlig forbedring. The team will gather lessons learned throughout the prosjekt to continuously build on incremental improvement as the work progresses.",
+        "level": 2,
+        "parent": "/kvalitet",
+        "children": []
+      },
+      {
+        "sid": "/4-egnet-for-formålet-alle-prosjektleveranser-må-være-egnet-for-formålet-dvs-faktisk-kunne-utføre-jobben-de-er-ment-for-og-fullt-ut-tilfredsstille-kundens-behov-dette-kravet-skal-også-inngå-i-de-formelle-vilkårene-terms-and-conditions-i-alle-leverandørkontrakter",
+        "title": "4. Egnet for formålet. Alle prosjektleveranser må være «egnet for formålet», dvs. faktisk kunne utføre jobben de er ment for og fullt ut tilfredsstille kundens behov. Dette kravet skal også inngå i de formelle vilkårene (Terms and Conditions) i alle leverandørkontrakter.",
+        "level": 2,
+        "parent": "/kvalitet",
+        "children": []
+      },
+      {
+        "sid": "/fagfellevurderinger",
+        "title": "Fagfellevurderinger",
+        "level": 2,
+        "parent": "/kvalitet",
+        "children": [
+          {
+            "sid": "/uformelle-fagfellevurderinger",
+            "title": "Uformelle fagfellevurderinger.",
+            "level": 3,
+            "parent": "/fagfellevurderinger",
+            "children": [
+              {
+                "sid": "/1-eier-av-hver-leveranse-som-overleveres-til-andre-i-prosjektet-skal-sikre-at-leveransen-har-vært-gjennom-en-fagfellevurdering-før-den-ferdigstilles",
+                "title": "1. Eier av hver leveranse som overleveres til andre i prosjektet skal sikre at leveransen har vært gjennom en fagfellevurdering før den ferdigstilles.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/2-for-store-arbeidspakker-skal-det-gjennomføres-flere-fagfellevurderinger-gjennom-utviklingsprosessen-av-leveransen-slik-at-hver-enkelt-review-krever-håndterlig-innsats-som-tommelfingerregel-bør-hver-review-kreve-høyst-én-time-per-reviewer",
+                "title": "2. For store arbeidspakker skal det gjennomføres flere fagfellevurderinger gjennom utviklingsprosessen av leveransen, slik at hver enkelt review krever håndterlig innsats. Som tommelfingerregel bør hver review kreve høyst én time per reviewer.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/3-en-fagfellevurdering-bør-inkludere-to-eller-tre-fagfeller-for-å-gi-en-helhetlig-vurdering-fra-mer-enn-ett-perspektiv",
+                "title": "3. En fagfellevurdering bør inkludere to eller tre fagfeller for å gi en helhetlig vurdering fra mer enn ett perspektiv.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/4-der-det-er-mulig-skal-leveranse-eier-holde-ett-konsolideringsmøte-med-alle-fagfellene-for-å-samle-et-konsolidert-sett-med-kommentarer-og-for-å-legge-til-rette-for-at-fagfellene-kan-kommentere-på-hverandres-anbefalinger",
+                "title": "4. Der det er mulig skal leveranse-eier holde ett konsolideringsmøte med alle fagfellene for å samle et konsolidert sett med kommentarer og for å legge til rette for at fagfellene kan kommentere på hverandres anbefalinger.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/5-leveranse-eier-kan-stille-oppfølgingsspørsmål-for-å-avklare-en-kommentar-men-skal-avstå-fra-å-diskutereargumentere-mot-nøyaktigheten-i-kommentaren-slik-at-konsolideringsmøtet-forblir-fokusert-på-å-samle-inn-et-komplett-sett-med-kommentarer-for-å-sikre-fokus-på-denne-sentrale-egenskapen-ved-uformelle-fagfellevurderinger-skal-leveranse-eier-si-takk-etter-mottak-av-hver-kommentar",
+                "title": "5. Leveranse-eier kan stille oppfølgingsspørsmål for å avklare en kommentar, men skal avstå fra å diskutere/argumentere mot nøyaktigheten i kommentaren slik at konsolideringsmøtet forblir fokusert på å samle inn et komplett sett med kommentarer. For å sikre fokus på denne sentrale egenskapen ved uformelle fagfellevurderinger, skal leveranse-eier si «Takk» etter mottak av hver kommentar.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/6-eier-av-leveransen-kan-deretter-innarbeide-kommentaren-i-en-revisjon-av-leveransen-eller-forkaste-kommentaren-etter-eget-faglig-skjønn",
+                "title": "6. Eier av leveransen kan deretter innarbeide kommentaren i en revisjon av leveransen, eller forkaste kommentaren etter eget faglig skjønn.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/7-det-kreves-ingen-formelle-protokoller-for-uformelle-fagfellevurderinger-men-leveranse-eier-må-beholde-en-oversikt-over-fagfellenes-kommentarer-i-egne-arkiver-til-prosjektet-er-levert-i-tilfelle-dokumentasjonen-senere-skulle-bli-etterspurt",
+                "title": "7. Det kreves ingen formelle protokoller for uformelle fagfellevurderinger, men leveranse-eier må beholde en oversikt over fagfellenes kommentarer i egne arkiver til prosjektet er levert, i tilfelle dokumentasjonen senere skulle bli etterspurt.",
+                "level": 4,
+                "parent": "/uformelle-fagfellevurderinger",
+                "children": []
+              }
+            ]
+          },
+          {
+            "sid": "/formelle-fagfellevurderinger",
+            "title": "Formelle fagfellevurderinger",
+            "level": 3,
+            "parent": "/fagfellevurderinger",
+            "children": [
+              {
+                "sid": "/1-qa-organisasjonen-skal-sikre-at-hver-leveranse-med-helse--sikkerhets--eller-juridiske-krav-har-gjennomført-en-formell-fagfellevurdering-før-den-ferdigstilles-en-qa-representant-skal-administrere-hver-formelle-fagfellevurderingsprosess",
+                "title": "1. QA-organisasjonen skal sikre at hver leveranse med helse-, sikkerhets- eller juridiske krav har gjennomført en formell fagfellevurdering før den ferdigstilles. En QA-representant skal administrere hver formelle fagfellevurderingsprosess.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/2-for-store-arbeidspakker-skal-det-gjennomføres-flere-formelle-fagfellevurderinger-gjennom-utviklingsprosessen-av-leveransen-slik-at-hver-enkelt-review-krever-håndterlig-innsats-fra-hver-reviewer",
+                "title": "2. For store arbeidspakker skal det gjennomføres flere formelle fagfellevurderinger gjennom utviklingsprosessen av leveransen, slik at hver enkelt review krever håndterlig innsats fra hver reviewer.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/3-en-formell-fagfellevurdering-bør-omfatte-tre-til-fem-fagfeller-for-å-gi-en-helhetlig-vurdering-fra-mer-enn-ett-perspektiv-fagfellene-bør-så-langt-som-mulig-velges-utenfor-prosjektteamet-for-å-sikre-en-full-og-upartisk-vurdering",
+                "title": "3. En formell fagfellevurdering bør omfatte tre til fem fagfeller for å gi en helhetlig vurdering fra mer enn ett perspektiv. Fagfellene bør så langt som mulig velges utenfor prosjektteamet for å sikre en full og upartisk vurdering.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/4-kvalitetssikring-qa-skal-innkalle-til-og-lede-ett-konsolideringsmøte-med-alle-fagfellene-for-å-samle-et-konsolidert-sett-av-avvikpunkter-og-for-å-legge-til-rette-for-kommentarer-på-hverandres-anbefalinger-det-er-ingen-fast-varighet-for-et-slikt-konsolideringsmøte-ved-formell-fagfellevurdering-qa-representanten-skal-registrere-og-følge-opp-den-konsoliderte-listen-fra-kommentar-til-løsning",
+                "title": "4. Kvalitetssikring (QA) skal innkalle til og lede ett konsolideringsmøte med alle fagfellene for å samle et konsolidert sett av avvik/punkter og for å legge til rette for kommentarer på hverandres anbefalinger. Det er ingen fast varighet for et slikt konsolideringsmøte ved formell fagfellevurdering. QA-representanten skal registrere og følge opp den konsoliderte listen fra kommentar til løsning.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/5-leveranse-eier-kan-stille-oppfølgingsspørsmål-til-en-fagfelle-for-å-avklare-avvik-og-kan-gi-tilleggsinformasjon-dersom-vedkommende-mener-at-et-punkt-ikke-er-korrekt-ved-uenighet-mellom-leveranse-eier-eller-fagfeller-om-riktigheten-av-et-punkt-skal-qa-representanten-be-om-avstemning-blant-fagfellene-uten-leveranse-eier-der-qa-representanten-avgjør-ved-stemmelikhet-stemmegivningen-til-hvert-medlem-i-omstridte-saker-uavhengig-av-om-saken-får-flertall-skal-registreres-i-avviksloggen-for-eventuell-senere-oppfølging-qa-representanten-kan-etter-eget-skjønn-registrere-et-punkt-for-oppfølging-dersom-det-vurderes-som-berettiget-selv-om-det-ikke-fikk-flertall",
+                "title": "5. Leveranse-eier kan stille oppfølgingsspørsmål til en fagfelle for å avklare avvik, og kan gi tilleggsinformasjon dersom vedkommende mener at et punkt ikke er korrekt. Ved uenighet mellom leveranse-eier eller fagfeller om riktigheten av et punkt, skal QA-representanten be om avstemning blant fagfellene (uten leveranse-eier), der QA-representanten avgjør ved stemmelikhet. Stemmegivningen til hvert medlem i omstridte saker, uavhengig av om saken får flertall, skal registreres i avviksloggen for eventuell senere oppfølging. QA-representanten kan etter eget skjønn registrere et punkt for oppfølging dersom det vurderes som berettiget, selv om det ikke fikk flertall.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/6-hvert-punkt-som-er-avtalt-vedtatt-ved-flertall-eller-tatt-inn-etter-qa-representantens-skjønn-skal-deretter-vurderes-av-leveranse-eier-og-håndteres-på-en-hensiktsmessig-måte-enten-ved-revisjon-av-leveransen-eller-ved-å-gi-relevant-tilleggsinformasjon-som-ikke-var-tilgjengelig-under-konsolideringsmøtet-hver-løsningtilbakemelding-skal-gjennomgås-av-de-opprinnelige-fagfellene-for-godkjenning-qa-representanten-vil-normalt-følge-den-opprinnelige-fagfellens-vurdering-av-om-løsningen-er-tilstrekkelig-dersom-enighet-ikke-oppnås-kan-qa-representanten-likevel-godkjenne-et-punkt-som-løst-dersom-dette-vurderes-som-hensiktsmessig-forutsatt-at-beslutningen-godkjennes-av-qa-direktøren",
+                "title": "6. Hvert punkt som er avtalt, vedtatt ved flertall, eller tatt inn etter QA-representantens skjønn, skal deretter vurderes av leveranse-eier og håndteres på en hensiktsmessig måte enten ved revisjon av leveransen eller ved å gi relevant tilleggsinformasjon som ikke var tilgjengelig under konsolideringsmøtet. Hver løsning/tilbakemelding skal gjennomgås av de opprinnelige fagfellene for godkjenning. QA-representanten vil normalt følge den opprinnelige fagfellens vurdering av om løsningen er tilstrekkelig. Dersom enighet ikke oppnås, kan QA-representanten likevel godkjenne et punkt som løst dersom dette vurderes som hensiktsmessig, forutsatt at beslutningen godkjennes av QA-direktøren.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              },
+              {
+                "sid": "/7-formelle-protokoller-fra-alle-fagfellevurderinger-og-tilhørende-løsnings-korrigeringshandlinger-skal-arkiveres-i-qa-arkivet-i-minst-fem-år-etter-at-prosjektet-er-avsluttet",
+                "title": "7. Formelle protokoller fra alle fagfellevurderinger og tilhørende løsnings-/korrigeringshandlinger skal arkiveres i QA-arkivet i minst fem år etter at prosjektet er avsluttet.",
+                "level": 4,
+                "parent": "/formelle-fagfellevurderinger",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "sid": "/brukerreviews",
+        "title": "Brukerreviews",
+        "level": 2,
+        "parent": "/kvalitet",
+        "children": [
+          {
+            "sid": "/1-når-leveranseutkast-bygg-versjoner-inkrementer-eller-sprinter-ferdigstilles-skal-det-gjennomføres-en-brukerreview-med-aktuell-brukergruppe-leveranseteamet-vil-presentere-arbeidet-som-er-underveis-til-brukergruppen-ved-hjelp-av-presentasjoner-gjennomganger-demonstrasjoner-prototyper-og-mockups-der-det-er-hensiktsmessig",
+            "title": "1. Når leveranseutkast, bygg, versjoner, inkrementer eller sprinter ferdigstilles, skal det gjennomføres en brukerreview med aktuell brukergruppe. Leveranseteamet vil presentere arbeidet som er underveis til brukergruppen ved hjelp av presentasjoner, gjennomganger, demonstrasjoner, prototyper og mockups der det er hensiktsmessig.",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          },
+          {
+            "sid": "/2-brukerkommentarer-skal-samles-inn-av-brukergruppeleder-i-en-review-tabell-for-eksempel-ved-bruk-av-malen-i-vedlegg-e",
+            "title": "2. Brukerkommentarer skal samles inn av brukergruppeleder i en review-tabell, for eksempel ved bruk av malen i vedlegg E.",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          },
+          {
+            "sid": "/3-etter-at-alle-kommentarer-er-samlet-inn-under-ledelse-av-brukergruppeleder-skal-brukerne-fylle-inn-kolonnen-brukerprioritet-for-å-prioritere-kommentarene-sine-ved-hjelp-av-følgende-kategorier",
+            "title": "3. Etter at alle kommentarer er samlet inn, under ledelse av brukergruppeleder, skal brukerne fylle inn kolonnen «Brukerprioritet» for å prioritere kommentarene sine ved hjelp av følgende kategorier:",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          },
+          {
+            "sid": "/4-i-et-separat-møte-ledet-av-leveranse-eier-og-med-deltakelse-fra-delprosjektleder-og-prosjektleder-ved-behov-vil-prosjektgruppen-gjennomgå-brukerprioriteringene-og-fylle-inn-kolonnen-prosjektprioritet-etter-samme-prioritetsskala-for-å-bidra-med-prosjektets-vurdering-av-beste-prioritering-sett-i-lys-av-sannsynlige-omfangs--fremdrifts--og-budsjettkonsekvenser",
+            "title": "4. I et separat møte, ledet av leveranse-eier og med deltakelse fra delprosjektleder og prosjektleder ved behov, vil prosjektgruppen gjennomgå brukerprioriteringene og fylle inn kolonnen «Prosjektprioritet» etter samme prioritetsskala, for å bidra med prosjektets vurdering av beste prioritering sett i lys av sannsynlige omfangs-, fremdrifts- og budsjettkonsekvenser.",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          },
+          {
+            "sid": "/5-prosjektgruppen-skal-levere-brukertabellen-tilbake-til-brukergruppeleder-tilleggsdialog-som-kreves-for-å-etablere-baseline-bruker--og-prosjektprioriteringer-skal-gjennomføres-ved-behov-tabellen-skal-deretter-sendes-til-prosjektsponsor-for-å-ferdigstille-kolonnen-sponsorbeslutning-som-viser-hvilke-punkter-som-skal-vurderes-for-mulig-inkludering-i-prosjektet",
+            "title": "5. Prosjektgruppen skal levere brukertabellen tilbake til brukergruppeleder. Tilleggsdialog som kreves for å etablere (baseline) bruker- og prosjektprioriteringer skal gjennomføres ved behov. Tabellen skal deretter sendes til prosjektsponsor for å ferdigstille kolonnen «Sponsorbeslutning», som viser hvilke punkter som skal vurderes for mulig inkludering i prosjektet.",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          },
+          {
+            "sid": "/6-prioritet-1-punktene-som-sponsoren-identifiserer-skal-deretter-føres-inn-i-endringskontrollprosessen-for-å-gjennomføre-en-full-konsekvensanalyse-av-foreslått-endring-endringen-skal-inkluderes-i-prosjektet-og-arbeid-igangsettes-bare-dersom-endringskontrollprosessen-ender-med-en-sponsorbeslutning-om-å-implementere-kommentaren-med-full-forståelse-av-tids--og-kostnadskonsekvenser-og-nødvendig-kommunikasjon-til-alle-berørte-parter-er-gjennomført",
+            "title": "6. Prioritet 1-punktene som sponsoren identifiserer, skal deretter føres inn i endringskontrollprosessen for å gjennomføre en full konsekvensanalyse av foreslått endring. Endringen skal inkluderes i prosjektet, og arbeid igangsettes, bare dersom endringskontrollprosessen ender med en sponsorbeslutning om å implementere kommentaren med full forståelse av tids- og kostnadskonsekvenser, og nødvendig kommunikasjon til alle berørte parter er gjennomført.",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          },
+          {
+            "sid": "/7-prosjektgruppen-og-brukergruppene-skal-gjennomføre-hver-iterasjon-av-brukerreview-så-raskt-som-mulig-for-å-minimere-konsekvensene-av-nødvendige-endringer-målet-er-å-ha-en-ferdigstilt-brukertabell-for-presentasjon-til-sponsor-innen-fire-dager-etter-avsluttet-review-og-at-analyse-av-endringskonsekvensene-for-sponsor-foreslåtte-endringer-er-fullført-innen-åtte-dager",
+            "title": "7. Prosjektgruppen og brukergruppene skal gjennomføre hver iterasjon av brukerreview så raskt som mulig for å minimere konsekvensene av nødvendige endringer. Målet er å ha en ferdigstilt brukertabell for presentasjon til sponsor innen fire dager etter avsluttet review, og at analyse av endringskonsekvensene for sponsor-foreslåtte endringer er fullført innen åtte dager.",
+            "level": 3,
+            "parent": "/brukerreviews",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "sid": "/anskaffelser",
+    "title": "Anskaffelser",
+    "level": 1,
+    "children": []
+  },
+  {
+    "sid": "/endringskontrollprosess",
+    "title": "Endringskontrollprosess",
+    "level": 1,
+    "children": [
+      {
+        "sid": "/1-først-må-endringen-dokumenteres-formelt-i-et-endringsforespørselsskjema-hvor-en-kopi-er-gitt-i-vedlegg-f-for-enkelhets-skyld",
+        "title": "1. Først må endringen dokumenteres formelt i et endringsforespørselsskjema, hvor en kopi er gitt i vedlegg F for enkelhets skyld.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/2-dersom-endringen-er-akutt-nødvendig-på-grunn-av-umiddelbar-risiko-for-prosjektets-suksess-eller-umiddelbar-påvirkning-på-helse-sikkerhet-sikring-eller-juridisk-etterlevelse-kan-prosjektleder-autorisere-endringen-umiddelbart-og-deretter-følge-opp-med-en-full-konsekvensanalyse-og-kommunikasjon-med-sponsor-kunde-og-andre-relevante-parter-så-snart-det-er-praktisk-mulig",
+        "title": "2. Dersom endringen er akutt nødvendig på grunn av umiddelbar risiko for prosjektets suksess eller umiddelbar påvirkning på helse, sikkerhet, sikring eller juridisk etterlevelse, kan prosjektleder autorisere endringen umiddelbart og deretter følge opp med en full konsekvensanalyse og kommunikasjon med sponsor, kunde og andre relevante parter så snart det er praktisk mulig.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/3-ellers-skal-det-innkalles-til-et-møte-i-endringskontrollstyret-ccb-for-å-evaluere-endringen-med-bred-deltakelse-fra-alle-parter-som-kan-være-berørt-inkludert-representanter-fra-alle-prosjektets-kjerne--og-støttefunksjoner-hovedformålet-med-dette-første-møtet-er-utelukkende-å-identifisere-alle-mulige-påvirkningsområder-prosjektleder-skal-lede-møtet",
+        "title": "3. Ellers skal det innkalles til et møte i endringskontrollstyret (CCB) for å evaluere endringen med bred deltakelse fra alle parter som kan være berørt, inkludert representanter fra alle prosjektets kjerne- og støttefunksjoner. Hovedformålet med dette første møtet er utelukkende å identifisere alle mulige påvirkningsområder. Prosjektleder skal lede møtet.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/4-en-person-som-er-nærmest-endringen-skal-deretter-utpekes-til-å-følge-opp-etter-første-møte-for-å-fullføre-en-analyse-og-fastslå-den-samlede-effekten-av-endringen-på-omfang-fremdriftsplan-budsjett-risiko-anskaffelser-og-andre-berørte-prosjektelementer-muligheter-og-alternativer-for-å-håndtere-endringen-skal-vurderes-oppdatert-krav-baseline-arbeidsnedbrytningsstruktur-wbs-avhengighetsdiagram-precedence-diagram-estimater-gantt-plan-og-risikoregister-skal-utarbeides-for-endringen-og-eventuelle-alternativer-ved-behov",
+        "title": "4. En person som er nærmest endringen skal deretter utpekes til å følge opp etter første møte for å fullføre en analyse og fastslå den samlede effekten av endringen på omfang, fremdriftsplan, budsjett, risiko, anskaffelser og andre berørte prosjektelementer. Muligheter og alternativer for å håndtere endringen skal vurderes. Oppdatert krav-baseline, arbeidsnedbrytningsstruktur (WBS), avhengighetsdiagram (precedence diagram), estimater, Gantt-plan og risikoregister skal utarbeides for endringen og eventuelle alternativer ved behov.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/5-endringskontrollstyret-skal-deretter-samles-på-nytt-for-å-vurdere-konsekvensene-av-endringen-og-velge-beste-alternativ-dersom-mer-enn-én-løsning-er-mulig",
+        "title": "5. Endringskontrollstyret skal deretter samles på nytt for å vurdere konsekvensene av endringen og velge beste alternativ dersom mer enn én løsning er mulig.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/6-dersom-endringskontrollstyret-vurderer-endringen-som-nødvendig-eller-på-annen-måte-nyttig-og-den-ikke-påvirker-baselinet-omfang-fremdriftsplan-budsjett-eller-risikobudsjett-godkjent-av-sponsor-kan-prosjektleder-autorisere-endringen",
+        "title": "6. Dersom endringskontrollstyret vurderer endringen som nødvendig eller på annen måte nyttig, og den ikke påvirker baselinet omfang, fremdriftsplan, budsjett eller risikobudsjett godkjent av sponsor, kan prosjektleder autorisere endringen.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/7-dersom-endringen-påvirker-baselined-omfang-fremdriftsplan-budsjett-eller-risikobudsjett-som-er-godkjent-av-sponsor-skal-endringskontrollstyret-etter-godkjenning-fra-prosjektleder-utarbeide-en-anbefaling-og-sende-den-til-sponsor-for-vurdering-endringen-skal-ikke-igangsettes-før-formell-skriftlig-godkjenning-fra-sponsor-foreligger",
+        "title": "7. Dersom endringen påvirker baselined omfang, fremdriftsplan, budsjett eller risikobudsjett som er godkjent av sponsor, skal endringskontrollstyret, etter godkjenning fra prosjektleder, utarbeide en anbefaling og sende den til sponsor for vurdering. Endringen skal ikke igangsettes før formell skriftlig godkjenning fra sponsor foreligger.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/8-når-en-endring-i-omfang-medfører-økning-i-baselinet-fremdriftsplan-og-budsjett-skal-det-alltid-vurderes-alternativer-for-å-fjerne-kompenserende-omfang-for-å-minimere-konsekvensene-og-disse-alternativene-skal-presenteres-for-sponsor-og-kunde-der-det-er-relevant",
+        "title": "8. Når en endring i omfang medfører økning i baselinet fremdriftsplan og budsjett, skal det alltid vurderes alternativer for å fjerne kompenserende omfang for å minimere konsekvensene, og disse alternativene skal presenteres for sponsor og kunde der det er relevant.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      },
+      {
+        "sid": "/9-når-det-er-fattet-en-beslutning-om-endringen-skal-begrunnelsen-for-beslutningen-og-all-relevant-dokumentasjon-lagres-i-endringsloggens-change-control-log-arkiv-hvis-endringen-godkjennes-skal-all-nødvendig-prosjektdokumentasjon-oppdateres-og-alle-relevante-parter-skal-informeres-i-tide",
+        "title": "9. Når det er fattet en beslutning om endringen, skal begrunnelsen for beslutningen og all relevant dokumentasjon lagres i endringsloggens (Change Control Log) arkiv. Hvis endringen godkjennes, skal all nødvendig prosjektdokumentasjon oppdateres, og alle relevante parter skal informeres i tide.",
+        "level": 2,
+        "parent": "/endringskontrollprosess",
+        "children": []
+      }
+    ]
+  }
+]
