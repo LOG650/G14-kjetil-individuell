@@ -25,7 +25,7 @@
       "owner": "Kjetil Lund",
       "deliverable": "Optimaliserings-modell",
       "status": "Under arbeid",
-      "notes": "Sikkerhetslager må dekke variasjon (stdev) over planleggingshorisonten på 7 dager. Særlig høy stdev observert for French (LM: 2178), Kebaba (LM: 2009) og Hotdog (HK: 1645) – disse krever ekstra oppmerksomhet."
+      "notes": "Sikkerhetslager må dekke variasjon (stdev) over planleggingshorisonten på 7 dager. Etter datarensing er stdev for French LM: 376, Kebaba LM: 140, Hotdog HK: 77 – alle nå innenfor normale rammer. French og Hotdog i øvrige butikker har fortsatt moderat stdev (200–415) og bør håndteres med tilstrekkelig sikkerhetslager."
     },
     {
       "id": "K4",
@@ -42,8 +42,8 @@
       "description": "Salgsdata skal være komplett og uten mangler",
       "owner": "Kjetil Lund",
       "deliverable": "Strukturert datasett",
-      "status": "Delvis oppfylt",
-      "notes": "Data er komplett (101 observasjoner per fil). Det er imidlertid observert ekstemverdier som trolig skyldes registreringsfeil: French LM maks 23 330 (mean 2087), Kebaba LM maks 22 360 (mean 2523), Hotdog HK maks 18 235 (mean 1968), Kebaba GM min 184 (mean 1924). Disse bør renses eller flagges før modellering."
+      "status": "Oppfylt",
+      "notes": "Data er komplett og verifisert. 101 sammenhengende observasjoner (dag 1–101) for alle fem datakilder. Alle dagsrekker er normalisert til dag 1–101. Tidligere identifiserte registreringsfeil er rettet av datainnhenter. Warehouse-toppene dag 1–3 (Pizza, Soda, Ice Cream) og dag 7 (Salad, Kebaba) er bekreftet korrekte – skyldes henholdsvis innledende opplasting av lager og normal variasjon."
     },
     {
       "id": "K6",

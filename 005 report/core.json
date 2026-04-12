@@ -17,11 +17,11 @@
     "source": "Big Ambitions (dataspill)",
     "data_type": "Simulert salgsdata",
     "observation_period": {
-      "GM": { "first_day": 30, "last_day": 130, "observations": 101 },
-      "HK": { "first_day": 30, "last_day": 130, "observations": 101 },
-      "LM": { "first_day": 30, "last_day": 130, "observations": 101 },
-      "MH": { "first_day": 1,  "last_day": 101, "observations": 101 },
-      "Warehouse": { "first_day": 30, "last_day": 130, "observations": 101 }
+      "GM":        { "first_day": 1, "last_day": 101, "observations": 101 },
+      "HK":        { "first_day": 1, "last_day": 101, "observations": 101 },
+      "LM":        { "first_day": 1, "last_day": 101, "observations": 101 },
+      "MH":        { "first_day": 1, "last_day": 101, "observations": 101 },
+      "Warehouse": { "first_day": 1, "last_day": 101, "observations": 101 }
     },
     "notes": [
       "Ingen sesongvariasjoner eller trender",
@@ -44,42 +44,42 @@
     "GM": {
       "Pizza":     { "mean": 1185.3, "stdev": 26.5,   "min": 1104, "max": 1242 },
       "Salad":     { "mean": 749.6,  "stdev": 146.5,  "min": 606,  "max": 1200 },
-      "French":    { "mean": 1731.7, "stdev": 416.9,  "min": 356,  "max": 2421 },
+      "French":    { "mean": 1751.7, "stdev": 397.8,  "min": 1275, "max": 2421 },
       "Burger":    { "mean": 2187.3, "stdev": 62.6,   "min": 2043, "max": 2376 },
       "Hotdog":    { "mean": 1443.8, "stdev": 348.5,  "min": 1019, "max": 2001 },
       "Soda":      { "mean": 1083.8, "stdev": 36.9,   "min": 998,  "max": 1161 },
       "Ice Cream": { "mean": 576.4,  "stdev": 20.3,   "min": 516,  "max": 620  },
-      "Kebaba":    { "mean": 1924.4, "stdev": 186.6,  "min": 184,  "max": 2049 }
+      "Kebaba":    { "mean": 1940.9, "stdev": 63.5,   "min": 1677, "max": 2049 }
     },
     "HK": {
-      "Pizza":     { "mean": 1120.0, "stdev": 28.7,    "min": 1035, "max": 1191 },
-      "Salad":     { "mean": 813.7,  "stdev": 98.1,    "min": 610,  "max": 1103 },
-      "French":    { "mean": 1989.2, "stdev": 260.8,   "min": 1575, "max": 2306 },
-      "Burger":    { "mean": 2041.5, "stdev": 81.8,    "min": 1760, "max": 2205 },
-      "Hotdog":    { "mean": 1968.1, "stdev": 1644.9,  "min": 1624, "max": 18235 },
-      "Soda":      { "mean": 1006.6, "stdev": 39.4,    "min": 918,  "max": 1081 },
-      "Ice Cream": { "mean": 545.2,  "stdev": 21.9,    "min": 483,  "max": 586  },
-      "Kebaba":    { "mean": 1671.0, "stdev": 334.5,   "min": 1321, "max": 4357 }
+      "Pizza":     { "mean": 1120.0, "stdev": 28.7,   "min": 1035, "max": 1191 },
+      "Salad":     { "mean": 813.7,  "stdev": 98.1,   "min": 610,  "max": 1103 },
+      "French":    { "mean": 1989.2, "stdev": 260.8,  "min": 1575, "max": 2306 },
+      "Burger":    { "mean": 2041.5, "stdev": 81.8,   "min": 1760, "max": 2205 },
+      "Hotdog":    { "mean": 1804.1, "stdev": 77.0,   "min": 1624, "max": 1946 },
+      "Soda":      { "mean": 1006.6, "stdev": 39.4,   "min": 918,  "max": 1081 },
+      "Ice Cream": { "mean": 545.2,  "stdev": 21.9,   "min": 483,  "max": 586  },
+      "Kebaba":    { "mean": 1641.0, "stdev": 197.7,  "min": 1321, "max": 1856 }
     },
     "LM": {
-      "Pizza":     { "mean": 1385.8, "stdev": 45.1,    "min": 1287, "max": 1497 },
-      "Salad":     { "mean": 1387.9, "stdev": 47.5,    "min": 1234, "max": 1481 },
-      "French":    { "mean": 2086.6, "stdev": 2178.1,  "min": 1244, "max": 23330 },
-      "Burger":    { "mean": 2554.8, "stdev": 95.5,    "min": 2181, "max": 2736 },
-      "Hotdog":    { "mean": 2369.2, "stdev": 320.4,   "min": 1839, "max": 2832 },
-      "Soda":      { "mean": 1000.5, "stdev": 30.6,    "min": 924,  "max": 1083 },
-      "Ice Cream": { "mean": 626.6,  "stdev": 85.7,    "min": 517,  "max": 766  },
-      "Kebaba":    { "mean": 2523.1, "stdev": 2008.6,  "min": 2061, "max": 22360 }
+      "Pizza":     { "mean": 1385.8, "stdev": 45.1,   "min": 1287, "max": 1497 },
+      "Salad":     { "mean": 1387.9, "stdev": 47.5,   "min": 1234, "max": 1481 },
+      "French":    { "mean": 1876.6, "stdev": 376.4,  "min": 1244, "max": 2625 },
+      "Burger":    { "mean": 2554.8, "stdev": 95.5,   "min": 2181, "max": 2736 },
+      "Hotdog":    { "mean": 2369.2, "stdev": 320.4,  "min": 1839, "max": 2832 },
+      "Soda":      { "mean": 1000.5, "stdev": 30.6,   "min": 924,  "max": 1083 },
+      "Ice Cream": { "mean": 626.6,  "stdev": 85.7,   "min": 517,  "max": 766  },
+      "Kebaba":    { "mean": 2323.1, "stdev": 140.3,  "min": 2061, "max": 2697 }
     },
     "MH": {
-      "Pizza":     { "mean": 1116.7, "stdev": 55.6,   "min": 1020, "max": 1353 },
+      "Pizza":     { "mean": 1114.7, "stdev": 51.2,   "min": 1020, "max": 1353 },
       "Salad":     { "mean": 852.0,  "stdev": 51.1,   "min": 765,  "max": 1086 },
       "French":    { "mean": 1775.0, "stdev": 414.8,  "min": 1074, "max": 2320 },
       "Burger":    { "mean": 2071.8, "stdev": 102.2,  "min": 1734, "max": 2463 },
       "Hotdog":    { "mean": 2071.9, "stdev": 219.3,  "min": 1683, "max": 2367 },
       "Soda":      { "mean": 1013.9, "stdev": 46.4,   "min": 856,  "max": 1118 },
       "Ice Cream": { "mean": 546.4,  "stdev": 17.0,   "min": 515,  "max": 587  },
-      "Kebaba":    { "mean": 2029.8, "stdev": 286.3,  "min": 198,  "max": 2389 }
+      "Kebaba":    { "mean": 2047.6, "stdev": 218.6,  "min": 1710, "max": 2389 }
     },
     "Warehouse": {
       "Pizza":     { "mean": 4101.8, "stdev": 1096.5, "min": 3106, "max": 7921  },
