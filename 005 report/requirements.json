@@ -1,0 +1,85 @@
+{
+  "requirements": [
+    {
+      "id": "K1",
+      "type": "Funksjonalitet",
+      "description": "Systemet skal samle inn og strukturere salgsdata fra fire utsalgssteder",
+      "owner": "Kjetil Lund",
+      "deliverable": "Strukturert datasett",
+      "status": "Oppfylt",
+      "notes": "CSV-filer er innhentet for alle fire utsalgssteder (GM, HK, LM, MH) samt sentrallager (Warehouse). Totalt 101 observasjoner per enhet."
+    },
+    {
+      "id": "K2",
+      "type": "Funksjonalitet",
+      "description": "Optimeringsmodellen skal minimere lagerbeholdning per utsalgssted",
+      "owner": "Kjetil Lund",
+      "deliverable": "Optimaliserings-modell",
+      "status": "Under arbeid",
+      "notes": "Modell skal baseres på historiske salgsdata (mean + stdev per produkt per utsalgssted). Mål: lavest mulig lagernivå uten stockout over 7 dager."
+    },
+    {
+      "id": "K3",
+      "type": "Funksjonalitet",
+      "description": "Modellen skal unngå stockout over en 7-dagersperiode",
+      "owner": "Kjetil Lund",
+      "deliverable": "Optimaliserings-modell",
+      "status": "Under arbeid",
+      "notes": "Sikkerhetslager må dekke variasjon (stdev) over planleggingshorisonten på 7 dager. Særlig høy stdev observert for French (LM: 2178), Kebaba (LM: 2009) og Hotdog (HK: 1645) – disse krever ekstra oppmerksomhet."
+    },
+    {
+      "id": "K4",
+      "type": "Funksjonalitet",
+      "description": "Resultatet skal være lett forståelig og presenteres ved dashboard/graf i tillegg til skriftlig rapport",
+      "owner": "Kjetil Lund",
+      "deliverable": "Visualisering",
+      "status": "Under arbeid",
+      "notes": "Visualisering av anbefalt lagernivå og bestillingsmengde per produkt per utsalgssted. Kan genereres med Python (matplotlib/pandas)."
+    },
+    {
+      "id": "K5",
+      "type": "Datakvalitet",
+      "description": "Salgsdata skal være komplett og uten mangler",
+      "owner": "Kjetil Lund",
+      "deliverable": "Strukturert datasett",
+      "status": "Delvis oppfylt",
+      "notes": "Data er komplett (101 observasjoner per fil). Det er imidlertid observert ekstemverdier som trolig skyldes registreringsfeil: French LM maks 23 330 (mean 2087), Kebaba LM maks 22 360 (mean 2523), Hotdog HK maks 18 235 (mean 1968), Kebaba GM min 184 (mean 1924). Disse bør renses eller flagges før modellering."
+    },
+    {
+      "id": "K6",
+      "type": "Kapasitet",
+      "description": "Modellen skal håndtere data fra flere utsalgssteder simultant",
+      "owner": "Kjetil Lund",
+      "deliverable": "Optimaliserings-modell",
+      "status": "Under arbeid",
+      "notes": "Modellen skal produsere separate anbefalinger for GM, HK, LM og MH, og aggregere til sentrallager (Warehouse) for grossistbestilling."
+    },
+    {
+      "id": "K7",
+      "type": "Dokumentasjon",
+      "description": "Prosjektet skal dokumenteres i en avsluttende rapport",
+      "owner": "Kjetil Lund",
+      "deliverable": "Forskningsrapport",
+      "status": "Under arbeid",
+      "notes": "Rapport skrives i 013 fase 3 - review/Rapport prosjekt LOG650 v2.md basert på mal fra 000 templates/Mal prosjekt LOG650 v2.md."
+    }
+  ],
+  "data_quality_flags": {
+    "description": "Observerte avvikere i rådata som bør håndteres før modellering",
+    "outliers": [
+      { "store": "LM", "product": "French",    "value": 23330, "typical_max": 2400, "action": "Undersøk og vurder ekskludering" },
+      { "store": "LM", "product": "Kebaba",    "value": 22360, "typical_max": 2600, "action": "Undersøk og vurder ekskludering" },
+      { "store": "HK", "product": "Hotdog",    "value": 18235, "typical_max": 2000, "action": "Undersøk og vurder ekskludering" },
+      { "store": "GM", "product": "Kebaba",    "value": 184,   "typical_min": 1500, "action": "Trolig registreringsfeil – vurder ekskludering" },
+      { "store": "MH", "product": "Kebaba",    "value": 198,   "typical_min": 1800, "action": "Trolig registreringsfeil – vurder ekskludering" },
+      { "store": "GM", "product": "French",    "value": 356,   "typical_min": 1500, "action": "Trolig registreringsfeil – vurder ekskludering" }
+    ]
+  },
+  "modeling_inputs": {
+    "planning_horizon_days": 7,
+    "service_level_target": "Minimere stockout-sannsynlighet",
+    "reorder_frequency": "Ukentlig",
+    "cost_components": ["Bestillingskostnad", "Lagringskostnad", "Stockout-kostnad"],
+    "excluded_costs": ["Lønnskostnader", "Lokalekostnader", "Utsalgspris"]
+  }
+}
