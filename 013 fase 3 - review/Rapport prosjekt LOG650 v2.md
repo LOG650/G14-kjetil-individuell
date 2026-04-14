@@ -1,14 +1,14 @@
-# Tittel (norsk og/eller engelsk)
+# Optimal lagerbeholdning for BiteBurst: En SARIMA-basert tilnærming til prognose og sikkerhetslager
 
-**Forfatter(e):**
+**Forfatter:** Kjetil Tronstad Lund
 
 **Totalt antall sider inkludert forsiden:**
 
-**Molde, Innleveringsdato:**
+**Molde, 31. mai 2026**
 
 ---
 
-## Obligatorisk egenerklæring/gruppeerklæring
+## Obligatorisk egenerklæring
 
 Den enkelte student er selv ansvarlig for å sette seg inn i hva som er lovlige hjelpemidler, retningslinjer for bruk av disse og regler om kildebruk. Erklæringen skal bevisstgjøre studentene på deres ansvar og hvilke konsekvenser fusk kan medføre. Manglende erklæring fritar ikke studentene fra sitt ansvar.
 
@@ -18,20 +18,13 @@ Den enkelte student er selv ansvarlig for å sette seg inn i hva som er lovlige 
 
 ### Personopplysningsloven
 
-Forskningsprosjekt som innebærer behandling av personopplysninger iht. Personopplysningsloven skal meldes til Norsk senter for forskningsdata, NSD, for vurdering.
+**Har oppgaven vært vurdert av NSD?** nei
 
-**Har oppgaven vært vurdert av NSD?** ja / nei
-
-- Hvis ja: Referansenummer:
-- Hvis nei: Jeg/vi erklærer at oppgaven ikke omfattes av Personopplysningsloven:
+- Jeg erklærer at oppgaven ikke omfattes av Personopplysningsloven. Datagrunnlaget består utelukkende av simulerte salgsdata fra dataspillet Big Ambitions og inneholder ingen personopplysninger.
 
 ### Helseforskningsloven
 
-Dersom prosjektet faller inn under Helseforskningsloven, skal det også søkes om forhåndsgodkjenning fra Regionale komiteer for medisinsk og helsefaglig forskningsetikk, REK, i din region.
-
-**Har oppgaven vært til behandling hos REK?** ja / nei
-
-- Hvis ja: Referansenummer:
+**Har oppgaven vært til behandling hos REK?** nei
 
 ---
 
@@ -41,36 +34,29 @@ Dersom prosjektet faller inn under Helseforskningsloven, skal det også søkes o
 
 **Veileder:**
 
-### Fullmakt til elektronisk publisering av oppgaven
+**Jeg/vi gir herved Høgskolen i Molde en vederlagsfri rett til å gjøre oppgaven tilgjengelig for elektronisk publisering:** ja
 
-Forfatter(ne) har opphavsrett til oppgaven. Det betyr blant annet enerett til å gjøre verket tilgjengelig for allmennheten (Åndsverkloven. §2).
-
-Alle oppgaver som fyller kriteriene vil bli registrert og publisert i Brage HiM med forfatter(ne)s godkjennelse. Oppgaver som er unntatt offentlighet eller båndlagt vil ikke bli publisert.
-
-**Jeg/vi gir herved Høgskolen i Molde en vederlagsfri rett til å gjøre oppgaven tilgjengelig for elektronisk publisering:** ja / nei
-
-**Er oppgaven båndlagt (konfidensiell)?** ja / nei
-(Båndleggingsavtale må fylles ut)
-
-- Hvis ja: Kan oppgaven publiseres når båndleggingsperioden er over? ja / nei
+**Er oppgaven båndlagt (konfidensiell)?** nei
 
 **Dato:**
 
 ---
 
-**Antall ord:** *(Marker denne setningen, og skriv inn antall ord dersom det er et krav at antall ord skal oppgis. Hvis det ikke er et krav at antall ord skal oppgis slettes hele dette avsnittet, og i begge tilfeller slettes denne setning.)*
-
-**Forfattererklæring:** *(Marker denne setningen, og skriv inn forfattererklæring dersom det er et krav til oppgaven. Hvis det ikke er krav om forfattererklæring slettes hele dette avsnitt, og i begge tilfeller slettes denne setning.)*
-
----
-
 ## Sammendrag
 
-*(Skriv sammendrag her)*
+Denne rapporten undersøker hvordan historiske salgsdata kan benyttes til å fastsette optimalt lagernivå for hvert av fire hurtigmatutsalgssteder i den fiktive bedriften BiteBurst. Datagrunnlaget er hentet fra dataspillet Big Ambitions og består av 101 dagers daglige salgsdata for åtte produktkategorier per utsalgssted.
+
+Analysen avdekket statistisk signifikante ukentlige salgsmønstre, noe som motiverte valget av sesong-ARIMA (SARIMA) som prognosemodell med en ukesperiode på syv dager. Modellparametere ble valgt automatisk via auto_arima basert på AIC-kriteriet, og det ble tilpasset 32 individuelle modeller – én per produkt per utsalgssted.
+
+Resultatene viser at SARIMA-modellene predikerer etterspørselen med god nøyaktighet for de fleste produkter, med gjennomsnittlig absolutt prosentfeil (MAPE) på 1–7 % for majoriteten. Høyere usikkerhet ble observert for French fries og Hotdog i utvalgte utsalgssteder. Basert på prognosene og et sikkerhetslager beregnet for 95 % servicegrad presenteres konkrete lagernivåanbefalinger per produkt per utsalgssted, som gir hvert sted grunnlag for syv dagers drift uten levering fra sentrallager. Rapporten diskuterer også modellenes begrensninger og mulighetene for å overføre metodikken til reelle forretningsdata.
 
 ## Abstract
 
-*(Write abstract here)*
+This report investigates how historical sales data can be used to determine optimal inventory levels for four fast-food outlets in the fictional company BiteBurst. The data was collected from the simulation game Big Ambitions and consists of 101 days of daily sales data across eight product categories per outlet.
+
+Analysis revealed statistically significant weekly sales patterns, motivating the choice of Seasonal Autoregressive Integrated Moving Average (SARIMA) as the forecasting model with a seasonal period of seven days. Model parameters were selected automatically via auto_arima based on the AIC criterion, resulting in 32 individual models – one per product per outlet.
+
+Results show that SARIMA models predict demand with high accuracy for most products, with mean absolute percentage error (MAPE) of 1–7 % for the majority. Higher uncertainty was observed for French fries and Hotdog at selected outlets. Based on the forecasts and a safety stock calculated for a 95 % service level, specific recommended stock levels per product per outlet are reported, enabling each outlet to operate for seven days without replenishment from the central warehouse. The report also discusses model limitations and the potential for applying the methodology to real business data.
 
 ---
 
@@ -78,13 +64,12 @@ Alle oppgaver som fyller kriteriene vil bli registrert og publisert i Brage HiM 
 
 1. [Innledning](#1-innledning)
    - 1.1 [Problemstilling](#11-problemstilling)
-   - 1.2 [Delproblemer (valgfri)](#12-delproblemer-valgfri)
-   - 1.3 [Avgrensinger](#13-avgrensinger)
-   - 1.4 [Antagelser](#14-antagelser)
+   - 1.2 [Avgrensninger](#12-avgrensninger)
+   - 1.3 [Antagelser](#13-antagelser)
 2. [Litteratur](#2-litteratur)
 3. [Teori](#3-teori)
 4. [Casebeskrivelse](#4-casebeskrivelse)
-5. [Metode og data](#5-metode-og-data-kan-splittes-i-to)
+5. [Metode og data](#5-metode-og-data)
    - 5.1 [Metode](#51-metode)
    - 5.2 [Data](#52-data)
 6. [Modellering](#6-modellering)
@@ -99,232 +84,527 @@ Alle oppgaver som fyller kriteriene vil bli registrert og publisert i Brage HiM 
 
 ## 1 Innledning
 
-Introduksjonen bør ikke være for lang, mellom 1-4 sider, helst kun 1-2. For mye skrift her kan være et tegn på at man sliter med å være presis. Ta utgangspunkt i et generelt tema og deretter beskriv den aktuelle problemstillingen.
+Effektiv lagerstyring er en av de mest kritiske faktorene for lønnsomheten i detaljhandel og serveringsbransjen. En mangelsituasjon – ofte omtalt som stockout – innebærer at et produkt ikke er tilgjengelig når kundene etterspør det, noe som resulterer i tapte inntekter, redusert kundetilfredshet og i verste fall varig tap av kunder. På den andre siden medfører overlagring unødvendig kapitalbinding, økte lagerkostnader og risiko for at ferskvarer ikke kan benyttes. Den grunnleggende utfordringen for enhver varehandler er å balansere disse to motsigende hensynene ved å opprettholde et lagernivå som er høyt nok til å dekke etterspørselen, men lavt nok til at kapitalen utnyttes effektivt (Silver et al., 2017).
 
-Svar på følgende spørsmål:
+Tradisjonelle tilnærminger til lagerstyring baserer seg på gjennomsnittlig etterspørsel og statistiske mål for variasjon for å beregne sikkerhetslager og bestillingspunkter. I takt med økt datatilgjengelighet har imidlertid kvantitative prognosemetoder blitt stadig mer utbredt. Blant disse har tidsrekkemodeller som ARIMA og dens sesongbaserte utvidelse SARIMA vist seg å være godt egnet for etterspørselsprognoser i detaljhandelen, særlig der salgsdata viser sesongmønstre eller autokorrelasjon over tid (Hyndman & Athanasopoulos, 2021). En viktig fordel med slike statistiske modeller er at de kan fange opp strukturen i historiske data og produsere prognoser med tilhørende usikkerhetsintervaller, som kan benyttes direkte til å dimensjonere sikkerhetslager.
 
-- Hvilket tema handler oppgaven om?
-- Hvorfor er tema aktuelt?
-- Hva har blitt gjort tidligere (de mest vesentlige referansene)?
-- Hva er rapportens problemstilling (eget underavsnitt)?
-- Hvilke avgrensinger gjøres (eget underavsnitt)?
+Denne rapporten tar utgangspunkt i den fiktive hurtigmatbedriften BiteBurst, som opererer fire utsalgssteder i dataspillet Big Ambitions (Hovgaard & Hovgaard, 2022). Spillet simulerer driften av utsalgssteder med en konsistent etterspørselslogikk og gir dermed en kontrollert setting der salgsdata kan samles inn og analyseres uten å ta hensyn til konfidensielle forretningsopplysninger. Med 101 dager med daglige salgsdata per utsalgssted for åtte produktkategorier danner datagrunnlaget en solid basis for tidsrekkeanalyse.
 
-Viktige momenter:
+Formålet med rapporten er å undersøke hvordan SARIMA-basert prognosemodellering kan benyttes til å fastsette det optimale lagernivået hvert utsalgssted må holde for å kunne operere i syv dager uten levering fra sentrallager. Et slikt lagernivå er særlig relevant i situasjoner der leveringsforsinkelser eller andre driftsforstyrrelser hindrer ordinær påfylling. Rapporten bidrar til å demonstrere en praktisk og reproduserbar metodikk for lageroptimalisering basert på historiske salgsdata, der en åpen kildekode-løsning i Python automatiserer modellvalg og beregninger.
 
-- Skap nysgjerrighet slik at leseren ønsker å lese videre. Kunsten er ofte å aktualisere temaet for deretter peke på konsekvenser som resultatet kan gi. Men unngå å brodere ut hvordan resultatet oppnås – for da må leseren lese videre.
-- Prøv å gi leseren innblikk i strukturen til rapporten gjennom hele introduksjonen.
-- «Lakseprisens volatilitet påvirker svært mange aktører som…»
-- «Ref 1 har vist at lakseprisen er avhengig av…»
-- «Derimot argumenter Ref 2 at volatiliteten også påvirkes av…»
-- «Litteraturstudiet vårt viser at ingen har inkludert faktorer som …»
-- «For Maritech skaper volatiliteten utfordringer for kundene fordi…»
-- «Med bedre modeller kan Maritech gi fordel til sine kunder ved at…»
-- «Vi har brukt bedriftens salgsdata for å kartlegge hvilke faktorer som…»
-- «Basert på statistisk regresjonsteori har vi beskrevet en ny modell som…»
-- «I analysen har vi indentifisert interessante funn som bl.a…»
-- «Konklusjonen er derfor at…»
-- Det er lurt å henvise tilbake til introduksjonen indirekte ved å f.eks. bruke setninger som gjentar litt det som ble sagt i introduksjonen. På den måten skapes det en rød tråd hos leseren gjennom hele rapporten hvor hen minnes på hvorfor rapporten er interessant.
+Rapportens struktur følger en klassisk vitenskapelig oppbygning. Etter en gjennomgang av relevant litteratur og det teoretiske grunnlaget for SARIMA-modellering og sikkerhetslagerberegning beskrives casebedriften og datagrunnlaget i detalj. Metode- og modelleringskapitlene dokumenterer den analytiske prosessen, fulgt av resultater og diskusjon. Rapporten avsluttes med en konklusjon som besvarer problemstillingen.
 
 ### 1.1 Problemstilling
 
-Problemstillingen din er avgjørende for et godt resultat. Dette skal ikke være et «hva»- eller «hvilket»-spørsmål.
+Rapporten tar utgangspunkt i følgende problemstilling:
 
-Sørg for at du har en «hvordan»- eller «hvorfor»-spørsmål, noe som vil gjøre problemstillingen din mye mer omfattende.
+> *Hvordan kan SARIMA-basert etterspørselsprognose benyttes til å fastsette optimalt lagernivå per produkt per utsalgssted for hurtigmatbedriften BiteBurst, slik at hvert utsalgssted kan operere i syv dager uten levering fra sentrallager?*
 
-En god problemstilling danner grunnlaget for hele oppgaven din, så her er det verdt å tenke seg nøye om.
+For å strukturere analysen deles problemstillingen inn i to delspørsmål:
 
-Kan godt gjenta noe av det som ble sagt i innledningen.
+1. Hvilken SARIMA-modell beskriver etterspørselen best for hvert produkt per utsalgssted, målt ved Akaike informasjonskriterium (AIC) og gjennomsnittlig absolutt prosentfeil (MAPE)?
+2. Hva er det anbefalte lagernivået per produkt per utsalgssted ved 95 % servicegrad, basert på SARIMA-prognosene og tilhørende konfidensintervaller?
 
-Her er det viktig at du:
+### 1.2 Avgrensninger
 
-- er så spesifikk som mulig
-- er svært nøye med formuleringene
-- ikke skriver noe du ikke svarer på (dangerzone)
-- ikke svarer på noe mer enn det som står i problemstillingen (da burde det enten vært tatt ut eller vært inkludert i problemstillingen (dangerzone)
+Følgende avgrensninger er gjort for å holde problemstillingen håndterbar og analysene fokuserte.
 
-### 1.2 Delproblemer (valgfri)
+**Produktutvalg:** Rapporten omfatter alle åtte produktkategoriene som selges i samtlige av BiteBursts utsalgssteder: Pizza, Salad, French fries, Burger, Hotdog, Soda, Ice Cream og Kebab. Opprinnelig var omfanget avgrenset til 4–5 produkter, men siden alle åtte er felles for alle utsalgsstedene og datagrunnlaget er komplett, ble det besluttet å inkludere samtlige for et mer fullstendig analysegrunnlag.
 
-Du kan om nødvendig dele opp problemstillingen din i flere delproblemer, dersom problemstillingen er komplisert eller omfattende. Det er da viktig at disse delproblemene blir fremstilt i en logisk rekkefølge som gir mening for hovedproblemstillingen. Vær også tydelig til leseren hvilket delproblem du svarer på til enhver tid.
+**Kostnadsmodell:** Det inkluderes ikke eksplisitte kostnader for ansatte, lokaler eller utsalgspris i analysen. Fokus er utelukkende på etterspørselsprognose og lagernivåanbefaling, ikke på en fullstendig totaløkonomisk optimalisering.
 
-### 1.3 Avgrensinger
+**Datagrunnlag:** Analysen baserer seg utelukkende på simulerte data fra Big Ambitions. Resultatene skal ikke generaliseres direkte til reelle hurtigmatkjeder uten videre validering mot faktiske forretningsdata.
 
-Avgrensing er en svært viktig måte å snevre inn en problemstilling. Her forklarer du hvorfor du ikke har tatt med det og det. Pass på at du ikke avgrenser noe uten å forklare hvorfor, og husk aldri skriv at du ikke har nok tid e.l. det er et stort tegn på en for vidt formulert problemstilling.
+**Bestillingsfrekvens:** Det antas at utsalgsstedene mottar levering fra sentrallager én gang per uke, og at lagernivåene fastsettes for en planleggingshorisont på syv dager.
 
-- «Vi avgrenser oppgaven til kun ett produkt siden…»
-- «Vi analyserer 80% av kundene da de resterende ikke…»
-- «Oppgaven omfatter kun Norge, da det utenlandske markedet ikke…»
+**Sentrallager:** Rapporten ser bort fra sentrallageret som en separat analyseenhet. Fokus er på lagernivåene i de fire utsalgsstedene.
 
-### 1.4 Antagelser
+### 1.3 Antagelser
 
-Antagelser er en måte å presisere en problemstilling på. En antagelser er ikke det samme som avgrensing. En avgrensing snevrer inn omfanget, mens en antagelse presiserer situasjonen som analyseres. Man må forklare hvorfor man har tatt antagelsen, og hvilke konsekvenser den får på aktualiteten til analysen.
+Følgende antagelser er lagt til grunn for analysen.
 
-- «Vi antar at antall innkommende ordrer er Poissonfordelt fordi… dette gjør at…»
-- «Vi antar at vi kan se vekk fra effekten av prisene i Sverige fordi… dette gjør at…»
+**Representativitet:** Det antas at salgsdata fra Big Ambitions er tilstrekkelig representative til å identifisere etterspørselsmønstre. Spillets etterspørselslogikk er konsistent og ble ikke påvirket av oppdateringer i observasjonsperioden.
+
+**Ukessyklus:** Statistisk analyse avdekket signifikant autokorrelasjon ved lag 7 for flere produkter og utsalgssteder, noe som bekrefter at en ukentlig sesongperiode er til stede i dataene (jf. kapittel 5.1). Det antas at disse mønstrene er stabile og at en sesongperiode på syv dager er korrekt. Det bemerkes at prosjektets opprinnelige planleggingsdokument antok at ingen sesongvariasjoner fantes i dataene. Denne antagelsen ble avkreftet av den statistiske analysen og er justert her.
+
+**Servicegrad:** En servicegrad på 95 % antas å være et hensiktsmessig mål for å balansere stockout-risiko mot lagerkostnader. Dette tilsvarer en z-verdi på 1,645 under normalfordelingsantagelsen.
+
+**Etterspørselsfordeling:** Det antas at prognosefeil er tilnærmet normalfordelte, slik at normalfordelingens z-verdier kan benyttes til å beregne sikkerhetslager fra modellenes konfidensintervaller.
 
 ---
 
 ## 2 Litteratur
 
-Diskuter de viktigste bidragene de 5 siste årene innen temaet du har valgt. Prøv å trekk tråder til din problemstilling og beskriv hvor og hvordan din rapport forholder seg til disse. Pass på at referanser blir korrekte.
-
-- Det er ikke alltid nødvendig å ha et eget kapittel for litteratur, det viktigste av alt er at man aldri, aldri siterer noen eller kommer med fakta eller påstander, uten at det refereres til hvor du har denne påstanden ifra. Dette kaller vi synsing, og synsing trekker ned karakteren kraftig.
-- Det kan ofte skje at man henviser til samme rapport flere ganger i teksten. Unngå da å repetere funnene i rapporten, men ha med selve referansen.
-- Husk en referanse har to hensikter:
-  - Kreditere resultatet til de som fant det.
-  - Gi leseren en mulighet til å sjekke opp en påstand eller fakta som du bygger rapporten din på.
+*[Skrives i runde 3]*
 
 ---
 
 ## 3 Teori
 
-Når du skal skrive en bacheloroppgave, er det også viktig å inkludere en teoridel. Her skal du beskrive teoretisk perspektiv, tidligere litteratur som beskriver samme tema og hva forskere eventuelt er uenige om.
+### 3.1 Tidsrekker og stasjonæritet
 
-Du kan også nevne hvorvidt tidligere forskning kan ha oversett noen faktorer, og plassere egen problemstilling i lys av tidligere litteratur på fagfeltet.
+En tidsserie er en sekvens av observasjoner samlet over tid i jevne tidsintervaller. For at klassiske statistiske metoder skal kunne benyttes direkte på tidsrekkedata, er det en forutsetning at serien er stasjonær – det vil si at seriens statistiske egenskaper, særlig gjennomsnitt og varians, er konstante over tid (Hyndman & Athanasopoulos, 2021). Mange reelle tidsrekker er ikke-stasjonære: de kan ekshibere trender, sesongsvingninger eller endringer i variansen over tid.
 
-Pass på at du får frem hva problemstillingen din belyser, som ikke tidligere forskning allerede har gjennomgått.
+En vanlig teknikk for å oppnå stasjonæritet er differensiering, der man erstatter de originale verdiene med differansen mellom påfølgende observasjoner. Graden av differensiering betegnes med *d*, slik at *d* = 1 innebærer at man tar første-ordens differansen Δy_t = y_t − y_{t−1}, og *d* = 2 innebærer ytterligere differensiering. Augmented Dickey-Fuller-testen (ADF) er en standard statistisk test for å undersøke om en tidsserie inneholder en enhetsrot, noe som er ensbetydende med ikke-stasjonæritet. En signifikant ADF-testverdi (p < 0,05) indikerer at nullhypotesen om enhetsrot kan forkastes, og at serien er stasjonær (Box et al., 2015).
 
-Teoridelen din skal rett og slett beskrive grunnlaget for studiet ditt, og danner utgangspunktet for videre metodevalg.
+### 3.2 ARIMA-modellen
+
+ARIMA(p, d, q) – Autoregressive Integrated Moving Average – er en familie av modeller for å beskrive og prognostisere tidsrekker (Box et al., 2015). Modellen har tre komponenter:
+
+**Autoregressive (AR) ledd** av orden *p* betyr at den nåværende verdien modelleres som en lineær kombinasjon av de *p* foregående verdiene:
+
+$$y_t = c + \varphi_1 y_{t-1} + \varphi_2 y_{t-2} + \cdots + \varphi_p y_{t-p} + \varepsilon_t$$
+
+der *φ_i* er autoregresjonskoeffisientene og *ε_t* er hvit støy.
+
+**Integrated (I) komponent** av orden *d* angir at serien er differensiert *d* ganger for å oppnå stasjonæritet. For *d* = 1 opererer modellen på den differensierte serien Δy_t = y_t − y_{t−1}.
+
+**Moving Average (MA) ledd** av orden *q* inkluderer *q* tidligere prognosefeil som forklaringsvariabler:
+
+$$y_t = \mu + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2} + \cdots + \theta_q \varepsilon_{t-q}$$
+
+der *θ_i* er MA-koeffisientene.
+
+Autokorrelasjonsfunksjonen (ACF) og den partielle autokorrelasjonsfunksjonen (PACF) er viktige diagnostiske verktøy for å identifisere passende *p*- og *q*-verdier. Et signifikant ACF-lag ved forsinkelse *k* indikerer at observasjoner med avstand *k* er korrelerte (Hyndman & Athanasopoulos, 2021).
+
+### 3.3 SARIMA – sesongbasert utvidelse
+
+SARIMA(p, d, q)(P, D, Q, s) er en utvidelse av ARIMA som inkluderer sesongkomponenter med periode *s* (Box et al., 2015). For ukentlige mønstre i daglige data settes *s* = 7. De store bokstavene *P*, *D*, *Q* angir henholdsvis sesong-AR-orden, sesongdifferensiering og sesong-MA-orden. SARIMA-modellen fanger dermed opp både kortsiktig autokorrelasjon (via *p*, *q*) og periodiske mønstre med periode *s* dager (via *P*, *Q*).
+
+Et signifikant ACF-lag ved forsinkelse *s* (eller multipler av *s*) indikerer at sesongkomponenten er til stede i dataene og at en SARIMA-modell vil beskrive serien bedre enn en ren ARIMA-modell. Hyndman og Athanasopoulos (2021) anbefaler å inkludere sesongkomponenter dersom ACF-koeffisienten ved forsinkelse *s* er statistisk signifikant.
+
+### 3.4 Informasjonskriterium og modellvalg
+
+Akaike informasjonskriterium (AIC) er et mål for modellens tilpasning til dataene, justert for antall frie parametre (Hyndman & Athanasopoulos, 2021):
+
+$$\text{AIC} = -2\ln(\hat{L}) + 2k$$
+
+der *L̂* er den maksimale likelihooden og *k* er antallet estimerte parametre. En lavere AIC-verdi indikerer en bedre balanse mellom modellens tilpasning til treningsdataene og dens kompleksitet. AIC penaliserer dermed overparametriserte modeller og hjelper til med å unngå overtilpasning.
+
+### 3.5 Sikkerhetslager og servicegrad
+
+Sikkerhetslager er en buffer av varer som holdes utover den forventede etterspørselen, for å beskytte mot etterspørselsusikkerhet og leveringsvariasjon (Silver et al., 2017). For en gitt servicegrad α og normalfordelte prognosefeil kan sikkerhetslageret beregnes som:
+
+$$SS = z_\alpha \cdot \sigma_L$$
+
+der *z_α* er den korresponderende z-verdien fra normalfordelingen (for 95 % servicegrad er *z* = 1,645), og *σ_L* er standardavviket til prognosefeilen over planleggingshorisonten *L*.
+
+I denne rapporten utnyttes at SARIMA-modellene leverer eksplisitte konfidensintervaller for prognosene. Det øvre konfidensintervallet for 7-dagerssummen ved 95 % nivå gir direkte det mengdenivået som dekker etterspørselen i 95 % av tilfellene. Sikkerhetslageret defineres derfor som differansen mellom det øvre konfidensintervallet og punktprognosen (jf. kapittel 6.4), som en praktisk implementasjon av den klassiske sikkerhetslagerformelen (Silver et al., 2017).
 
 ---
 
 ## 4 Casebeskrivelse
 
-Her skal problemstillingen utbroderes for den bedriften du samarbeidet med eller det. Ta med all relevant informasjon som er nødvendig for å få en full forståelse av problemet, men ikke mer. Husk å holde den røde tråden til problemstillingen, unødvendig informasjon trekker ned. Man kan gjerne beskrive om en bransje eller en teori hvis problemstillingen ikke omhandler en spesifikk bedrift.
+BiteBurst er en fiktiv hurtigmatkjede som driftes av én eier i dataspillet Big Ambitions (Hovgaard & Hovgaard, 2022). Big Ambitions er en forretningssimulator der spilleren bygger opp en virksomhet i New York fra grunnen av, og tar beslutninger om lokalisering, bemanning, sortiment, prissetting og leverandørrelasjoner. Spillet er utviklet av Hovgaard Games og har mottatt svært positive anmeldelser på Steam for sin dybde og realisme i forretningsmekanikken. For dette prosjektet er BiteBurst benyttet som et kontrollert simuleringsmiljø for å generere daglige salgsdata med en realistisk etterspørselslogikk, uten å måtte benytte konfidensielle data fra en reell bedrift.
 
-Anta vi f.eks. har som problemstilling og forbedre gjennomløpstiden for en vare i en produksjonsbedrift:
+### Utsalgsstedene
 
-- Type bedrift og hvorfor produktet har lav gjennomløpstid.
-- Beskrivelse av produktets oppbygning i komponenter.
-- Hvordan bedriften gjennomfører produksjonen av produktet i dag?
-- Hvilke faktorer som påvirker gjennomløpstiden.
-- Hvilke data som bedriften har for prosessen.
-- Hva bedriften tror som forårsaker lav gjennomløpstid.
+BiteBurst opererer fire hurtigmatutsalgssteder lokalisert i ulike bydeler i New York slik de fremstår i spillet. Tabell 1 gir en oversikt over stedene med forkortelse, bydel og trafikkscore.
+
+**Tabell 1: Oversikt over BiteBursts utsalgssteder**
+
+| Forkortelse | Bydel           | Trafikkscore | Maks. kapasitet |
+|-------------|-----------------|-------------|-----------------|
+| GM          | Garment District | 46          | 30 kunder/time  |
+| HK          | Hell's Kitchen   | 39          | 30 kunder/time  |
+| LM          | Lower Manhattan  | 40          | 30 kunder/time  |
+| MH          | Murray Hill      | 38          | 30 kunder/time  |
+
+Trafikkscore i Big Ambitions er et mål på potensiell kundestrøm til en eiendom basert på bydelens fottrafikk. Alle fire utsalgsstedene har identisk lokal kapasitet på maksimalt 30 kunder i timen, like store lokaler og identiske åpningstider. Utsalgsstedene er konfigurert uten bruk av spillfunksjoner som reklame eller kampanjer for å minimere eksterne påvirkningsfaktorer på salget.
+
+Til tross for relativt sammenlignbare trafikkscore-verdier selger Lower Manhattan (LM) vesentlig mer enn de tre øvrige stedene, noe Tabell 2 illustrerer.
+
+**Tabell 2: Gjennomsnittlig daglig prognose per utsalgssted (alle produkter summert)**
+
+| Utsalgssted | Prognose per dag (enheter) | Relativt til GM |
+|-------------|---------------------------|-----------------|
+| GM          | 10 496                    | 100 %           |
+| HK          | 11 433                    | 109 %           |
+| LM          | 13 204                    | 126 %           |
+| MH          | 11 025                    | 105 %           |
+
+Forklaringen ligger ikke i trafikkscoren alene, men i at Big Ambitions også opererer med en bydelsspesifikk *etterspørsel* som varierer mellom områder i spillet. Lower Manhattan er et høyaktivitetsområde i spillet med høyere innebygd etterspørsel etter hurtigmatprodukter enn de øvrige bydelene, noe som driver det høyere salgsvolumet. Dette skillet mellom trafikkscore og bydeletterspørsel er en viktig egenskap ved spillets simulering. For modelleringen innebærer det at individuelle SARIMA-modeller per utsalgssted er nødvendige, fremfor én felles modell for alle.
+
+### Produktsortiment
+
+Alle fire utsalgsstedene selger de samme åtte produktkategoriene: Pizza, Salad, French fries, Burger, Hotdog, Soda, Ice Cream og Kebab. Produktene ble valgt av eier innenfor de valgmulighetene spillets forretningstype tillater, og representerer et bredt standardsortiment for en hurtigmatrestaurant. Innkjøpsprisen er identisk for alle utsalgssteder, mens utsalgsprisen kan variere. Siden kostnadsanalyse er avgrenset ut av rapporten (jf. kapittel 1.2), er dette ikke av direkte relevans for analysene.
+
+### Forsyningskjeden
+
+Forsyningskjeden i BiteBurst er bygget opp i to ledd. Utsalgsstedene mottar daglig levering fra et sentrallager som eier har opprettet, med levering hver natt klokken 02:00. Sentrallageret på sin side bestiller varer fra en grossist og mottar levering hver mandag klokken 08:00, noe som etablerer en ukentlig bestillingssyklus oppstrøms i kjeden.
+
+Denne strukturen er direkte relevant for problemstillingen. Under normal drift fylles utsalgsstedenes lagre daglig fra sentrallageret. Den analytiske utfordringen rapporten adresserer er imidlertid dimensjoneringen av det interne lageret på hvert utsalgssted: hvor mye varer må hvert sted holde for å klare syv dagers drift dersom den daglige leveransen fra sentrallageret skulle falle bort? Svaret på dette spørsmålet er bestemmende for utsalgsstedenes beredskapslagernivå og er det sentrale resultatet i rapporten.
+
+### Simuleringens styrker og begrensninger
+
+En sentral styrke ved Big Ambitions som datagrunnlag er at simuleringen gir en konsistent etterspørselslogikk uten konfidensielle hensyn, og at data kan akkumuleres over en lengre periode enn det som normalt ville vært mulig å innhente fra en reell bedrift i et avgrenset prosjekt. Datainnsamlingen foregår manuelt ved daglig avlesning av salgstall i spillgrensesnittet, noe som setter et praktisk tak på observasjonsperioden og kan introdusere enkeltfeil i registreringen.
+
+Det er viktig å understreke at Big Ambitions er et kommersielt underholdningsspill, og at den underliggende etterspørselslogikken ikke er transparent for spilleren. Hvorvidt spillets algoritmer gjenspeiler reelle etterspørselsmønstre i hurtigmatbransjen, er ikke mulig å verifisere direkte. Resultatene i denne rapporten bør tolkes med dette forbeholdet.
 
 ---
 
-## 5 Metode og data (kan splittes i to)
-
-Litt avhengig av omfanget, kan det være lurt å vurdere om du skal splitte kapittelet i to eller ikke.
+## 5 Metode og data
 
 ### 5.1 Metode
 
-I oppgavens metodedel skal du beskrive valgt metode. Dette skal beskrives så nøyaktig at andre skal kunne klare å gjenta prosessen. Metodedelen gir leseren mulighet til å vurdere hvorvidt oppgaven kan inneholde feil i fremgangsmåten.
+#### Begrunnelse for valg av SARIMA
 
-Oppgi paradigme betraktninger, forskningsperspektiv, forskningsdesign, innsamlingsmetode for data, utvalgskriterier, utvalgsmetode, utvalgsstørrelse og analysemetoder.
+Valget av SARIMA som prognosemodell ble motivert av to analyser gjennomført på de rensede salgsseriene: stasjonæritetstest og autokorrelasjonanalyse.
 
-Du kan også ta opp eventuelle etiske spørsmål og potensielle feilkilder.
+**Stasjonæritetstesting (ADF):** Augmented Dickey-Fuller-testen ble anvendt på alle 32 salgsserier. For et flertall av produktene på alle utsalgssteder – spesielt de med moderat til sterk trend – ble nullhypotesen om enhetsrot ikke avvist på 5 %-nivå (p > 0,05). Dette indikerer ikke-stasjonæritet og nødvendiggjør differensiering, det vil si *d* ≥ 1. For produkter med relativt stabile nivåer (eksempelvis Ice Cream og Soda) ble serien i noen tilfeller vurdert som nær-stasjonær, men sesongdifferensiering ble likevel vurdert separat.
 
-Eksempel:
+**Autokorrelasjonanalyse (ACF):** For alle 32 serier ble ACF-koeffisienten ved lag 1 beregnet og funnet svært høy (0,77–0,99), noe som bekrefter sterk autokorrelasjon i daglige salgsdata. Av særlig interesse er lag 7: signifikante ACF-koeffisienter (|r| > 0,20) ved forsinkelse 7 ble observert for French fries, Hotdog, Kebaba og Salad på tvers av utsalgsstedene. Disse funnene underbygger at det eksisterer en statistisk målbar ukentlig sesongkomponent i dataene, og at SARIMA med sesongperiode *s* = 7 er en bedre modellklasse enn ren ARIMA uten sesongleddet.
 
-- Hvilken forskningsmetode er valgt?
-- For de fleste er det case-metode
-- Kvantitativ eller kvalitativ?
-- Hva slags data (spørreskjema, intervju, fra ERP systemet)
-- Teori rundt det å lage spørreskjema
-- Teori rundt det med nøyaktigheten av data fra ERP system
-- Metode for analyse, kvantitativ, kvalitativ
-- Kort beskrivelse av den metoden som er valgt
-- Statistisk metode? regresjon?
-- Kort beskrivelse (bruk lærebøker)
-- Dataverktøy for eksempel SPSS eller excel
+Samlet sett gir ADF-testen grunnlag for differensiering og ACF-analysen grunnlag for sesongkomponenten. SARIMA(p, d, q)(P, D, Q, 7) ble valgt som modellklasse for alle 32 kombinasjoner av produkt og utsalgssted.
+
+#### Automatisk modellvalg med auto_arima
+
+Modellparametrene (*p*, *d*, *q*, *P*, *D*, *Q*) ble valgt automatisk ved hjelp av funksjonen `auto_arima` fra Python-biblioteket pmdarima (Hyndman & Athanasopoulos, 2021). Funksjonen implementerer en trinnvis (*stepwise*) søkeprosedyr der parametre inkrementelt justeres og ulike modellkombinasjoner sammenlignes basert på AIC-verdien. Modellen med lavest AIC velges som den endelige modellen. Parameterrommet som ble utforsket var:
+
+- *p*, *q*: 0–3 (ikke-sesongmessige AR- og MA-ledd)
+- *d*: automatisk bestemt (basert på KPSS- og ADF-tester internt i `auto_arima`)
+- *P*, *Q*: 0–2 (sesongmessige AR- og MA-ledd)
+- *D*: automatisk bestemt
+- Sesongperiode *s* = 7
+
+#### Trenings- og valideringsopplegg
+
+For å evaluere modellenes prediktive nøyaktighet ble de siste syv dagene (dag 95–101) holdt tilbake som valideringssett. Modellen ble tilpasset på treningsdataene (dag 1–94) og deretter benyttet til å prognostisere de syv påfølgende dagene. Gjennomsnittlig absolutt prosentfeil (MAPE) mellom prognose og faktisk valideringssett ble beregnet som mål på modellnøyaktighet:
+
+$$\text{MAPE} = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \right| \times 100 \%$$
+
+#### Sikkerhetslagerberegning
+
+Sikkerhetslageret ble beregnet direkte fra SARIMA-modellens 95 %-konfidensintervall for 7-dagerssummen. Den øvre grensen for konfidensintervallet representerer det nivået som – gitt modellens estimerte usikkerhet – dekker etterspørselen med 95 % sannsynlighet. Sikkerhetslageret defineres som:
+
+$$SS = \text{CI}_{\text{øvre},\,7d} - \hat{F}_{7d}$$
+
+der *CI_øvre,7d* er summen av de øvre 95 %-konfidensgrensene for de syv prognosedagene, og *F̂_7d* er punktprognosesummen for samme periode. Den anbefalte bestillingsmengden for én uke er dermed:
+
+$$\text{Anbefalt} = \hat{F}_{7d} + SS = \text{CI}_{\text{øvre},\,7d}$$
+
+Denne fremgangsmåten er i tråd med den klassiske sikkerhetslagerformelen (Silver et al., 2017) og utnytter den modellspesifikke usikkerheten direkte fremfor å benytte en generisk standardavviksbasert tilnærming.
 
 ### 5.2 Data
 
-Her beskriver du hvilke data du har brukt, hvordan du har fått tak i de og hvordan leser evt. kan få tak i dataene om nødvendig.
+#### Datainnsamling
 
-Hvordan er data samlet inn:
+Salgsdata ble samlet inn manuelt ved daglig avlesning av salgstallene i Big Ambitions for hvert av de fire utsalgsstedene. Data ble registrert i separate CSV-filer (semikolonseparert) for hvert utsalgssted, samt én fil for sentrallageret. Registreringen dekker en sammenhengende periode på 101 dager (dag 1 til 101) for alle fem datakilder, noe som tilsvarer om lag 14 fullstendige uker. Hvert utsalgssted har én rad per dag med følgende kolonner: dagnummer, salgsvolum per produkt (åtte kolonner) og ukedag.
 
-- Tidsperiode
-- Intervju – hvor mange og til hvem? (Hvorfor ble disse valgt som intervjuobjekt)
-- Spørreskjema – hvor mange er det sent til, hvor mange fikk dere inn, hvor mange kunne dere bruke – hvem sendte dere til – er det flere versjoner?
-- Data fra ERP-systemet: Periode-antall observasjoner rå data, antall observasjoner etter cleaning.
+#### Datarensing
+
+Ved innledende dataanalyse ble det identifisert et antall verdier som avvek markant fra det øvrige datagrunnlaget. En 3-sigma-regel ble benyttet systematisk for å flagge potensielle feil, der verdier som avviker mer enn tre standardavvik fra seriens gjennomsnitt ble vurdert nærmere. Flaggede verdier ble videre klassifisert som enten isolerte utliggere midt i tidsserien, eller kant-effekter ved begynnelsen og slutten av observasjonsperioden, da disse tolkes ulikt med hensyn til datakvalitet.
+
+Følgende registreringsfeil ble identifisert og korrigert av datainnhenter:
+
+**Tabell 3: Identifiserte og korrigerte registreringsfeil**
+
+| Fil | Produkt | Opprinnelig verdi | Vurdering               |
+|-----|---------|-------------------|-------------------------|
+| LM  | French  | 23 330            | Trolig tastefeil        |
+| LM  | Kebaba  | 22 360            | Trolig tastefeil        |
+| HK  | Hotdog  | 18 235            | Trolig tastefeil        |
+| HK  | Kebaba  | 4 357 (dag 86)    | Isolert utligger (z=8,0) |
+| GM  | Kebaba  | 184               | Manglende siffer        |
+| MH  | Kebaba  | 198               | Manglende siffer        |
+| GM  | French  | 356               | Manglende siffer        |
+
+Sentrallagerdata hadde noe høyere leveransevolum de første tre dagene (dag 1–3) for Pizza, Soda og Ice Cream. Dette ble bekreftet som korrekte verdier som skyldes innledende opplasting av lagerkapasitet ved simuleringens oppstart, og ble ikke korrigert. Tilsvarende ble to forhøyede enkeltdagsverdier for Salad og Kebaba på dag 7 bekreftet korrekte etter manuell gjennomgang av originalregistreringen.
+
+Etter datarensing er alle fem CSV-filer komplette med 101 sammenhengende observasjoner og uten gjenværende isolerte utliggere.
+
+#### Deskriptiv statistikk
+
+Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per utsalgssted. Tabellene 4–7 presenterer nøkkeltall per utsalgssted.
+
+**Tabell 4: Deskriptiv statistikk for daglig salgsvolum – GM (etter datarensing)**
+
+| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|-----------|-------------|-----------|---------|----------|
+| Pizza     | 1 185       | 27        | 1 104   | 1 242    |
+| Salad     | 750         | 147       | 606     | 1 200    |
+| French    | 1 752       | 398       | 1 275   | 2 421    |
+| Burger    | 2 187       | 63        | 2 043   | 2 376    |
+| Hotdog    | 1 444       | 349       | 1 019   | 2 001    |
+| Soda      | 1 084       | 37        | 998     | 1 161    |
+| Ice Cream | 576         | 20        | 516     | 620      |
+| Kebaba    | 1 941       | 64        | 1 677   | 2 049    |
+
+**Tabell 5: Deskriptiv statistikk for daglig salgsvolum – HK (etter datarensing)**
+
+| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|-----------|-------------|-----------|---------|----------|
+| Pizza     | 1 120       | 29        | 1 035   | 1 191    |
+| Salad     | 814         | 98        | 610     | 1 103    |
+| French    | 1 989       | 261       | 1 575   | 2 306    |
+| Burger    | 2 042       | 82        | 1 760   | 2 205    |
+| Hotdog    | 1 804       | 77        | 1 624   | 1 946    |
+| Soda      | 1 007       | 39        | 918     | 1 081    |
+| Ice Cream | 545         | 22        | 483     | 586      |
+| Kebaba    | 1 641       | 198       | 1 321   | 1 856    |
+
+**Tabell 6: Deskriptiv statistikk for daglig salgsvolum – LM (etter datarensing)**
+
+| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|-----------|-------------|-----------|---------|----------|
+| Pizza     | 1 386       | 45        | 1 287   | 1 497    |
+| Salad     | 1 388       | 48        | 1 234   | 1 481    |
+| French    | 1 877       | 376       | 1 244   | 2 625    |
+| Burger    | 2 555       | 96        | 2 181   | 2 736    |
+| Hotdog    | 2 369       | 320       | 1 839   | 2 832    |
+| Soda      | 1 001       | 31        | 924     | 1 083    |
+| Ice Cream | 627         | 86        | 517     | 766      |
+| Kebaba    | 2 323       | 140       | 2 061   | 2 697    |
+
+**Tabell 7: Deskriptiv statistikk for daglig salgsvolum – MH (etter datarensing)**
+
+| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|-----------|-------------|-----------|---------|----------|
+| Pizza     | 1 115       | 51        | 1 020   | 1 353    |
+| Salad     | 852         | 51        | 765     | 1 086    |
+| French    | 1 775       | 415       | 1 074   | 2 320    |
+| Burger    | 2 072       | 102       | 1 734   | 2 463    |
+| Hotdog    | 2 072       | 219       | 1 683   | 2 367    |
+| Soda      | 1 014       | 46        | 856     | 1 118    |
+| Ice Cream | 546         | 17        | 515     | 587      |
+| Kebaba    | 2 048       | 219       | 1 710   | 2 389    |
+
+Det fremgår at det er stor variasjon i standardavvik mellom produktene, og at mønsteret er konsistent på tvers av utsalgsstedene. French fries og Hotdog har gjennomgående vesentlig høyere variasjon enn eksempelvis Ice Cream og Soda. Kebaba viser moderat til lav variasjon etter at registreringsfeilene ble korrigert. LM skiller seg ut med høyere absolutte salgstall for de fleste produkter, men har ikke nødvendigvis høyere relativ variasjon.
+
+Høy standardavvik innebærer større usikkerhet i etterspørselsprognosene og dermed et høyere nødvendig sikkerhetslager. Dette vil være en gjennomgående observasjon i resultatkapittelet: produkter med høy variasjon krever en forholdsmessig større buffer utover selve prognosen for å oppnå ønsket servicegrad.
 
 ---
 
 ## 6 Modellering
 
-*(Skriv her)*
+### 6.1 SARIMA-formulering
+
+Den tilpassede SARIMA(p, d, q)(P, D, Q, 7)-modellen for en gitt tidsserie kan skrives som:
+
+$$\Phi_P(B^7)\,\phi_p(B)\,(1-B)^d(1-B^7)^D\,y_t = \Theta_Q(B^7)\,\theta_q(B)\,\varepsilon_t$$
+
+der *B* er tilbakeskiftoperatoren (*By_t* = *y_t−1*), *φ_p*(*B*) og *Φ_P*(*B*^7) er henholdsvis de ikke-sesongmessige og sesongmessige AR-polynomene, og *θ_q*(*B*) og *Θ_Q*(*B*^7) de tilsvarende MA-polynomene. Faktoren (1−*B*)^d sikrer ikke-sesongmessig stasjonæritet og (1−*B*^7)^D sesongmessig stasjonæritet. *ε_t* er hvit støy.
+
+I praksis ble modellparametrene estimert ved maksimum likelihood via `auto_arima`, og det ble benyttet *D* = 0 for alle modeller i dette datasettet – sesongmønsteret er fanget opp gjennom sesong-AR- og MA-ledd (*P*, *Q*) fremfor sesongdifferensiering.
+
+### 6.2 Automatisk parametertilpasning
+
+For å unngå manuell identifisering av SARIMA-ordre for alle 32 produkt-utsalgsstedskombinasjoner ble `auto_arima` fra pmdarima benyttet med AIC som informasjonskriterium og trinnvis søk aktivert. Funksjonen gjennomfører internt stasjonæritetstest (KPSS-test) for å bestemme *d*, og ADF-test for å bestemme *D*. Søkerommet var avgrenset til *p*, *q* ∈ {0, 1, 2, 3} og *P*, *Q* ∈ {0, 1, 2} for å holde beregningstiden nede og redusere risikoen for overtilpasning.
+
+### 6.3 Tilpassede modeller – oversikt
+
+Tabell 8 gir en komplett oversikt over de 32 tilpassede SARIMA-modellene med modellordre og AIC-verdi. Alle modeller fikk en sesongkomponent (*P* > 0 eller *Q* > 0 med *s* = 7), noe som bekrefter at ukessyklusen er statistisk vesentlig på tvers av alle produkt-utsalgsstedskombinasjoner.
+
+**Tabell 8: Oversikt over tilpassede SARIMA-modeller**
+
+| Utsalgssted | Produkt   | ARIMA-orden | Sesong-orden    | AIC    |
+|-------------|-----------|-------------|-----------------|--------|
+| GM          | Pizza     | (0,1,1)     | (0,0,1,7)       | 739,19 |
+| GM          | Salad     | (1,1,1)     | (0,0,1,7)       | 722,00 |
+| GM          | French    | (1,1,1)     | (2,0,0,7)       | 901,01 |
+| GM          | Burger    | (1,0,0)     | (2,0,0,7)       | 893,48 |
+| GM          | Hotdog    | (1,1,1)     | (0,0,2,7)       | 853,56 |
+| GM          | Soda      | (2,0,0)     | (2,0,0,7)       | 818,28 |
+| GM          | Ice Cream | (1,0,0)     | (2,0,1,7)       | 661,06 |
+| GM          | Kebaba    | (2,0,1)     | (2,0,0,7)       | 910,44 |
+| HK          | Pizza     | (2,0,1)     | (2,0,0,7)       | 767,09 |
+| HK          | Salad     | (1,1,3)     | (0,0,1,7)       | 702,27 |
+| HK          | French    | (1,1,0)     | (2,0,1,7)       | 904,90 |
+| HK          | Burger    | (1,1,2)     | (0,0,1,7)       | 860,67 |
+| HK          | Hotdog    | (0,1,0)     | (0,0,1,7)       | 855,94 |
+| HK          | Soda      | (1,0,0)     | (2,0,1,7)       | 784,70 |
+| HK          | Ice Cream | (3,0,0)     | (2,0,0,7)       | 690,09 |
+| HK          | Kebaba    | (1,1,0)     | (0,0,1,7)       | 869,14 |
+| LM          | Pizza     | (0,1,0)     | (0,0,1,7)       | 813,04 |
+| LM          | Salad     | (0,1,2)     | (0,0,1,7)       | 798,67 |
+| LM          | French    | (1,1,1)     | (2,0,0,7)       | 967,05 |
+| LM          | Burger    | (3,1,1)     | (1,0,0,7)       | 907,53 |
+| LM          | Hotdog    | (2,1,0)     | (0,0,1,7)       | 914,65 |
+| LM          | Soda      | (0,1,0)     | (0,0,1,7)       | 759,23 |
+| LM          | Ice Cream | (1,1,1)     | (0,0,1,7)       | 699,98 |
+| LM          | Kebaba    | (1,1,0)     | (0,0,1,7)       | 903,50 |
+| MH          | Pizza     | (0,1,0)     | (2,0,0,7)       | 755,14 |
+| MH          | Salad     | (1,0,0)     | (2,0,0,7)       | 743,50 |
+| MH          | French    | (1,1,0)     | (2,0,0,7)       | 927,84 |
+| MH          | Burger    | (2,0,1)     | (2,0,0,7)       | 912,85 |
+| MH          | Hotdog    | (0,1,3)     | (0,0,1,7)       | 891,18 |
+| MH          | Soda      | (0,1,0)     | (0,0,1,7)       | 818,97 |
+| MH          | Ice Cream | (1,0,0)     | (2,0,1,7)       | 657,24 |
+| MH          | Kebaba    | (1,1,0)     | (0,0,1,7)       | 906,58 |
+
+Modellordene varierer mellom produkt og utsalgssted, noe som reflekterer at de individuelle salgsseriene har ulik korrelasjonstruktur. Enklere modeller som SARIMA(0,1,0)(0,0,1,7) – som tilsvarer en sesongmessig random walk med MA-ledd – er valgt for produkter med lite systematisk autokorrelasjon utover sesongmønsteret, mens mer komplekse modeller med høyere *p*- og *q*-verdier er valgt der dataene viser sterkere avhengighetsstruktur.
+
+### 6.4 Beregning av sikkerhetslager og anbefalt ordre
+
+For hver tilpasset modell ble SARIMA-prognosen fremskrevet syv dager, og et 95 %-konfidensintervall ble konstruert basert på modellens estimerte feilevarians. Konfidensintervallet tolkes som: dersom modellen er korrekt spesifisert og feilene er normalfordelte, vil 95 % av alle fremtidige 7-dagerssummer falle innenfor dette intervallet.
+
+Anbefalt bestillingsmengde for én uke settes lik den øvre grensen for 7-dagersintervallet, og sikkerhetslageret er differansen mellom denne øvre grensen og punktprognosen (jf. kapittel 5.1). Kildekoden som implementerer denne beregningen er tilgjengelig i vedlegg C.
 
 ---
 
 ## 7 Analyse
 
-Hvordan skrive bacheloroppgave etter at metodedelen er laget? Jo, du lager en analyse!
+### 7.1 Modellnøyaktighet
 
-Dette er siste bit før du kan presentere selve resultatene av studiene. Du kan velge mellom forskjellige metoder, nemlig:
+Tabell 9 sammenfatter MAPE-verdiene fra valideringssettet (siste syv dager) for alle 32 modeller. Verdiene reflekterer modellenes evne til å predikere den faktiske etterspørselen på et produkt-utsalgsstedspar som ikke var benyttet i tilpasningen.
 
-- Kvalitativ metode (intervju eller lignende)
-- Kvantitativ metode
-- Dokumentanalyse
+**Tabell 9: MAPE (%) fra valideringssettet per produkt og utsalgssted**
 
-Prat gjerne med veilederen din om du er usikker på hvilken metode som er best for akkurat din problemstilling.
+| Produkt   | GM   | HK   | LM  | MH   |
+|-----------|------|------|-----|------|
+| Pizza     | 3,1  | 0,8  | 2,3 | 9,2  |
+| Salad     | 4,2  | 15,7 | 1,5 | 16,4 |
+| French    | 16,0 | 1,5  | 2,0 | 21,6 |
+| Burger    | 5,4  | 0,8  | 0,8 | 8,9  |
+| Hotdog    | 19,9 | 2,0  | 7,3 | 7,7  |
+| Soda      | 1,3  | 4,9  | 1,6 | 0,8  |
+| Ice Cream | 2,6  | 5,0  | 4,3 | 1,8  |
+| Kebaba    | 1,1  | 3,1  | 5,1 | 2,2  |
+
+For et klart flertall av modellene (24 av 32) er MAPE under 8 %, noe som generelt regnes som god prognoseytelse (Hyndman & Athanasopoulos, 2021). Åtte modeller har MAPE over 8 %, og av disse har fem MAPE over 15 %. Disse tilhører hovedsakelig to produktkategorier – French fries og Salad – og ett utsalgssted – Murray Hill (MH).
+
+De produktene som gjennomgående gir lav MAPE (Soda, Ice Cream, Kebaba, Burger) kjennetegnes av relativt lav standardavvik i salgsvolum (jf. Tabellene 4–7) og stabil etterspørselsstruktur. Disse er dermed de enkleste å prognostisere. Produkter med høy standardavvik – French fries og i noen grad Hotdog – gir mer varierende MAPE, avhengig av utsalgssted.
+
+### 7.2 Bekreftet ukessyklus
+
+Alle 32 modeller fikk automatisk valgt en sesongkomponent (*P* > 0 eller *Q* > 0 med *s* = 7). Dette er en sterk empirisk bekreftelse på at ukessyklusen er statistisk relevant og systematisk på tvers av alle produkter og utsalgssteder. Mønsteret med lavere salg midt i uken og høyere salg i helg/fredag, som ble identifisert i den innledende dataanalysen, er dermed godt ivaretatt av SARIMA-modellene.
+
+### 7.3 French fries og Hotdog: høy variasjon og heterogen modellytelse
+
+French fries og Hotdog utmerker seg med de høyeste standardavvikene på tvers av utsalgsstedene (jf. Tabellene 4–7). Denne grunnleggende variasjonen i salgsvolum gjenspeiles direkte i modellresultatene. For GM gir French fries MAPE = 16,0 % og Hotdog MAPE = 19,9 %, noe som skyldes at det faktiske salgsnivået i valideringsperioden var i en oppadgående trend som modellen ikke fanget fullt ut. Tilsvarende mønster ses for MH French fries (MAPE = 21,6 %) og MH Salad (MAPE = 16,4 %).
+
+Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK French fries gir MAPE = 1,5 % og HK Hotdog MAPE = 2,0 %. Dette indikerer at den høye MAPE-en ikke er iboende for produktet alene, men er et resultat av samspillet mellom produkt og utsalgssted i den konkrete observasjonsperioden – spesielt der salgsserien hadde en mer utpreget trend mot slutten av observasjonsperioden.
+
+### 7.4 Trendeffekter i Murray Hill
+
+Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, French fries, Burger og Salad. Eksempel: MH French fries har prognosesum på 10 801 enheter, men faktisk siste sju dager summerer til rundt 13 917 enheter – et avvik på om lag 29 %.
+
+Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fullt etablert over de foregående 94 treningsdagene. SARIMA-modellene er designet for stasjonære eller svakt trendende serier, og har begrenset evne til å ekstrapolere en akselererende veksttrend over det historiske nivået. Dette er en klar begrensning som vil bli adressert i diskusjonskapittelet.
+
+Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i den forstand at de høye konfidensintervallene reflekterer den store usikkerheten, og anbefalt bestillingsmengde inkluderer en relativt større buffer for de produktene der MAPE er høy.
 
 ---
 
 ## 8 Resultat
 
-Den kanskje viktigste delen når du skal skrive en bacheloroppgave, er resultatdelen. Her beskriver du alle funnene som er gjort i analyser og studier.
+Kapitlet presenterer det sentrale resultatet av analysen: anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad. Bestillingsmengden er definert som summen av 7-dagers etterspørselsprognose og sikkerhetslager, og tilsvarer det lagernivået hvert utsalgssted må holde for å kunne operere i syv dager uten levering fra sentrallager.
 
-Det er viktig at du presenterer resultatene på en klar og tydelig måte – gjerne ved bruk av tabeller og figurer.
+### 8.1 Garment District (GM)
 
-Noen viktige punkter:
+**Tabell 10: Anbefalte lagernivåer for GM – uke (enheter, 95 % servicegrad)**
 
-- Dersom dette er et eget kapittel så skal dere her kun presentere resultatene i form av tabeller og/eller figurer.
-- Tabeller: Oppsummerte resultater
-- Resultatene er direkte linket til forskningsspørsmålet!
-- Dersom det ikke er det så er det to alternativer:
-  - Kjør analysene på nytt i henhold til forskningsspørsmålet
-  - Endre forskningsspørsmålet slik at det er samsvar med analysene
-- NB: En forklarende tekst for hver tabell og hver figur!
-- Som regel kommer teksten før tabellen/figuren, men noen ganger etter og noen ganger litt tekst først og litt etter tabellen/figuren.
-- Dere vil synes at det er overflødig med forklarende tekst, men det må gjøres og kun det som dere ser: en objektiv presentasjon.
+| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|-----------|------------|-----------------|----------------|
+| Pizza     | 8 500      | 288             | 8 789          |
+| Salad     | 7 642      | 456             | 8 097          |
+| French    | 9 594      | 1 279           | 10 873         |
+| Burger    | 15 353     | 579             | 15 932         |
+| Hotdog    | 7 045      | 1 054           | 8 098          |
+| Soda      | 7 676      | 434             | 8 110          |
+| Ice Cream | 4 121      | 165             | 4 286          |
+| Kebaba    | 13 540     | 736             | 14 275         |
+| **Totalt**| **73 471** | **4 991**       | **78 460**     |
+
+GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgsvolum. Burger og Kebaba dominerer sortimentet volumsmessig. Sikkerhetslageret er relativt lite for stabile produkter som Ice Cream (165 enheter, 4 % av prognosen) og forholdsmessig stort for French fries (1 279 enheter, 13 % av prognosen) og Hotdog (1 054 enheter, 15 %) som følge av høy salgsvariation.
+
+### 8.2 Hell's Kitchen (HK)
+
+**Tabell 11: Anbefalte lagernivåer for HK – uke (enheter, 95 % servicegrad)**
+
+| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|-----------|------------|-----------------|----------------|
+| Pizza     | 7 960      | 358             | 8 318          |
+| Salad     | 5 906      | 442             | 6 348          |
+| French    | 15 369     | 1 556           | 16 925         |
+| Burger    | 14 154     | 799             | 14 952         |
+| Hotdog    | 12 589     | 629             | 13 218         |
+| Soda      | 7 075      | 337             | 7 412          |
+| Ice Cream | 3 742      | 208             | 3 951          |
+| Kebaba    | 13 234     | 1 367           | 14 601         |
+| **Totalt**| **80 029** | **5 696**       | **85 725**     |
+
+HK skiller seg ut ved at French fries er det klart mest solgte produktet med 15 369 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (9 594). Sikkerhetslageret for French (1 556) og Kebaba (1 367) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK French fries en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
+
+### 8.3 Lower Manhattan (LM)
+
+**Tabell 12: Anbefalte lagernivåer for LM – uke (enheter, 95 % servicegrad)**
+
+| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|-----------|------------|-----------------|----------------|
+| Pizza     | 9 594      | 506             | 10 100         |
+| Salad     | 9 954      | 466             | 10 419         |
+| French    | 11 456     | 1 887           | 13 343         |
+| Burger    | 18 742     | 722             | 19 464         |
+| Hotdog    | 14 751     | 1 474           | 16 226         |
+| Soda      | 7 008      | 378             | 7 386          |
+| Ice Cream | 3 607      | 395             | 4 002          |
+| Kebaba    | 17 319     | 1 174           | 18 493         |
+| **Totalt**| **92 431** | **7 002**       | **99 433**     |
+
+Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en 7-dagersanbefaling på nær 100 000 enheter – om lag 27 % mer enn GM. Som beskrevet i casebeskrivelsen skyldes dette bydelens høyere innebygde etterspørsel i spillsimulasjonen, ikke trafikkscoren alene. French fries har det høyeste sikkerhetslageret absolutt (1 887 enheter, 16 % av prognosen), mens Burger er det volumsmessig største enkeltproduktet med 18 742 enheter i prognosen.
+
+### 8.4 Murray Hill (MH)
+
+**Tabell 13: Anbefalte lagernivåer for MH – uke (enheter, 95 % servicegrad)**
+
+| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|-----------|------------|-----------------|----------------|
+| Pizza     | 7 770      | 371             | 8 141          |
+| Salad     | 5 727      | 294             | 6 021          |
+| French    | 10 801     | 2 095           | 12 896         |
+| Burger    | 14 562     | 786             | 15 348         |
+| Hotdog    | 14 375     | 1 170           | 15 545         |
+| Soda      | 7 038      | 525             | 7 563          |
+| Ice Cream | 3 821      | 168             | 3 989          |
+| Kebaba    | 13 080     | 1 495           | 14 574         |
+| **Totalt**| **77 174** | **6 904**       | **84 077**     |
+
+MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgsstedene (8,9 % av total prognosesum), noe som gjenspeiler den høyere etterspørselsusikkerheten for dette stedet i observasjonsperioden. French fries alene har et sikkerhetslager på 2 095 enheter – det høyeste av alle 32 modeller. Som vist i analysekapittelet hadde MH en oppadgående salgstendens i slutten av observasjonsperioden, og de faktiske siste-syv-dagers-tallene overskrider prognosen for flere produkter. Anbefalingene i Tabell 13 bør tolkes med dette forbeholdet, og et konservativt påslag på anbefalte mengder kan vurderes for produkter med høy MAPE.
+
+### 8.5 Samlet oppsummering
+
+Alle 32 SARIMA-modeller leverte konkrete lagernivåanbefalinger. For majoriteten av produkt-utsalgsstedskombinasjonene (24 av 32) ble MAPE under 8 % oppnådd, noe som gir god tillit til at prognosene er representative for forventet etterspørsel. Sikkerhetslageret utgjør gjennomsnittlig 6–9 % av total ukentlig prognose per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog, Kebaba ved utvalgte steder).
+
+Produkter som Ice Cream og Soda kjennetegnes ved svært stabile salgsvolumer og lav MAPE, og krever minimalt sikkerhetslager. Disse produktene er enkle å styre fra et lagerperspektiv. French fries representerer det motsatte: høy salgsvariation, store konfidensintervaller og – avhengig av utsalgssted – moderat til høy modellusikkerhet. For dette produktet er en konservativ tilnærming til lagernivå særlig viktig for å unngå stockout.
 
 ---
 
 ## 9 Diskusjon
 
-I diskusjonsdelen skal du diskutere de forskjellige funnene du har gjort. Her skal du blant annet inkludere en kritisk metodediskusjon, der du vurderer om metoden din var riktig. Diskuter hvor pålitelige funnene dine er, om de er generaliserbare og eventuelle svakheter. Forklar også hvorvidt studiet har gitt ny teoretisk innsikt, og om hypoteser kan avkreftes.
-
-Noen viktige punkter:
-
-- Her skal resultatene diskuteres
-- Studenter blander ofte sammen diskusjon og resultater...
-- Her skal dere kommentere de resultatene som dere har funnet
-- Er dette som forventet?
-- Uventede funn? Hvis ja hvordan kan dere forklare dette
-- Stemmer deres resultater med forskningslitteraturen?
-- Hvis ikke, hvorfor ikke? Og det kan være bra!
-- Hvis ja, kan dere henvise til forskningslitteraturen for å understøtte deres resultater
-- Resultatene diskuteres opp mot problemstillingen! Har dere fått svar på forskningsspørsmålet?
-- Hvilken betydning for næringslivet?
-  - Anbefales som eget punkt i diskusjonen (dette er et viktig punkt i oppgaven)
-  - Hva medfører deres resultater for næringslivet/bedriften?
-  - Hvilke endringer bør bedriften/næringslivet gjøre?
-- Mulig å generalisere?
-- Ta med begrensinger/svakheter i oppgaven
-- Ikke overfokuser på dette punktet men vær ærlige
+*[Skrives i runde 3]*
 
 ---
 
 ## 10 Konklusjon
 
-I oppgavens konklusjon oppsummerer du hovedfunn sett i forhold til problemstilling. Avslutt gjerne med spørsmål til videre forskning, og del personlige refleksjoner du eventuelt måtte ha.
-
-- Hva er det viktigste dere har funnet?
-- Konkludere i henhold til oppgavens problemstilling. Ofte begynner en konklusjon med å gjenta forskningsspørsmålet:
-- «I denne oppgaven har analysert/redegjort for...».
-- «Hovedfunnene i oppgaven viser at ....»
-- «På tross av de svakhetene som oppgaven har er det indikasjoner om at ...»
-- I konklusjonen blir det ofte litt gjentagelse fra diskusjon/resultat men det er helt greit. Her skal dere dra frem de viktigste funnene og hvilken betydning det har for deres case.
+*[Skrives i runde 3]*
 
 ---
 
 ## 11 Bibliografi
 
-*(Legg inn referanser her)*
+Box, G. E. P., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). *Time series analysis: Forecasting and control* (5. utg.). Wiley.
+
+Chopra, S., & Meindl, P. (2019). *Supply chain management: Strategy, planning, and operation* (7. utg.). Pearson.
+
+Hovgaard, M., & Hovgaard, S. (2022). *Big Ambitions* [PC-spill]. Hovgaard Games.
+
+Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and practice* (3. utg.). OTexts. https://otexts.com/fpp3/
+
+Silver, E. A., Pyke, D. F., & Thomas, D. J. (2017). *Inventory and production management in supply chains* (4. utg.). CRC Press.
 
 ---
 
 ## 12 Vedlegg
 
-*(Legg inn vedlegg her)*
+### Vedlegg A – Deskriptiv statistikk alle utsalgssteder
+
+Fullstendig deskriptiv statistikk (gjennomsnitt, standardavvik, minimum, maksimum) for alle produkter og alle utsalgssteder er tilgjengelig i `005 report/core.json` under nøkkelen `sales_statistics`.
+
+### Vedlegg B – SARIMA-resultater
+
+Fullstendige modellresultater (modellorden, AIC, MAPE, prognose, sikkerhetslager, anbefalt lagernivå) for alle 32 modeller er tilgjengelig i `005 report/sarima_results.json`.
+
+### Vedlegg C – Python-kode
+
+Kildekoden for SARIMA-modelleringen er tilgjengelig i `005 report/sarima_model.py`.
