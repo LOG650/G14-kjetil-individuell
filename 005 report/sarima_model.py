@@ -98,8 +98,12 @@ def fit_and_forecast(series: list[int], store: str, product: str) -> tuple:
     fc = np.maximum(fc, 0)
 
     # --- Nøkkeltall ---
-    fc_sum   = float(fc.sum())
-    fc_upper = float(ci[:, 1].sum())           # øvre grense 7-dagerssummen
+    # Dataene er rullerende 7-dagerssummer fra spillet ("sold last 7 days").
+    # Det 7. prognosesteget gir direkte den predikerte 7-dagerssummen for
+    # de neste 7 dagene – det er dette vi vil bestille. Summen av alle 7
+    # prognosetrinn ville telle overlappende vinduer og gi ~7× for høyt tall.
+    fc_sum   = float(fc[-1])                   # 7. steg = prognose neste 7 dager
+    fc_upper = float(ci[-1, 1])                # øvre KI for samme steg
 
     # Sikkerhetslager = øvre KI-grense minus punktprognose (7-dagersnivå)
     safety_stock = max(fc_upper - fc_sum, 0)

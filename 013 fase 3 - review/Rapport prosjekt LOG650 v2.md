@@ -232,14 +232,14 @@ Trafikkscore i Big Ambitions er et mål på potensiell kundestrøm til en eiendo
 
 Til tross for relativt sammenlignbare trafikkscore-verdier selger Lower Manhattan (LM) vesentlig mer enn de tre øvrige stedene, noe Tabell 2 illustrerer.
 
-**Tabell 2: Gjennomsnittlig daglig prognose per utsalgssted (alle produkter summert)**
+**Tabell 2: Ukentlig prognose per utsalgssted (alle produkter summert)**
 
-| Utsalgssted | Prognose per dag (enheter) | Relativt til GM |
+| Utsalgssted | Prognose per uke (enheter) | Relativt til GM |
 |-------------|---------------------------|-----------------|
-| GM          | 10 496                    | 100 %           |
-| HK          | 11 433                    | 109 %           |
-| LM          | 13 204                    | 126 %           |
-| MH          | 11 025                    | 105 %           |
+| GM          | 10 469                    | 100 %           |
+| HK          | 11 402                    | 109 %           |
+| LM          | 13 158                    | 126 %           |
+| MH          | 10 832                    | 103 %           |
 
 Forklaringen ligger ikke i trafikkscoren alene, men i at Big Ambitions også opererer med en bydelsspesifikk *etterspørsel* som varierer mellom områder i spillet. Lower Manhattan er et høyaktivitetsområde i spillet med høyere innebygd etterspørsel etter hurtigmatprodukter enn de øvrige bydelene, noe som driver det høyere salgsvolumet. Dette skillet mellom trafikkscore og bydeletterspørsel er en viktig egenskap ved spillets simulering. For modelleringen innebærer det at individuelle SARIMA-modeller per utsalgssted er nødvendige, fremfor én felles modell for alle.
 
@@ -495,7 +495,7 @@ Interessant nok presterer de samme produktene svært godt ved andre utsalgsstede
 
 ### 7.4 Trendeffekter i Murray Hill
 
-Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, French fries, Burger og Salad. Eksempel: MH French fries har prognosesum på 10 801 enheter, men faktisk siste sju dager summerer til rundt 13 917 enheter – et avvik på om lag 29 %.
+Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, French fries, Burger og Salad. Eksempel: for MH French fries er prognosen for siste 7-dagersvindu 1 511 enheter, mens faktisk siste rullerende 7-dagerssum er 2 236 – et avvik på nær 48 %.
 
 Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fullt etablert over de foregående 94 treningsdagene. SARIMA-modellene er designet for stasjonære eller svakt trendende serier, og har begrenset evne til å ekstrapolere en akselererende veksttrend over det historiske nivået. Dette er en klar begrensning som vil bli adressert i diskusjonskapittelet.
 
@@ -513,17 +513,17 @@ Kapitlet presenterer det sentrale resultatet av analysen: anbefalt ukentlig best
 
 | Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |-----------|------------|-----------------|----------------|
-| Pizza     | 8 500      | 288             | 8 789          |
-| Salad     | 7 642      | 456             | 8 097          |
-| French    | 9 594      | 1 279           | 10 873         |
-| Burger    | 15 353     | 579             | 15 932         |
-| Hotdog    | 7 045      | 1 054           | 8 098          |
-| Soda      | 7 676      | 434             | 8 110          |
-| Ice Cream | 4 121      | 165             | 4 286          |
-| Kebaba    | 13 540     | 736             | 14 275         |
-| **Totalt**| **73 471** | **4 991**       | **78 460**     |
+| Pizza     | 1 219      | 55              | 1 273          |
+| Salad     | 1 108      | 111             | 1 219          |
+| French    | 1 381      | 312             | 1 694          |
+| Burger    | 2 172      | 98              | 2 270          |
+| Hotdog    | 995        | 264             | 1 259          |
+| Soda      | 1 088      | 76              | 1 164          |
+| Ice Cream | 568        | 29              | 596            |
+| Kebaba    | 1 938      | 136             | 2 073          |
+| **Totalt**| **10 469** | **1 081**       | **11 548**     |
 
-GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgsvolum. Burger og Kebaba dominerer sortimentet volumsmessig. Sikkerhetslageret er relativt lite for stabile produkter som Ice Cream (165 enheter, 4 % av prognosen) og forholdsmessig stort for French fries (1 279 enheter, 13 % av prognosen) og Hotdog (1 054 enheter, 15 %) som følge av høy salgsvariation.
+GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgsvolum. Burger og Kebaba dominerer sortimentet volumsmessig. Sikkerhetslageret er relativt lite for stabile produkter som Ice Cream (29 enheter, 5 % av prognosen) og forholdsmessig stort for French fries (312 enheter, 23 % av prognosen) og Hotdog (264 enheter, 27 %) som følge av høy salgsvariation.
 
 ### 8.2 Hell's Kitchen (HK)
 
@@ -531,17 +531,17 @@ GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgs
 
 | Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |-----------|------------|-----------------|----------------|
-| Pizza     | 7 960      | 358             | 8 318          |
-| Salad     | 5 906      | 442             | 6 348          |
-| French    | 15 369     | 1 556           | 16 925         |
-| Burger    | 14 154     | 799             | 14 952         |
-| Hotdog    | 12 589     | 629             | 13 218         |
-| Soda      | 7 075      | 337             | 7 412          |
-| Ice Cream | 3 742      | 208             | 3 951          |
-| Kebaba    | 13 234     | 1 367           | 14 601         |
-| **Totalt**| **80 029** | **5 696**       | **85 725**     |
+| Pizza     | 1 113      | 67              | 1 180          |
+| Salad     | 843        | 108             | 951            |
+| French    | 2 250      | 371             | 2 621          |
+| Burger    | 2 034      | 166             | 2 200          |
+| Hotdog    | 1 811      | 123             | 1 935          |
+| Soda      | 980        | 60              | 1 039          |
+| Ice Cream | 536        | 38              | 574            |
+| Kebaba    | 1 835      | 334             | 2 169          |
+| **Totalt**| **11 402** | **1 267**       | **12 669**     |
 
-HK skiller seg ut ved at French fries er det klart mest solgte produktet med 15 369 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (9 594). Sikkerhetslageret for French (1 556) og Kebaba (1 367) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK French fries en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
+HK skiller seg ut ved at French fries er det klart mest solgte produktet med 2 250 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (1 381). Sikkerhetslageret for French (371) og Kebaba (334) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK French fries en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
 
 ### 8.3 Lower Manhattan (LM)
 
@@ -549,17 +549,17 @@ HK skiller seg ut ved at French fries er det klart mest solgte produktet med 15 
 
 | Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |-----------|------------|-----------------|----------------|
-| Pizza     | 9 594      | 506             | 10 100         |
-| Salad     | 9 954      | 466             | 10 419         |
-| French    | 11 456     | 1 887           | 13 343         |
-| Burger    | 18 742     | 722             | 19 464         |
-| Hotdog    | 14 751     | 1 474           | 16 226         |
-| Soda      | 7 008      | 378             | 7 386          |
-| Ice Cream | 3 607      | 395             | 4 002          |
-| Kebaba    | 17 319     | 1 174           | 18 493         |
-| **Totalt**| **92 431** | **7 002**       | **99 433**     |
+| Pizza     | 1 388      | 99              | 1 487          |
+| Salad     | 1 435      | 90              | 1 525          |
+| French    | 1 646      | 457             | 2 103          |
+| Burger    | 2 651      | 134             | 2 785          |
+| Hotdog    | 2 010      | 362             | 2 373          |
+| Soda      | 1 016      | 74              | 1 090          |
+| Ice Cream | 516        | 94              | 610            |
+| Kebaba    | 2 496      | 255             | 2 751          |
+| **Totalt**| **13 158** | **1 565**       | **14 724**     |
 
-Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en 7-dagersanbefaling på nær 100 000 enheter – om lag 27 % mer enn GM. Som beskrevet i casebeskrivelsen skyldes dette bydelens høyere innebygde etterspørsel i spillsimulasjonen, ikke trafikkscoren alene. French fries har det høyeste sikkerhetslageret absolutt (1 887 enheter, 16 % av prognosen), mens Burger er det volumsmessig største enkeltproduktet med 18 742 enheter i prognosen.
+Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en 7-dagersanbefaling på 14 724 enheter – om lag 27 % mer enn GM. Som beskrevet i casebeskrivelsen skyldes dette bydelens høyere innebygde etterspørsel i spillsimulasjonen, ikke trafikkscoren alene. French fries har det høyeste sikkerhetslageret absolutt (457 enheter, 28 % av prognosen), mens Burger er det volumsmessig største enkeltproduktet med 2 651 enheter i prognosen.
 
 ### 8.4 Murray Hill (MH)
 
@@ -567,21 +567,21 @@ Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en
 
 | Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |-----------|------------|-----------------|----------------|
-| Pizza     | 7 770      | 371             | 8 141          |
-| Salad     | 5 727      | 294             | 6 021          |
-| French    | 10 801     | 2 095           | 12 896         |
-| Burger    | 14 562     | 786             | 15 348         |
-| Hotdog    | 14 375     | 1 170           | 15 545         |
-| Soda      | 7 038      | 525             | 7 563          |
-| Ice Cream | 3 821      | 168             | 3 989          |
-| Kebaba    | 13 080     | 1 495           | 14 574         |
-| **Totalt**| **77 174** | **6 904**       | **84 077**     |
+| Pizza     | 1 115      | 73              | 1 188          |
+| Salad     | 821        | 54              | 875            |
+| French    | 1 511      | 531             | 2 042          |
+| Burger    | 2 055      | 145             | 2 199          |
+| Hotdog    | 1 895      | 261             | 2 157          |
+| Soda      | 1 008      | 103             | 1 111          |
+| Ice Cream | 550        | 29              | 579            |
+| Kebaba    | 1 877      | 346             | 2 222          |
+| **Totalt**| **10 832** | **1 542**       | **12 373**     |
 
-MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgsstedene (8,9 % av total prognosesum), noe som gjenspeiler den høyere etterspørselsusikkerheten for dette stedet i observasjonsperioden. French fries alene har et sikkerhetslager på 2 095 enheter – det høyeste av alle 32 modeller. Som vist i analysekapittelet hadde MH en oppadgående salgstendens i slutten av observasjonsperioden, og de faktiske siste-syv-dagers-tallene overskrider prognosen for flere produkter. Anbefalingene i Tabell 13 bør tolkes med dette forbeholdet, og et konservativt påslag på anbefalte mengder kan vurderes for produkter med høy MAPE.
+MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgsstedene (14,2 % av total prognosesum), noe som gjenspeiler den høyere etterspørselsusikkerheten for dette stedet i observasjonsperioden. French fries alene har et sikkerhetslager på 531 enheter – det høyeste av alle 32 modeller. Som vist i analysekapittelet hadde MH en oppadgående salgstendens i slutten av observasjonsperioden, og de faktiske siste rullerende 7-dagerssummene overskrider prognosen for flere produkter. Anbefalingene i Tabell 13 bør tolkes med dette forbeholdet, og et konservativt påslag på anbefalte mengder kan vurderes for produkter med høy MAPE.
 
 ### 8.5 Samlet oppsummering
 
-Alle 32 SARIMA-modeller leverte konkrete lagernivåanbefalinger. For majoriteten av produkt-utsalgsstedskombinasjonene (24 av 32) ble MAPE under 8 % oppnådd, noe som gir god tillit til at prognosene er representative for forventet etterspørsel. Sikkerhetslageret utgjør gjennomsnittlig 6–9 % av total ukentlig prognose per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog, Kebaba ved utvalgte steder).
+Alle 32 SARIMA-modeller leverte konkrete lagernivåanbefalinger. For majoriteten av produkt-utsalgsstedskombinasjonene (24 av 32) ble MAPE under 8 % oppnådd, noe som gir god tillit til at prognosene er representative for forventet etterspørsel. Sikkerhetslageret utgjør 10–14 % av total ukentlig prognose per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog, Kebaba ved utvalgte steder).
 
 Produkter som Ice Cream og Soda kjennetegnes ved svært stabile salgsvolumer og lav MAPE, og krever minimalt sikkerhetslager. Disse produktene er enkle å styre fra et lagerperspektiv. French fries representerer det motsatte: høy salgsvariation, store konfidensintervaller og – avhengig av utsalgssted – moderat til høy modellusikkerhet. For dette produktet er en konservativ tilnærming til lagernivå særlig viktig for å unngå stockout.
 
@@ -613,7 +613,7 @@ En plausibel forklaring er at salgsseriene for disse produktene ved de «gode» 
 
 Beregningen av sikkerhetslager direkte fra SARIMA-konfidensintervallet forutsetter at prognosefeilene er tilnærmet normalfordelte. Denne forutsetningen er innebygd i maksimum likelihood-estimeringen i SARIMA-modellen og er en standardantagelse som holder godt for mange stabile tidsrekker, men som kan brytes for serier med sporadiske sprang eller skjev fordeling (Box et al., 2015). For produktene og utsalgsstedene der MAPE er lav, er det rimelig å anta at normalfordelingsantagelsen holder tilfredsstillende. For MH i vekstfase er den mer diskutabel.
 
-En praktisk begrensning er at konfidensintervallene fra SARIMA kan bli svært vide for modeller med høy residualvarians, noe som fører til store sikkerhetslagre. For French fries ved MH er sikkerhetslageret 2 095 enheter (19,4 % av prognosen), noe som reflekterer den reelle usikkerheten, men som også kan bidra til overlagring dersom trenden stabiliserer seg. Det er derfor hensiktsmessig å revurdere lagernivåanbefalingene periodisk, fremfor å behandle dem som statiske referansestørrelser.
+En praktisk begrensning er at konfidensintervallene fra SARIMA kan bli svært vide for modeller med høy residualvarians, noe som fører til store sikkerhetslagre. For French fries ved MH er sikkerhetslageret 531 enheter (35 % av prognosen), noe som reflekterer den reelle usikkerheten, men som også kan bidra til overlagring dersom trenden stabiliserer seg. Det er derfor hensiktsmessig å revurdere lagernivåanbefalingene periodisk, fremfor å behandle dem som statiske referansestørrelser.
 
 ### 9.5 Simuleringens overføringsverdi til reelle data
 
@@ -635,7 +635,7 @@ Rapporten undersøkte hvordan SARIMA-basert etterspørselsprognose kan benyttes 
 
 **Delspørsmål 1 – Modellvalg:** For alle 32 kombinasjoner av produkt og utsalgssted ble det identifisert en SARIMA-modell med sesongperiode *s* = 7 som den best tilpassede modellen etter AIC-kriteriet. Sesongkomponenten ble valgt automatisk for samtlige modeller, noe som bekrefter at en statistisk målbar ukentlig salgssyklus er til stede i dataene på tvers av alle produkter og utsalgssteder. Modellordene varierer betydelig mellom kombinasjonene – fra enkle random walk-modeller med sesong-MA-ledd til mer komplekse modeller med høyere AR- og MA-orden – noe som understreker behovet for individuelle modeller fremfor én felles modell. Valideringen mot de siste syv dagenes faktiske salg viser at 24 av 32 modeller oppnår MAPE under 8 %, noe som klassifiseres som god prognoseytelse.
 
-**Delspørsmål 2 – Lagernivåer:** Basert på 7-dagers SARIMA-prognoser og 95 %-konfidensintervaller er det beregnet konkrete lagernivåanbefalinger for alle 32 produkt-utsalgsstedskombinasjonene. Anbefalt ukentlig bestillingsmengde per utsalgssted er 78 460 enheter for GM, 85 725 for HK, 99 433 for LM og 84 077 for MH. Sikkerhetslageret utgjør 6–9 % av total prognosesum per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog og Kebaba). Produktene Ice Cream og Soda er de enkleste å styre: lav variasjon, lav MAPE og minimalt sikkerhetslager.
+**Delspørsmål 2 – Lagernivåer:** Basert på 7-dagers SARIMA-prognoser og 95 %-konfidensintervaller er det beregnet konkrete lagernivåanbefalinger for alle 32 produkt-utsalgsstedskombinasjonene. Anbefalt ukentlig bestillingsmengde per utsalgssted er 11 548 enheter for GM, 12 669 for HK, 14 724 for LM og 12 373 for MH. Sikkerhetslageret utgjør 6–9 % av total prognosesum per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog og Kebaba). Produktene Ice Cream og Soda er de enkleste å styre: lav variasjon, lav MAPE og minimalt sikkerhetslager.
 
 Et viktig forbehold er knyttet til Murray Hill, der en oppadgående salgstendens mot slutten av observasjonsperioden indikerer at SARIMA-modellene kan underpredikere fremtidig etterspørsel for dette utsalgsstedet. Det anbefales å revurdere lagernivåene for MH etter at en lengre og mer stabil observasjonsperiode er tilgjengelig.
 
