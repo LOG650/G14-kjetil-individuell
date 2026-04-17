@@ -28,6 +28,18 @@ RESULTS_FILE = os.path.join(BASE_DIR, "sarima_results.json")
 STORES   = ["GM", "HK", "LM", "MH"]
 PRODUCTS = ["Pizza", "Salad", "French", "Burger", "Hotdog", "Soda", "Ice Cream", "Kebaba"]
 
+# Norske visningsnavn (brukes i figurtitler og akseetiketter)
+PRODUCT_LABELS = {
+    "Pizza":     "Pizza",
+    "Salad":     "Salat",
+    "French":    "Pommes frites",
+    "Burger":    "Hamburger",
+    "Hotdog":    "Pølse",
+    "Soda":      "Brus",
+    "Ice Cream": "Iskrem",
+    "Kebaba":    "Kebab",
+}
+
 STORE_COLORS = {
     "GM": "#4C72B0",
     "HK": "#DD8452",
@@ -69,7 +81,7 @@ ax.fill_betweenx(
 ax.set_xlabel("Dag", fontsize=10)
 ax.set_ylabel("Enheter (rullerende 7-dagers sum)", fontsize=10)
 ax.set_title(
-    "Figur 1: French fries – rullerende 7-dagers salg per utsalgssted",
+    "Figur 1: Pommes frites – rullerende 7-dagers salg per utsalgssted",
     fontsize=11, fontweight="bold"
 )
 ax.yaxis.set_major_formatter(fmt_int)
@@ -96,7 +108,7 @@ axes = axes.flatten()
 COLOR_FC = "#4C72B0"
 COLOR_SS = "#DD8452"
 x = np.arange(len(PRODUCTS))
-prod_labels = [p if p != "Ice Cream" else "Ice\nCream" for p in PRODUCTS]
+prod_labels = [PRODUCT_LABELS[p].replace(" ", "\n") if len(PRODUCT_LABELS[p]) > 8 else PRODUCT_LABELS[p] for p in PRODUCTS]
 
 for idx, store in enumerate(STORES):
     ax = axes[idx]
@@ -125,7 +137,7 @@ handles = [
 ]
 fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=10, frameon=True)
 fig.suptitle(
-    "Figur 2: Anbefalt ukentlig bestilling per produkt per utsalgssted (95 % servicegrad)",
+    "Figur 4: Anbefalt ukentlig bestilling per produkt per utsalgssted (95 % servicegrad)",
     fontsize=12, fontweight="bold"
 )
 plt.tight_layout(rect=[0, 0.06, 1, 0.97])
