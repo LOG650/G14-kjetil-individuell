@@ -489,15 +489,25 @@ Alle 32 modeller fikk automatisk valgt en sesongkomponent (*P* > 0 eller *Q* > 0
 
 ### 7.3 French fries og Hotdog: høy variasjon og heterogen modellytelse
 
+Figur 1 viser den rullerende 7-dagers salgsutviklingen for French fries ved alle fire utsalgssteder gjennom hele observasjonsperioden. Det fremgår tydelig at HK har det høyeste salgsvolumet for dette produktet, og at alle fire seriene har en oppadgående tendens mot slutten av perioden – med MH som den mest markante.
+
+![Figur 1: French fries – rullerende 7-dagers salg per utsalgssted](../005 report/plots/fig1_french_tidsserie.png)
+
 French fries og Hotdog utmerker seg med de høyeste standardavvikene på tvers av utsalgsstedene (jf. Tabellene 4–7). Denne grunnleggende variasjonen i salgsvolum gjenspeiles direkte i modellresultatene. For GM gir French fries MAPE = 16,0 % og Hotdog MAPE = 19,9 %, noe som skyldes at det faktiske salgsnivået i valideringsperioden var i en oppadgående trend som modellen ikke fanget fullt ut. Tilsvarende mønster ses for MH French fries (MAPE = 21,6 %) og MH Salad (MAPE = 16,4 %).
 
-Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK French fries gir MAPE = 1,5 % og HK Hotdog MAPE = 2,0 %. Dette indikerer at den høye MAPE-en ikke er iboende for produktet alene, men er et resultat av samspillet mellom produkt og utsalgssted i den konkrete observasjonsperioden – spesielt der salgsserien hadde en mer utpreget trend mot slutten av observasjonsperioden.
+Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK French fries gir MAPE = 1,5 % og HK Hotdog MAPE = 2,0 %. Figur 2 illustrerer dette med et eksempel på et godt modelltilpasset tilfelle.
+
+![Figur 2: SARIMA-prognose HK – French fries (MAPE = 1,5 %)](../005 report/plots/HK_French.png) Dette indikerer at den høye MAPE-en ikke er iboende for produktet alene, men er et resultat av samspillet mellom produkt og utsalgssted i den konkrete observasjonsperioden – spesielt der salgsserien hadde en mer utpreget trend mot slutten av observasjonsperioden.
 
 ### 7.4 Trendeffekter i Murray Hill
 
 Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, French fries, Burger og Salad. Eksempel: for MH French fries er prognosen for siste 7-dagersvindu 1 511 enheter, mens faktisk siste rullerende 7-dagerssum er 2 236 – et avvik på nær 48 %.
 
 Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fullt etablert over de foregående 94 treningsdagene. SARIMA-modellene er designet for stasjonære eller svakt trendende serier, og har begrenset evne til å ekstrapolere en akselererende veksttrend over det historiske nivået. Dette er en klar begrensning som vil bli adressert i diskusjonskapittelet.
+
+Figur 3 viser SARIMA-prognosen for MH French fries, der det tydelig fremgår at prognosen (oransje) systematisk ligger under de faktiske valideringsverdiene (grå stiplet).
+
+![Figur 3: SARIMA-prognose MH – French fries (MAPE = 21,6 %)](../005 report/plots/MH_French.png)
 
 Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i den forstand at de høye konfidensintervallene reflekterer den store usikkerheten, og anbefalt bestillingsmengde inkluderer en relativt større buffer for de produktene der MAPE er høy.
 
@@ -582,6 +592,10 @@ MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgssted
 ### 8.5 Samlet oppsummering
 
 Alle 32 SARIMA-modeller leverte konkrete lagernivåanbefalinger. For majoriteten av produkt-utsalgsstedskombinasjonene (24 av 32) ble MAPE under 8 % oppnådd, noe som gir god tillit til at prognosene er representative for forventet etterspørsel. Sikkerhetslageret utgjør 10–14 % av total ukentlig prognose per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog, Kebaba ved utvalgte steder).
+
+Figur 4 gir en visuell oppsummering av lagernivåanbefalingene for alle 32 kombinasjoner. Den blå delen av hver søyle representerer punktprognosen og den oransje bufferen utgjør sikkerhetslageret.
+
+![Figur 4: Anbefalt ukentlig bestilling per produkt per utsalgssted](../005 report/plots/fig2_anbefalt_bestilling.png)
 
 Produkter som Ice Cream og Soda kjennetegnes ved svært stabile salgsvolumer og lav MAPE, og krever minimalt sikkerhetslager. Disse produktene er enkle å styre fra et lagerperspektiv. French fries representerer det motsatte: høy salgsvariation, store konfidensintervaller og – avhengig av utsalgssted – moderat til høy modellusikkerhet. For dette produktet er en konservativ tilnærming til lagernivå særlig viktig for å unngå stockout.
 
