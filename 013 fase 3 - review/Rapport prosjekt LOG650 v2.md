@@ -297,7 +297,7 @@ Sikkerhetslageret ble beregnet direkte fra SARIMA-modellens 95 %-konfidensinterv
 
 $$SS = \text{CI}_{\text{øvre},\,7d} - \hat{F}_{7d}$$
 
-der *CI_øvre,7d* er summen av de øvre 95 %-konfidensgrensene for de syv prognosedagene, og *F̂_7d* er punktprognosesummen for samme periode. Den anbefalte bestillingsmengden for én uke er dermed:
+der *CI_øvre,7d* er den øvre 95 %-konfidensgrensen for det syvende prognosesteget, og *F̂_7d* er punktprognosen for samme steg. Fordi dataene er rullerende 7-dagerssummer fra spillet, representerer det syvende prognosesteget direkte den predikerte totale etterspørselen for de neste syv dagene. Den anbefalte bestillingsmengden for én uke er dermed:
 
 $$\text{Anbefalt} = \hat{F}_{7d} + SS = \text{CI}_{\text{øvre},\,7d}$$
 
@@ -454,9 +454,9 @@ Modellordene varierer mellom produkt og utsalgssted, noe som reflekterer at de i
 
 ### 6.4 Beregning av sikkerhetslager og anbefalt ordre
 
-For hver tilpasset modell ble SARIMA-prognosen fremskrevet syv dager, og et 95 %-konfidensintervall ble konstruert basert på modellens estimerte feilevarians. Konfidensintervallet tolkes som: dersom modellen er korrekt spesifisert og feilene er normalfordelte, vil 95 % av alle fremtidige 7-dagerssummer falle innenfor dette intervallet.
+For hver tilpasset modell ble SARIMA-prognosen fremskrevet syv steg, og et 95 %-konfidensintervall ble konstruert for hvert steg basert på modellens estimerte feilevarians. Fordi de registrerte salgsdata er rullerende 7-dagerssummer («sold last 7 days» i spillet), representerer det syvende prognosesteget direkte den predikerte totale etterspørselen for de neste syv dagene. Det er dette stegets konfidensintervall som benyttes.
 
-Anbefalt bestillingsmengde for én uke settes lik den øvre grensen for 7-dagersintervallet, og sikkerhetslageret er differansen mellom denne øvre grensen og punktprognosen (jf. kapittel 5.1). Kildekoden som implementerer denne beregningen er tilgjengelig i vedlegg C.
+Anbefalt bestillingsmengde for én uke settes lik den øvre 95 %-grensen for det syvende prognosesteget, og sikkerhetslageret er differansen mellom denne øvre grensen og punktprognosen for samme steg (jf. kapittel 5.1). Kildekoden som implementerer denne beregningen er tilgjengelig i vedlegg C.
 
 ---
 
