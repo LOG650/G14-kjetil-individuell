@@ -135,7 +135,25 @@ Følgende antagelser er lagt til grunn for analysen.
 
 ## 2 Litteratur
 
-*[Skrives i runde 3]*
+Forskning på etterspørselsprognoser og lagerstyring spenner over et bredt felt av metoder og anvendelsesområder. Dette kapittelet gir en oversikt over sentrale bidrag som er relevante for problemstillingen i denne rapporten: bruken av SARIMA-modeller til etterspørselsprognoser og den direkte koblingen til sikkerhetslagerberegning.
+
+### 2.1 ARIMA og SARIMA i etterspørselsprognoser
+
+Den metodologiske fundamentet for ARIMA-modellering ble lagt av Box, Jenkins, Reinsel og Ljung (2015) i standardverket *Time Series Analysis: Forecasting and Control*, som gjennom flere tiår har vært referansepunktet for praktisk tidsrekkemodellering. Box og Jenkins introduserte den identifiserings-estimerings-diagnostikk-syklusen som ligger til grunn for manuell modellvalg, og som er automatisert i moderne verktøy som `auto_arima`. Sesongkomponenten i SARIMA-modellen adresserer et grunnleggende fenomen i handelssektoren: at etterspørselen varierer systematisk med ukedagen, måneden eller årstiden, og at denne variasjonen er målbar og kan utnyttes i prognosene.
+
+Hyndman og Athanasopoulos (2021) gir i *Forecasting: Principles and Practice* en bred og tilgjengelig gjennomgang av hele spekteret fra eksponentiell utjevning til ARIMA-modeller, og er en sentral kilde for vurderingen av AIC som informasjonskriterium samt for tolkning av ACF og PACF-diagnostikk. Forfatterne understreker at automatiske modellvalgsalgoritmer – som stepwise-søket i `auto_arima` – i praksis gir resultater på linje med manuell modellvalg for de fleste datasett, mens beregningstiden reduseres dramatisk når et stort antall modeller skal tilpasses. Dette er direkte relevant for dette prosjektet der 32 individuelle modeller ble tilpasset.
+
+Bruken av SARIMA for daglige salgsdata i mat- og detaljhandel er dokumentert i litteraturen. Fellesnevneren er at daglige salgsdata fra serveringssteder og dagligvarehandel nesten alltid viser en signifikant ukentlig sesongkomponent, siden handlevanene til forbrukerne er tett koblet til ukesrytmen med toppunkter i helgene og lavere aktivitet midt i uken (Hyndman & Athanasopoulos, 2021). SARIMA med sesongperiode *s* = 7 er dermed et naturlig valg for slike data, noe som bekreftes av at alle 32 modeller i dette prosjektet fikk valgt en sesongkomponent automatisk.
+
+### 2.2 Lagerstyring og sikkerhetslager
+
+Den klassiske teorien for sikkerhetslager tar utgangspunkt i at etterspørselen er stokastisk og at målet er å fastsette et lagernivå som balanserer stockout-risiko mot lagerkostnader. Silver, Pyke og Thomas (2017) gir en samlet fremstilling av metodene for bestillingspunktsmodeller, servicegradbegreper og beregning av sikkerhetslager under ulike fordelingsantagelser. Den klassiske formelen *SS = z_α · σ_L* er en direkte implementasjon av denne teorien, der z-verdien fra normalfordelingen kobler den ønskede servicegraden til det nødvendige lagernivået. Forutsetningen om normalfordelte prognosefeil er en forenkling som fungerer godt for produkter med jevn og relativt stabil etterspørsel, men som kan undervurdere risikoen for produkter med tunge haler i fordelingen eller systematiske trender.
+
+Chopra og Meindl (2019) setter lagerstyringen inn i et bredere forsyningskjedeperspektiv og understreker at den optimale lagerpolitikken ikke kan ses isolert fra bestillingsfrekvens, ledetid og leverandørvariabilitet. I BiteBurst-konteksten er disse parameterne relativt enkle: ukentlig bestillingssyklus og ingen eksplisitt ledetidsvariasjon. Dette forenkler sikkerhetslagerberegningen til å handle primært om etterspørselsvariasjon over en fast planleggingshorisont, noe SARIMA-konfidensintervallene er godt egnet til å kvantifisere.
+
+### 2.3 Integrering av prognose og lagerstyring
+
+En viktig utvikling i litteraturen er koblingen mellom statistiske prognosemodeller og sikkerhetslagerberegning. Fremfor å bruke historisk standardavvik som en separat inputparameter til sikkerhetslageret, utnytter den tilnærmingen som er benyttet i denne rapporten – direkte avlesning av konfidensintervaller fra SARIMA-modellen – den modellspesifikke usikkerheten slik den er estimert av modellen selv. Fordelen er at sikkerhetslageret automatisk vil være høyere for produkter og perioder der modellen er usikker, og lavere der modellen er presis, uten at dette krever separate vurderinger for hvert produkt (Silver et al., 2017). Denne tilnærmingen er i tråd med prinsippet om at prognose og lagerdimensjonering bør behandles som en integrert prosess fremfor to adskilte trinn.
 
 ---
 
@@ -571,13 +589,57 @@ Produkter som Ice Cream og Soda kjennetegnes ved svært stabile salgsvolumer og 
 
 ## 9 Diskusjon
 
-*[Skrives i runde 3]*
+### 9.1 Modellnøyaktighet og praktisk implikasjon
+
+Resultatene viser at SARIMA-modellene gir god prognoseytelse for majoriteten av produkt-utsalgsstedskombinasjonene: 24 av 32 modeller oppnår MAPE under 8 %, og de beste modellene leverer MAPE under 2 %. Dette er i tråd med hva man kan forvente av SARIMA på daglige salgsdata med tydelige ukesmønstre (Hyndman & Athanasopoulos, 2021). Sett fra et lagerstyringsperspektiv er dette et godt utgangspunkt: for produkter med lav MAPE er konfidensintervallet – og dermed sikkerhetslageret – direkte drevet av den iboende etterspørselsvariansen, ikke av modellusikkerhet. Lageranbefaling og faktisk behov vil i disse tilfellene typisk stemme godt overens.
+
+For de åtte modellene med MAPE over 8 % er bildet mer nyansert. Her er det viktig å skille mellom to årsaker til høy prognosefeil: (1) iboende høy etterspørselsvariation som modellen ikke kan eliminere, og (2) systematiske avvik der modellen konsekvent under- eller overpredikerer som følge av at den historiske strukturen ikke lenger holder. For French fries og Hotdog ved GM, og for flere produkter ved MH, er det siste tilfellet som gjør seg gjeldende – noe som omtales nærmere i avsnitt 9.2 og 9.3.
+
+### 9.2 SARIMA-modellens begrensning ved trendende etterspørsel
+
+Den viktigste begrensningen som avdekkes i analysen, er SARIMA-modellenes vanskelighet med å ekstrapolere en akselererende veksttrend utover det historiske nivået. Murray Hill (MH) viser et systematisk mønster der faktiske salgstall i valideringsperioden (dag 95–101) overstiger prognoseverdiene for flere produkter – mest markant for French fries (faktisk salg ~29 % over prognose) og Burger. SARIMA er designet for stasjonære eller svakt trendende serier og vil, ved tilpasning på 94 dager, i hovedsak ekstrapolere den gjennomsnittlige vekstraten over treningsperioden. Dersom vekstkurven har akselerert mot slutten av observasjonsperioden, vil modellen systematisk underpredikere (Box et al., 2015).
+
+En praktisk konsekvens er at lagernivåanbefalingene for MH – særlig for French fries – bør behandles med et konservativt påslag inntil en lengre og mer stabil observasjonsperiode er tilgjengelig. Alternativt kan en kortere, rullerende treningsvindu (for eksempel de siste 30–60 dagene) gi modeller som er mer responsive til nylige trendskifter, på bekostning av at sesongkomponenten estimeres med færre observasjoner.
+
+Det er viktig å understreke at dette ikke nødvendigvis er en svakhet ved SARIMA som metode, men heller et tegn på at 101 dagers treningsdata kan være utilstrekkelig dersom etterspørselen er i en tidlig vekstfase. Med et lengre datasett der vekstkurven stabiliserer seg, vil SARIMA ha bedre forutsetninger for å fange opp den underliggende strukturen.
+
+### 9.3 Heterogen modellytelse for French fries og Hotdog
+
+French fries og Hotdog utmerker seg med det høyeste standardavviket blant produktene på tvers av alle utsalgssteder, og dette gjenspeiles i varierende modellytelse. Det interessante observasjonen er at de samme produktene kan gi svært lav MAPE ved ett utsalgssted (HK French fries: 1,5 %, HK Hotdog: 2,0 %) og svært høy ved et annet (GM Hotdog: 19,9 %, MH French fries: 21,6 %). Dette peker på at den underliggende årsaken er utsalgsstedsspesifikk, ikke produktspesifikk.
+
+En plausibel forklaring er at salgsseriene for disse produktene ved de «gode» utsalgsstedene hadde en relativt stabil sesongstruktur gjennom hele observasjonsperioden, mens de ved de «svake» utsalgsstedene hadde en mer ustabil trend. SARIMA-modellen er sensitiv for slike strukturbrudd fordi den tilpasses som en helhet over hele treningsperioden, uten å vekte nylige observasjoner høyere. Denne svakheten er godt kjent i litteraturen og er en av motivasjonene for metoder som eksponentiell utjevning med dempet trend, som gir høyere vekt til nylige observasjoner (Hyndman & Athanasopoulos, 2021).
+
+### 9.4 Sikkerhetslagerberegningens validitet
+
+Beregningen av sikkerhetslager direkte fra SARIMA-konfidensintervallet forutsetter at prognosefeilene er tilnærmet normalfordelte. Denne forutsetningen er innebygd i maksimum likelihood-estimeringen i SARIMA-modellen og er en standardantagelse som holder godt for mange stabile tidsrekker, men som kan brytes for serier med sporadiske sprang eller skjev fordeling (Box et al., 2015). For produktene og utsalgsstedene der MAPE er lav, er det rimelig å anta at normalfordelingsantagelsen holder tilfredsstillende. For MH i vekstfase er den mer diskutabel.
+
+En praktisk begrensning er at konfidensintervallene fra SARIMA kan bli svært vide for modeller med høy residualvarians, noe som fører til store sikkerhetslagre. For French fries ved MH er sikkerhetslageret 2 095 enheter (19,4 % av prognosen), noe som reflekterer den reelle usikkerheten, men som også kan bidra til overlagring dersom trenden stabiliserer seg. Det er derfor hensiktsmessig å revurdere lagernivåanbefalingene periodisk, fremfor å behandle dem som statiske referansestørrelser.
+
+### 9.5 Simuleringens overføringsverdi til reelle data
+
+En åpenbar innvending mot prosjektets datagrunnlag er at Big Ambitions er et dataspill, og at etterspørselslogikken i spillet ikke nødvendigvis gjenspeiler dynamikken i reelle hurtigmatrestauranter. Det er rimelig å forvente at reelle data vil ha mer eksogene påvirkningsfaktorer – vær, kampanjer, konkurrenter, lokale hendelser – som ikke er representert i spillets simulering. I tillegg er selve registreringsprosessen manuell, noe som introduserer risiko for enkeltfeil (jf. datarensingskapittelet).
+
+Disse forbeholdene til tross, er metodikken som er utviklet i rapporten fullt overførbar til reelle forretningsdata. Den sentrale metodiske pipelinen – stasjonæritetstest, ACF-analyse, automatisk SARIMA-tilpasning med AIC, konfidensintervallbasert sikkerhetslager – fungerer uavhengig av om dataene er simulerte eller reelle. Det som ville endre seg ved overgang til reelle data, er (1) behovet for mer robust datarensing og håndtering av manglende verdier, (2) muligheten for å inkludere eksternt påvirkende variabler som kampanjer via SARIMAX-utvidelsen, og (3) periodisk reestimering av modellparametrene etter hvert som nye data akkumuleres. Simuleringskonteksten har dermed fungert som et kontrollert testmiljø for metodikken, uten de konfidensialitetshensyn som ville fulgt med reelle bedriftsdata.
+
+### 9.6 Alternative metoder
+
+SARIMA er langt fra den eneste tilgjengelige metoden for etterspørselsprognoser i detaljhandelen. Eksponentiell utjevning med Holt-Winters sesongkomponent er en enklere og mer robust metode som er spesielt god på kortere serier og stabile sesongmønstre (Hyndman & Athanasopoulos, 2021). Sammenlignet med SARIMA krever Holt-Winters ingen stasjonæritetstransformasjoner og er ofte lettere å tolke for ikke-statistikere.
+
+For situasjoner med tilgang til ekstra forklaringsvariabler – slik som kampanjekalender, værdata eller trafikktelling – ville en SARIMAX-modell (SARIMA med eksternt forklaringsvariabel) være et naturlig neste skritt. Maskinlæringsmetoder som gradient boosting og rekurrente nevrale nettverk (LSTM) har vist lovende resultater for prognoser på store datasett med mange produkter, men krever betydelig mer data enn de 101 dagene som er tilgjengelig her for å gi reliable estimater. Med et datasett av denne størrelsen er SARIMA et velegnet valg som balanserer metodisk robusthet med tilgjengelig datavolum.
 
 ---
 
 ## 10 Konklusjon
 
-*[Skrives i runde 3]*
+Rapporten undersøkte hvordan SARIMA-basert etterspørselsprognose kan benyttes til å fastsette optimalt lagernivå per produkt per utsalgssted for hurtigmatbedriften BiteBurst, slik at hvert utsalgssted kan operere i syv dager uten levering fra sentrallager.
+
+**Delspørsmål 1 – Modellvalg:** For alle 32 kombinasjoner av produkt og utsalgssted ble det identifisert en SARIMA-modell med sesongperiode *s* = 7 som den best tilpassede modellen etter AIC-kriteriet. Sesongkomponenten ble valgt automatisk for samtlige modeller, noe som bekrefter at en statistisk målbar ukentlig salgssyklus er til stede i dataene på tvers av alle produkter og utsalgssteder. Modellordene varierer betydelig mellom kombinasjonene – fra enkle random walk-modeller med sesong-MA-ledd til mer komplekse modeller med høyere AR- og MA-orden – noe som understreker behovet for individuelle modeller fremfor én felles modell. Valideringen mot de siste syv dagenes faktiske salg viser at 24 av 32 modeller oppnår MAPE under 8 %, noe som klassifiseres som god prognoseytelse.
+
+**Delspørsmål 2 – Lagernivåer:** Basert på 7-dagers SARIMA-prognoser og 95 %-konfidensintervaller er det beregnet konkrete lagernivåanbefalinger for alle 32 produkt-utsalgsstedskombinasjonene. Anbefalt ukentlig bestillingsmengde per utsalgssted er 78 460 enheter for GM, 85 725 for HK, 99 433 for LM og 84 077 for MH. Sikkerhetslageret utgjør 6–9 % av total prognosesum per utsalgssted, med størst buffer for produkter med høy salgsvariation (French fries, Hotdog og Kebaba). Produktene Ice Cream og Soda er de enkleste å styre: lav variasjon, lav MAPE og minimalt sikkerhetslager.
+
+Et viktig forbehold er knyttet til Murray Hill, der en oppadgående salgstendens mot slutten av observasjonsperioden indikerer at SARIMA-modellene kan underpredikere fremtidig etterspørsel for dette utsalgsstedet. Det anbefales å revurdere lagernivåene for MH etter at en lengre og mer stabil observasjonsperiode er tilgjengelig.
+
+**Videre arbeid:** Metodikken er direkte overførbar til reelle forretningsdata, og et naturlig neste skritt er å validere tilnærmingen mot faktiske salgstall fra en reell hurtigmatkjede. Inkludering av eksogene variabler via SARIMAX-modellen, samt periodisk reestimering av modellparametrene, vil øke robustheten i en operasjonell setting. For utsalgssteder i rask vekst kan en kortere, rullerende treningsvindu vurderes for å gi mer responsive prognoser.
 
 ---
 
