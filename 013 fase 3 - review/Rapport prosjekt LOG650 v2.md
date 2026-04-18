@@ -44,7 +44,7 @@ Den enkelte student er selv ansvarlig for å sette seg inn i hva som er lovlige 
 
 ## Sammendrag
 
-Denne rapporten undersøker hvordan historiske salgsdata kan benyttes til å fastsette optimalt lagernivå for hvert av fire hurtigmatutsalgssteder i den fiktive bedriften BiteBurst. Datagrunnlaget er hentet fra dataspillet Big Ambitions og består av 101 dagers daglige salgsdata for åtte produktkategorier per utsalgssted.
+Denne rapporten undersøker hvordan historiske salgsdata kan benyttes til å fastsette optimalt lagernivå for hvert av fire hurtigmatutsalgssteder i den fiktive bedriften BiteBurst. Datagrunnlaget er hentet fra dataspillet Big Ambitions og består av 101 observasjoner av rullerende 7-dagerssummer for åtte produktkategorier per utsalgssted.
 
 Analysen avdekket statistisk signifikante ukentlige salgsmønstre, noe som motiverte valget av sesong-ARIMA (SARIMA) som prognosemodell med en ukesperiode på syv dager. Modellparametere ble valgt automatisk via auto_arima basert på AIC-kriteriet, og det ble tilpasset 32 individuelle modeller – én per produkt per utsalgssted.
 
@@ -52,7 +52,7 @@ Resultatene viser at SARIMA-modellene predikerer etterspørselen med god nøyakt
 
 ## Abstract
 
-This report investigates how historical sales data can be used to determine optimal inventory levels for four fast-food outlets in the fictional company BiteBurst. The data was collected from the simulation game Big Ambitions and consists of 101 days of daily sales data across eight product categories per outlet.
+This report investigates how historical sales data can be used to determine optimal inventory levels for four fast-food outlets in the fictional company BiteBurst. The data was collected from the simulation game Big Ambitions and consists of 101 observations of rolling 7-day sales sums across eight product categories per outlet.
 
 Analysis revealed statistically significant weekly sales patterns, motivating the choice of Seasonal Autoregressive Integrated Moving Average (SARIMA) as the forecasting model with a seasonal period of seven days. Model parameters were selected automatically via auto_arima based on the AIC criterion, resulting in 32 individual models – one per product per outlet.
 
@@ -88,7 +88,7 @@ Effektiv lagerstyring er en av de mest kritiske faktorene for lønnsomheten i de
 
 Tradisjonelle tilnærminger til lagerstyring baserer seg på gjennomsnittlig etterspørsel og statistiske mål for variasjon for å beregne sikkerhetslager og bestillingspunkter. I takt med økt datatilgjengelighet har imidlertid kvantitative prognosemetoder blitt stadig mer utbredt. Blant disse har tidsrekkemodeller som ARIMA og dens sesongbaserte utvidelse SARIMA vist seg å være godt egnet for etterspørselsprognoser i detaljhandelen, særlig der salgsdata viser sesongmønstre eller autokorrelasjon over tid (Hyndman & Athanasopoulos, 2021). En viktig fordel med slike statistiske modeller er at de kan fange opp strukturen i historiske data og produsere prognoser med tilhørende usikkerhetsintervaller, som kan benyttes direkte til å dimensjonere sikkerhetslager.
 
-Denne rapporten tar utgangspunkt i den fiktive hurtigmatbedriften BiteBurst, som opererer fire utsalgssteder i dataspillet Big Ambitions (Hovgaard & Hovgaard, 2022). Spillet simulerer driften av utsalgssteder med en konsistent etterspørselslogikk og gir dermed en kontrollert setting der salgsdata kan samles inn og analyseres uten å ta hensyn til konfidensielle forretningsopplysninger. Med 101 dager med daglige salgsdata per utsalgssted for åtte produktkategorier danner datagrunnlaget en solid basis for tidsrekkeanalyse.
+Denne rapporten tar utgangspunkt i den fiktive hurtigmatbedriften BiteBurst, som opererer fire utsalgssteder i dataspillet Big Ambitions (Hovgaard & Hovgaard, 2022). Spillet simulerer driften av utsalgssteder med en konsistent etterspørselslogikk og gir dermed en kontrollert setting der salgsdata kan samles inn og analyseres uten å ta hensyn til konfidensielle forretningsopplysninger. Med 101 daglige observasjoner av rullerende 7-dagerssummer per utsalgssted for åtte produktkategorier danner datagrunnlaget en solid basis for tidsrekkeanalyse.
 
 Formålet med rapporten er å undersøke hvordan SARIMA-basert prognosemodellering kan benyttes til å fastsette det optimale lagernivået hvert utsalgssted må holde for å kunne operere i syv dager uten levering fra sentrallager. Et slikt lagernivå er særlig relevant i situasjoner der leveringsforsinkelser eller andre driftsforstyrrelser hindrer ordinær påfylling. Rapporten bidrar til å demonstrere en praktisk og reproduserbar metodikk for lageroptimalisering basert på historiske salgsdata, der en åpen kildekode-løsning i Python automatiserer modellvalg og beregninger.
 
@@ -103,7 +103,7 @@ Rapporten tar utgangspunkt i følgende problemstilling:
 For å strukturere analysen deles problemstillingen inn i to delspørsmål:
 
 1. Hvilken SARIMA-modell beskriver etterspørselen best for hvert produkt per utsalgssted, målt ved Akaike informasjonskriterium (AIC) og gjennomsnittlig absolutt prosentfeil (MAPE)?
-2. Hva er det anbefalte lagernivået per produkt per utsalgssted ved 95 % servicegrad, basert på SARIMA-prognosene og tilhørende konfidensintervaller?
+2. Hva er det anbefalte lagernivået per produkt per utsalgssted ved 95 % servicegrad, basert på SARIMA-prognosene og tilhørende prediksjonsintervaller?
 
 ### 1.2 Avgrensninger
 
@@ -129,7 +129,7 @@ Følgende antagelser er lagt til grunn for analysen.
 
 **Servicegrad:** En servicegrad på 95 % antas å være et hensiktsmessig mål for å balansere stockout-risiko mot lagerkostnader. Dette tilsvarer en z-verdi på 1,645 under normalfordelingsantagelsen.
 
-**Etterspørselsfordeling:** Det antas at prognosefeil er tilnærmet normalfordelte, slik at normalfordelingens z-verdier kan benyttes til å beregne sikkerhetslager fra modellenes konfidensintervaller.
+**Etterspørselsfordeling:** Det antas at prognosefeil er tilnærmet normalfordelte, slik at normalfordelingens z-verdier kan benyttes til å beregne sikkerhetslager fra modellenes prediksjonsintervaller.
 
 ---
 
@@ -149,11 +149,11 @@ Bruken av SARIMA for daglige salgsdata i mat- og detaljhandel er dokumentert i l
 
 Den klassiske teorien for sikkerhetslager tar utgangspunkt i at etterspørselen er stokastisk og at målet er å fastsette et lagernivå som balanserer stockout-risiko mot lagerkostnader. Silver, Pyke og Thomas (2017) gir en samlet fremstilling av metodene for bestillingspunktsmodeller, servicegradbegreper og beregning av sikkerhetslager under ulike fordelingsantagelser. Den klassiske formelen *SS = z_α · σ_L* er en direkte implementasjon av denne teorien, der z-verdien fra normalfordelingen kobler den ønskede servicegraden til det nødvendige lagernivået. Forutsetningen om normalfordelte prognosefeil er en forenkling som fungerer godt for produkter med jevn og relativt stabil etterspørsel, men som kan undervurdere risikoen for produkter med tunge haler i fordelingen eller systematiske trender.
 
-Chopra og Meindl (2019) setter lagerstyringen inn i et bredere forsyningskjedeperspektiv og understreker at den optimale lagerpolitikken ikke kan ses isolert fra bestillingsfrekvens, ledetid og leverandørvariabilitet. I BiteBurst-konteksten er disse parameterne relativt enkle: ukentlig bestillingssyklus og ingen eksplisitt ledetidsvariasjon. Dette forenkler sikkerhetslagerberegningen til å handle primært om etterspørselsvariasjon over en fast planleggingshorisont, noe SARIMA-konfidensintervallene er godt egnet til å kvantifisere.
+Chopra og Meindl (2019) setter lagerstyringen inn i et bredere forsyningskjedeperspektiv og understreker at den optimale lagerpolitikken ikke kan ses isolert fra bestillingsfrekvens, ledetid og leverandørvariabilitet. I BiteBurst-konteksten er disse parameterne relativt enkle: ukentlig bestillingssyklus og ingen eksplisitt ledetidsvariasjon. Dette forenkler sikkerhetslagerberegningen til å handle primært om etterspørselsvariasjon over en fast planleggingshorisont, noe SARIMA-prediksjonsintervallene er godt egnet til å kvantifisere.
 
 ### 2.3 Integrering av prognose og lagerstyring
 
-En viktig utvikling i litteraturen er koblingen mellom statistiske prognosemodeller og sikkerhetslagerberegning. Fremfor å bruke historisk standardavvik som en separat inputparameter til sikkerhetslageret, utnytter den tilnærmingen som er benyttet i denne rapporten – direkte avlesning av konfidensintervaller fra SARIMA-modellen – den modellspesifikke usikkerheten slik den er estimert av modellen selv. Fordelen er at sikkerhetslageret automatisk vil være høyere for produkter og perioder der modellen er usikker, og lavere der modellen er presis, uten at dette krever separate vurderinger for hvert produkt (Silver et al., 2017). Denne tilnærmingen er i tråd med prinsippet om at prognose og lagerdimensjonering bør behandles som en integrert prosess fremfor to adskilte trinn.
+En viktig utvikling i litteraturen er koblingen mellom statistiske prognosemodeller og sikkerhetslagerberegning. Fremfor å bruke historisk standardavvik som en separat inputparameter til sikkerhetslageret, utnytter den tilnærmingen som er benyttet i denne rapporten – direkte avlesning av prediksjonsintervaller fra SARIMA-modellen – den modellspesifikke usikkerheten slik den er estimert av modellen selv. Fordelen er at sikkerhetslageret automatisk vil være høyere for produkter og perioder der modellen er usikker, og lavere der modellen er presis, uten at dette krever separate vurderinger for hvert produkt (Silver et al., 2017). Denne tilnærmingen er i tråd med prinsippet om at prognose og lagerdimensjonering bør behandles som en integrert prosess fremfor to adskilte trinn.
 
 ---
 
@@ -207,7 +207,7 @@ $$SS = z_\alpha \cdot \sigma_L$$
 
 der *z_α* er den korresponderende z-verdien fra normalfordelingen (for 95 % servicegrad er *z* = 1,645), og *σ_L* er standardavviket til prognosefeilen over planleggingshorisonten *L*.
 
-I denne rapporten utnyttes at SARIMA-modellene leverer eksplisitte konfidensintervaller for prognosene. Det øvre konfidensintervallet for 7-dagerssummen ved 95 % nivå gir direkte det mengdenivået som dekker etterspørselen i 95 % av tilfellene. Sikkerhetslageret defineres derfor som differansen mellom det øvre konfidensintervallet og punktprognosen (jf. kapittel 6.4), som en praktisk implementasjon av den klassiske sikkerhetslagerformelen (Silver et al., 2017).
+I denne rapporten utnyttes at SARIMA-modellene leverer eksplisitte prediksjonsintervaller for prognosene. Et prediksjonsintervall angir spredningen til fremtidige enkeltobservasjoner og inkluderer både parameterusikkerhet og residualvarians – i motsetning til et konfidensintervall, som kun angir usikkerheten rundt en estimert parameter. Det øvre prediksjonsintervallet for 7-dagerssummen ved 95 % nivå gir dermed direkte det mengdenivået som dekker etterspørselen i 95 % av tilfellene. Sikkerhetslageret defineres som differansen mellom den øvre prediksjonsgrensen og punktprognosen (jf. kapittel 6.4), som en praktisk implementasjon av den klassiske sikkerhetslagerformelen (Silver et al., 2017).
 
 ---
 
@@ -230,7 +230,7 @@ BiteBurst opererer fire hurtigmatutsalgssteder lokalisert i ulike bydeler i New 
 
 Trafikkscore i Big Ambitions er et mål på potensiell kundestrøm til en eiendom basert på bydelens fottrafikk. Alle fire utsalgsstedene har identisk lokal kapasitet på maksimalt 30 kunder i timen, like store lokaler og identiske åpningstider. Utsalgsstedene er konfigurert uten bruk av spillfunksjoner som reklame eller kampanjer for å minimere eksterne påvirkningsfaktorer på salget.
 
-Til tross for relativt sammenlignbare trafikkscore-verdier selger Lower Manhattan (LM) vesentlig mer enn de tre øvrige stedene, noe Tabell 2 illustrerer.
+Til tross for relativt sammenlignbare trafikkscore-verdier selger Lower Manhattan (LM) vesentlig mer enn de tre øvrige stedene, noe Tabell 2 illustrerer. Tallene i tabellen er hentet fra SARIMA-prognosene presentert i kapittel 8 og er inkludert her for å gi kontekst til de utsalgsstedsrelaterte forskjellene.
 
 **Tabell 2: Ukentlig prognose per utsalgssted (alle produkter summert)**
 
@@ -271,7 +271,7 @@ Valget av SARIMA som prognosemodell ble motivert av to analyser gjennomført på
 
 **Stasjonæritetstesting (ADF):** Augmented Dickey-Fuller-testen ble anvendt på alle 32 salgsserier. For et flertall av produktene på alle utsalgssteder – spesielt de med moderat til sterk trend – ble nullhypotesen om enhetsrot ikke avvist på 5 %-nivå (p > 0,05). Dette indikerer ikke-stasjonæritet og nødvendiggjør differensiering, det vil si *d* ≥ 1. For produkter med relativt stabile nivåer (eksempelvis Iskrem og Brus) ble serien i noen tilfeller vurdert som nær-stasjonær, men sesongdifferensiering ble likevel vurdert separat.
 
-**Autokorrelasjonanalyse (ACF):** For alle 32 serier ble ACF-koeffisienten ved lag 1 beregnet og funnet svært høy (0,77–0,99), noe som bekrefter sterk autokorrelasjon i daglige salgsdata. Av særlig interesse er lag 7: signifikante ACF-koeffisienter (|r| > 0,20) ved forsinkelse 7 ble observert for Pommes frites, Pølse, Kebab og Salat på tvers av utsalgsstedene. Disse funnene underbygger at det eksisterer en statistisk målbar ukentlig sesongkomponent i dataene, og at SARIMA med sesongperiode *s* = 7 er en bedre modellklasse enn ren ARIMA uten sesongleddet.
+**Autokorrelasjonsanalyse (ACF):** For alle 32 serier ble ACF-koeffisienten ved lag 1 beregnet og funnet svært høy (0,77–0,99). Det bemerkes at deler av denne høye lag-1-korrelasjonen er et konstruert artefakt av den rullerende 7-dagers sumstrukturen, der seks av syv dager overlapper mellom påfølgende observasjoner. Denne overlappingen alene vil mekanisk generere høy autokorrelasjon ved korte lag, uavhengig av den underliggende etterspørselsstrukturen. Av særlig interesse er lag 7: signifikante ACF-koeffisienter (|r| > 0,20) ved forsinkelse 7 ble observert eksplisitt for Pommes frites, Pølse, Kebab og Salat på tvers av utsalgsstedene. For øvrige produkter (Pizza, Hamburger, Brus, Iskrem) var lag-7-verdiene lavere, men sesongkomponenten ble likevel valgt av auto_arima for samtlige – noe som reflekterer at søket var begrenset til *s* = 7 som fast sesongperiode. Resultatene er dermed betinget på dette valget, og sesongkomponentens statistiske styrke varierer mellom produktgrupper. Samlet sett støtter ACF-analysen valget av SARIMA med ukessyklus, og det er det syvende prognosestegets prediksjonsintervall som benyttes i sikkerhetslagerberegningen.
 
 Samlet sett gir ADF-testen grunnlag for differensiering og ACF-analysen grunnlag for sesongkomponenten. SARIMA(p, d, q)(P, D, Q, 7) ble valgt som modellklasse for alle 32 kombinasjoner av produkt og utsalgssted.
 
@@ -293,13 +293,13 @@ $$\text{MAPE} = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \r
 
 #### Sikkerhetslagerberegning
 
-Sikkerhetslageret ble beregnet direkte fra SARIMA-modellens 95 %-konfidensintervall for 7-dagerssummen. Den øvre grensen for konfidensintervallet representerer det nivået som – gitt modellens estimerte usikkerhet – dekker etterspørselen med 95 % sannsynlighet. Sikkerhetslageret defineres som:
+Sikkerhetslageret ble beregnet direkte fra SARIMA-modellens 95 %-prediksjonsintervall for 7-dagerssummen. Den øvre prediksjonsgrensen representerer det nivået som – gitt modellens estimerte usikkerhet – dekker etterspørselen med 95 % sannsynlighet. Sikkerhetslageret defineres som:
 
-$$SS = \text{CI}_{\text{øvre},\,7d} - \hat{F}_{7d}$$
+$$SS = \text{PI}_{\text{øvre},\,7d} - \hat{F}_{7d}$$
 
-der *CI_øvre,7d* er den øvre 95 %-konfidensgrensen for det syvende prognosesteget, og *F̂_7d* er punktprognosen for samme steg. Fordi dataene er rullerende 7-dagerssummer fra spillet, representerer det syvende prognosesteget direkte den predikerte totale etterspørselen for de neste syv dagene. Den anbefalte bestillingsmengden for én uke er dermed:
+der *PI_øvre,7d* er den øvre 95 %-prediksjonsgrensen for det syvende prognosesteget, og *F̂_7d* er punktprognosen for samme steg. Fordi dataene er rullerende 7-dagerssummer fra spillet, representerer det syvende prognosesteget direkte den predikerte totale etterspørselen for de neste syv dagene. Den anbefalte bestillingsmengden for én uke er dermed:
 
-$$\text{Anbefalt} = \hat{F}_{7d} + SS = \text{CI}_{\text{øvre},\,7d}$$
+$$\text{Anbefalt} = \hat{F}_{7d} + SS = \text{PI}_{\text{øvre},\,7d}$$
 
 Denne fremgangsmåten er i tråd med den klassiske sikkerhetslagerformelen (Silver et al., 2017) og utnytter den modellspesifikke usikkerheten direkte fremfor å benytte en generisk standardavviksbasert tilnærming.
 
@@ -307,7 +307,7 @@ Denne fremgangsmåten er i tråd med den klassiske sikkerhetslagerformelen (Silv
 
 #### Datainnsamling
 
-Salgsdata ble samlet inn manuelt ved daglig avlesning av salgstallene i Big Ambitions for hvert av de fire utsalgsstedene. Data ble registrert i separate CSV-filer (semikolonseparert) for hvert utsalgssted, samt én fil for sentrallageret. Registreringen dekker en sammenhengende periode på 101 dager (dag 1 til 101) for alle fem datakilder, noe som tilsvarer om lag 14 fullstendige uker. Hvert utsalgssted har én rad per dag med følgende kolonner: dagnummer, salgsvolum per produkt (åtte kolonner) og ukedag.
+Salgsdata ble samlet inn manuelt ved daglig avlesning av salgstallene i Big Ambitions for hvert av de fire utsalgsstedene. Data ble registrert i separate CSV-filer (semikolonseparert) for hvert utsalgssted, samt én fil for sentrallageret. Registreringen dekker en sammenhengende periode på 101 observasjoner (dag 1 til 101) for alle fem datakilder, noe som tilsvarer om lag 14 fullstendige uker. Hvert utsalgssted har én rad per dag med følgende kolonner: dagnummer, rullerende 7-dagers salgsvolum per produkt (åtte kolonner) og ukedag. Det bemerkes at spillgrensesnittet eksponerer salget som rullerende 7-dagerssummer («sold last 7 days»), ikke enkeltdagssalg. Denne datastrukturen innebærer at påfølgende observasjoner overlapper med seks felles dager, noe som skaper konstruert autokorrelasjon i serien uavhengig av den underliggende etterspørselsstrukturen. Dette er redegjort for i avsnitt 5.1.
 
 #### Datarensing
 
@@ -454,9 +454,9 @@ Modellordene varierer mellom produkt og utsalgssted, noe som reflekterer at de i
 
 ### 6.4 Beregning av sikkerhetslager og anbefalt ordre
 
-For hver tilpasset modell ble SARIMA-prognosen fremskrevet syv steg, og et 95 %-konfidensintervall ble konstruert for hvert steg basert på modellens estimerte feilevarians. Fordi de registrerte salgsdata er rullerende 7-dagerssummer («sold last 7 days» i spillet), representerer det syvende prognosesteget direkte den predikerte totale etterspørselen for de neste syv dagene. Det er dette stegets konfidensintervall som benyttes.
+For hver tilpasset modell ble SARIMA-prognosen fremskrevet syv steg, og et 95 %-prediksjonsintervall ble konstruert for hvert steg basert på modellens estimerte feilevarians. Fordi de registrerte salgsdata er rullerende 7-dagerssummer («sold last 7 days» i spillet), representerer det syvende prognosesteget direkte den predikerte totale etterspørselen for de neste syv dagene. Det er dette stegets prediksjonsintervall som benyttes.
 
-Anbefalt bestillingsmengde for én uke settes lik den øvre 95 %-grensen for det syvende prognosesteget, og sikkerhetslageret er differansen mellom denne øvre grensen og punktprognosen for samme steg (jf. kapittel 5.1). Kildekoden som implementerer denne beregningen er tilgjengelig i vedlegg C.
+Anbefalt bestillingsmengde for én uke settes lik den øvre 95 %-prediksjonsgrensen for det syvende prognosesteget, og sikkerhetslageret er differansen mellom denne øvre grensen og punktprognosen for samme steg (jf. kapittel 5.1). Kildekoden som implementerer denne beregningen er tilgjengelig i vedlegg C.
 
 ---
 
@@ -501,13 +501,13 @@ Interessant nok presterer de samme produktene svært godt ved andre utsalgsstede
 
 ![SARIMA-prognose HK – Pommes frites](plots/HK_French.png)
 
-*Figur 2: SARIMA-prognose for Pommes frites ved Hell's Kitchen (MAPE = 1,5 %). Blå linje: treningsdata. Grå stiplet: faktisk validering. Oransje: prognose med 95 % konfidensintervall. Kilde: Egne beregninger.*
+*Figur 2: SARIMA-prognose for Pommes frites ved Hell's Kitchen (MAPE = 1,5 %). Blå linje: treningsdata. Grå stiplet: faktisk validering. Oransje: prognose med 95 % prediksjonsintervall. Kilde: Egne beregninger.*
 
 Dette indikerer at den høye MAPE-en ikke er iboende for produktet alene, men er et resultat av samspillet mellom produkt og utsalgssted i den konkrete observasjonsperioden – spesielt der salgsserien hadde en mer utpreget trend mot slutten av observasjonsperioden.
 
 ### 7.4 Trendeffekter i Murray Hill
 
-Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, Pommes frites, Hamburger og Salat. Eksempel: for MH Pommes frites er prognosen for siste 7-dagersvindu 1 511 enheter, mens faktisk siste rullerende 7-dagerssum er 2 236 – et avvik på nær 48 %.
+Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, Pommes frites, Hamburger og Salat. Eksempel: for MH Pommes frites er prognosen for siste 7-dagersvindu 1 511 enheter, mens faktisk siste rullerende 7-dagerssum er 2 236 – et avvik på nær 48 % for denne enkeltobservasjonen (MAPE på 21,6 % er gjennomsnittet over alle syv valideringsdager).
 
 Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fullt etablert over de foregående 94 treningsdagene. SARIMA-modellene er designet for stasjonære eller svakt trendende serier, og har begrenset evne til å ekstrapolere en akselererende veksttrend over det historiske nivået. Dette er en klar begrensning som vil bli adressert i diskusjonskapittelet.
 
@@ -517,7 +517,7 @@ Figur 3 viser SARIMA-prognosen for MH Pommes frites, der det tydelig fremgår at
 
 *Figur 3: SARIMA-prognose for Pommes frites ved Murray Hill (MAPE = 21,6 %). Prognosen (oransje) undervurderer systematisk de faktiske valideringsverdiene (grå stiplet), noe som reflekterer den oppadgående salgstendensen. Kilde: Egne beregninger.*
 
-Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i den forstand at de høye konfidensintervallene reflekterer den store usikkerheten, og anbefalt bestillingsmengde inkluderer en relativt større buffer for de produktene der MAPE er høy.
+Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i den forstand at de høye prediksjonsintervallene reflekterer den store usikkerheten, og anbefalt bestillingsmengde inkluderer en relativt større buffer for de produktene der MAPE er høy.
 
 ---
 
@@ -559,7 +559,7 @@ GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgs
 | Kebab    | 1 835      | 334             | 2 169          |
 | **Totalt**| **11 402** | **1 267**       | **12 669**     |
 
-HK skiller seg ut ved at Pommes frites er det klart mest solgte produktet med 2 250 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (1 381). Sikkerhetslageret for French (371) og Kebab (334) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK Pommes frites en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
+HK skiller seg ut ved at Pommes frites er det klart mest solgte produktet med 2 250 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (1 381). Sikkerhetslageret for Pommes frites (371) og Kebab (334) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK Pommes frites en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
 
 ### 8.3 Lower Manhattan (LM)
 
@@ -607,7 +607,7 @@ Figur 4 gir en visuell oppsummering av lagernivåanbefalingene for alle 32 kombi
 
 *Figur 4: Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad. Blå: etterspørselsprognose. Oransje: sikkerhetslager. Kilde: Egne beregninger.*
 
-Produkter som Iskrem og Brus kjennetegnes ved svært stabile salgsvolumer og lav MAPE, og krever minimalt sikkerhetslager. Disse produktene er enkle å styre fra et lagerperspektiv. Pommes frites representerer det motsatte: høy salgsvariation, store konfidensintervaller og – avhengig av utsalgssted – moderat til høy modellusikkerhet. For dette produktet er en konservativ tilnærming til lagernivå særlig viktig for å unngå stockout.
+Produkter som Iskrem og Brus kjennetegnes ved svært stabile salgsvolumer og lav MAPE, og krever minimalt sikkerhetslager. Disse produktene er enkle å styre fra et lagerperspektiv. Pommes frites representerer det motsatte: høy salgsvariation, store prediksjonsintervaller og – avhengig av utsalgssted – moderat til høy modellusikkerhet. For dette produktet er en konservativ tilnærming til lagernivå særlig viktig for å unngå stockout.
 
 ---
 
@@ -615,7 +615,7 @@ Produkter som Iskrem og Brus kjennetegnes ved svært stabile salgsvolumer og lav
 
 ### 9.1 Modellnøyaktighet og praktisk implikasjon
 
-Resultatene viser at SARIMA-modellene gir god prognoseytelse for majoriteten av produkt-utsalgsstedskombinasjonene: 24 av 32 modeller oppnår MAPE under 8 %, og de beste modellene leverer MAPE under 2 %. Dette er i tråd med hva man kan forvente av SARIMA på daglige salgsdata med tydelige ukesmønstre (Hyndman & Athanasopoulos, 2021). Sett fra et lagerstyringsperspektiv er dette et godt utgangspunkt: for produkter med lav MAPE er konfidensintervallet – og dermed sikkerhetslageret – direkte drevet av den iboende etterspørselsvariansen, ikke av modellusikkerhet. Lageranbefaling og faktisk behov vil i disse tilfellene typisk stemme godt overens.
+Resultatene viser at SARIMA-modellene gir god prognoseytelse for majoriteten av produkt-utsalgsstedskombinasjonene: 24 av 32 modeller oppnår MAPE under 8 %, og de beste modellene leverer MAPE under 2 %. Dette er i tråd med hva man kan forvente av SARIMA på daglige salgsdata med tydelige ukesmønstre (Hyndman & Athanasopoulos, 2021). Sett fra et lagerstyringsperspektiv er dette et godt utgangspunkt: for produkter med lav MAPE er prediksjonsintervallet – og dermed sikkerhetslageret – direkte drevet av den iboende etterspørselsvariansen, ikke av modellusikkerhet. Lageranbefaling og faktisk behov vil i disse tilfellene typisk stemme godt overens.
 
 For de åtte modellene med MAPE over 8 % er bildet mer nyansert. Her er det viktig å skille mellom to årsaker til høy prognosefeil: (1) iboende høy etterspørselsvariation som modellen ikke kan eliminere, og (2) systematiske avvik der modellen konsekvent under- eller overpredikerer som følge av at den historiske strukturen ikke lenger holder. For Pommes frites og Pølse ved GM, og for flere produkter ved MH, er det siste tilfellet som gjør seg gjeldende – noe som omtales nærmere i avsnitt 9.2 og 9.3.
 
@@ -625,7 +625,7 @@ Den viktigste begrensningen som avdekkes i analysen, er SARIMA-modellenes vanske
 
 En praktisk konsekvens er at lagernivåanbefalingene for MH – særlig for Pommes frites – bør behandles med et konservativt påslag inntil en lengre og mer stabil observasjonsperiode er tilgjengelig. Alternativt kan en kortere, rullerende treningsvindu (for eksempel de siste 30–60 dagene) gi modeller som er mer responsive til nylige trendskifter, på bekostning av at sesongkomponenten estimeres med færre observasjoner.
 
-Det er viktig å understreke at dette ikke nødvendigvis er en svakhet ved SARIMA som metode, men heller et tegn på at 101 dagers treningsdata kan være utilstrekkelig dersom etterspørselen er i en tidlig vekstfase. Med et lengre datasett der vekstkurven stabiliserer seg, vil SARIMA ha bedre forutsetninger for å fange opp den underliggende strukturen.
+Det er viktig å understreke at dette ikke nødvendigvis er en svakhet ved SARIMA som metode, men heller et tegn på at 101 observasjoner kan være utilstrekkelig som treningsgrunnlag dersom etterspørselen er i en tidlig vekstfase. Med et lengre datasett der vekstkurven stabiliserer seg, vil SARIMA ha bedre forutsetninger for å fange opp den underliggende strukturen.
 
 ### 9.3 Heterogen modellytelse for Pommes frites og Pølse
 
@@ -635,21 +635,25 @@ En plausibel forklaring er at salgsseriene for disse produktene ved de «gode» 
 
 ### 9.4 Sikkerhetslagerberegningens validitet
 
-Beregningen av sikkerhetslager direkte fra SARIMA-konfidensintervallet forutsetter at prognosefeilene er tilnærmet normalfordelte. Denne forutsetningen er innebygd i maksimum likelihood-estimeringen i SARIMA-modellen og er en standardantagelse som holder godt for mange stabile tidsrekker, men som kan brytes for serier med sporadiske sprang eller skjev fordeling (Box et al., 2015). For produktene og utsalgsstedene der MAPE er lav, er det rimelig å anta at normalfordelingsantagelsen holder tilfredsstillende. For MH i vekstfase er den mer diskutabel.
+Beregningen av sikkerhetslager direkte fra SARIMA-prediksjonsintervallet forutsetter at prognosefeilene er tilnærmet normalfordelte. Denne forutsetningen er innebygd i maksimum likelihood-estimeringen i SARIMA-modellen og er en standardantagelse som holder godt for mange stabile tidsrekker, men som kan brytes for serier med sporadiske sprang eller skjev fordeling (Box et al., 2015). For produktene og utsalgsstedene der MAPE er lav, er det rimelig å anta at normalfordelingsantagelsen holder tilfredsstillende. For MH i vekstfase er den mer diskutabel.
 
-En praktisk begrensning er at konfidensintervallene fra SARIMA kan bli svært vide for modeller med høy residualvarians, noe som fører til store sikkerhetslagre. For Pommes frites ved MH er sikkerhetslageret 531 enheter (35 % av prognosen), noe som reflekterer den reelle usikkerheten, men som også kan bidra til overlagring dersom trenden stabiliserer seg. Det er derfor hensiktsmessig å revurdere lagernivåanbefalingene periodisk, fremfor å behandle dem som statiske referansestørrelser.
+En praktisk begrensning er at prediksjonsintervallene fra SARIMA kan bli svært vide for modeller med høy residualvarians, noe som fører til store sikkerhetslagre. For Pommes frites ved MH er sikkerhetslageret 531 enheter (35 % av prognosen), noe som reflekterer den reelle usikkerheten, men som også kan bidra til overlagring dersom trenden stabiliserer seg. Det er derfor hensiktsmessig å revurdere lagernivåanbefalingene periodisk, fremfor å behandle dem som statiske referansestørrelser.
+
+Det bemerkes videre at formell residualdiagnostikk – herunder Ljung-Box-test for gjenværende autokorrelasjon i residualene og test for normalitet – ikke er rapportert i denne analysen. For en fullstendig modellvalidering bør slike tester gjennomføres, da de gir grunnlag for å vurdere om modellspesifikasjonen er tilstrekkelig og om prediksjonsintervallenes normalfordelingsantagelse holder.
 
 ### 9.5 Simuleringens overføringsverdi til reelle data
 
 En åpenbar innvending mot prosjektets datagrunnlag er at Big Ambitions er et dataspill, og at etterspørselslogikken i spillet ikke nødvendigvis gjenspeiler dynamikken i reelle hurtigmatrestauranter. Det er rimelig å forvente at reelle data vil ha mer eksogene påvirkningsfaktorer – vær, kampanjer, konkurrenter, lokale hendelser – som ikke er representert i spillets simulering. I tillegg er selve registreringsprosessen manuell, noe som introduserer risiko for enkeltfeil (jf. datarensingskapittelet).
 
-Disse forbeholdene til tross, er metodikken som er utviklet i rapporten fullt overførbar til reelle forretningsdata. Den sentrale metodiske pipelinen – stasjonæritetstest, ACF-analyse, automatisk SARIMA-tilpasning med AIC, konfidensintervallbasert sikkerhetslager – fungerer uavhengig av om dataene er simulerte eller reelle. Det som ville endre seg ved overgang til reelle data, er (1) behovet for mer robust datarensing og håndtering av manglende verdier, (2) muligheten for å inkludere eksternt påvirkende variabler som kampanjer via SARIMAX-utvidelsen, og (3) periodisk reestimering av modellparametrene etter hvert som nye data akkumuleres. Simuleringskonteksten har dermed fungert som et kontrollert testmiljø for metodikken, uten de konfidensialitetshensyn som ville fulgt med reelle bedriftsdata.
+Disse forbeholdene til tross, er metodikken som er utviklet i rapporten fullt overførbar til reelle forretningsdata. Den sentrale metodiske pipelinen – stasjonæritetstest, ACF-analyse, automatisk SARIMA-tilpasning med AIC, prediksjonsintervallbasert sikkerhetslager – fungerer uavhengig av om dataene er simulerte eller reelle. Det som ville endre seg ved overgang til reelle data, er (1) behovet for mer robust datarensing og håndtering av manglende verdier, (2) muligheten for å inkludere eksternt påvirkende variabler som kampanjer via SARIMAX-utvidelsen, og (3) periodisk reestimering av modellparametrene etter hvert som nye data akkumuleres. Simuleringskonteksten har dermed fungert som et kontrollert testmiljø for metodikken, uten de konfidensialitetshensyn som ville fulgt med reelle bedriftsdata.
 
 ### 9.6 Alternative metoder
 
 SARIMA er langt fra den eneste tilgjengelige metoden for etterspørselsprognoser i detaljhandelen. Eksponentiell utjevning med Holt-Winters sesongkomponent er en enklere og mer robust metode som er spesielt god på kortere serier og stabile sesongmønstre (Hyndman & Athanasopoulos, 2021). Sammenlignet med SARIMA krever Holt-Winters ingen stasjonæritetstransformasjoner og er ofte lettere å tolke for ikke-statistikere.
 
-For situasjoner med tilgang til ekstra forklaringsvariabler – slik som kampanjekalender, værdata eller trafikktelling – ville en SARIMAX-modell (SARIMA med eksternt forklaringsvariabel) være et naturlig neste skritt. Maskinlæringsmetoder som gradient boosting og rekurrente nevrale nettverk (LSTM) har vist lovende resultater for prognoser på store datasett med mange produkter, men krever betydelig mer data enn de 101 dagene som er tilgjengelig her for å gi reliable estimater. Med et datasett av denne størrelsen er SARIMA et velegnet valg som balanserer metodisk robusthet med tilgjengelig datavolum.
+For situasjoner med tilgang til ekstra forklaringsvariabler – slik som kampanjekalender, værdata eller trafikktelling – ville en SARIMAX-modell (SARIMA med eksternt forklaringsvariabel) være et naturlig neste skritt. Maskinlæringsmetoder som gradient boosting og rekurrente nevrale nettverk (LSTM) har vist lovende resultater for prognoser på store datasett med mange produkter, men krever betydelig mer data enn de 101 observasjonene som er tilgjengelig her for å gi reliable estimater. Med et datasett av denne størrelsen er SARIMA et velegnet valg som balanserer metodisk robusthet med tilgjengelig datavolum.
+
+Det bemerkes at rapporten ikke inkluderer en eksplisitt sammenlikning mot enklere metoder, som naiv prognose (siste kjente observasjon som fremskrivning) eller enkelt glidende gjennomsnitt. En slik baseline-sammenlikning ville styrket konklusjonen om at SARIMA faktisk tilfører verdi utover trivielle metoder. Dette er et naturlig neste steg dersom metodikken videreføres til reelle data.
 
 ---
 
@@ -659,7 +663,7 @@ Rapporten undersøkte hvordan SARIMA-basert etterspørselsprognose kan benyttes 
 
 **Delspørsmål 1 – Modellvalg:** For alle 32 kombinasjoner av produkt og utsalgssted ble det identifisert en SARIMA-modell med sesongperiode *s* = 7 som den best tilpassede modellen etter AIC-kriteriet. Sesongkomponenten ble valgt automatisk for samtlige modeller, noe som bekrefter at en statistisk målbar ukentlig salgssyklus er til stede i dataene på tvers av alle produkter og utsalgssteder. Modellordene varierer betydelig mellom kombinasjonene – fra enkle random walk-modeller med sesong-MA-ledd til mer komplekse modeller med høyere AR- og MA-orden – noe som understreker behovet for individuelle modeller fremfor én felles modell. Valideringen mot de siste syv dagenes faktiske salg viser at 24 av 32 modeller oppnår MAPE under 8 %, noe som klassifiseres som god prognoseytelse.
 
-**Delspørsmål 2 – Lagernivåer:** Basert på 7-dagers SARIMA-prognoser og 95 %-konfidensintervaller er det beregnet konkrete lagernivåanbefalinger for alle 32 produkt-utsalgsstedskombinasjonene. Anbefalt ukentlig bestillingsmengde per utsalgssted er 11 548 enheter for GM, 12 669 for HK, 14 724 for LM og 12 373 for MH. Sikkerhetslageret utgjør 10–14 % av total prognosesum per utsalgssted, med størst buffer for produkter med høy salgsvariation (Pommes frites, Pølse og Kebab). Produktene Iskrem og Brus er de enkleste å styre: lav variasjon, lav MAPE og minimalt sikkerhetslager.
+**Delspørsmål 2 – Lagernivåer:** Basert på 7-dagers SARIMA-prognoser og 95 %-prediksjonsintervaller er det beregnet konkrete lagernivåanbefalinger for alle 32 produkt-utsalgsstedskombinasjonene. Anbefalt ukentlig bestillingsmengde per utsalgssted er 11 548 enheter for GM, 12 669 for HK, 14 724 for LM og 12 373 for MH. Sikkerhetslageret utgjør 10–14 % av total prognosesum per utsalgssted, med størst buffer for produkter med høy salgsvariation (Pommes frites, Pølse og Kebab). Produktene Iskrem og Brus er de enkleste å styre: lav variasjon, lav MAPE og minimalt sikkerhetslager.
 
 Et viktig forbehold er knyttet til Murray Hill, der en oppadgående salgstendens mot slutten av observasjonsperioden indikerer at SARIMA-modellene kan underpredikere fremtidig etterspørsel for dette utsalgsstedet. Det anbefales å revurdere lagernivåene for MH etter at en lengre og mer stabil observasjonsperiode er tilgjengelig.
 
