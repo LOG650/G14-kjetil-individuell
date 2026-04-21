@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python make_figures.py)"
+      "Bash(python make_figures.py)",
+      "Bash(python regen_report_plots.py)"
     ]
   }
 }

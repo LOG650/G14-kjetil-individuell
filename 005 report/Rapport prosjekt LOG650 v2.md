@@ -508,7 +508,7 @@ Alle 32 modeller fikk automatisk valgt en sesongkomponent (*P* > 0 eller *Q* > 0
 
 Figur 1 viser den rullerende 7-dagers salgsutviklingen for Pommes frites ved alle fire utsalgssteder gjennom hele observasjonsperioden. Det fremgår tydelig at HK har det høyeste salgsvolumet for dette produktet, og at alle fire seriene har en oppadgående tendens mot slutten av perioden – med MH som den mest markante.
 
-![Pommes frites – rullerende 7-dagers salg per utsalgssted](plots/fig1_french_tidsserie.png)
+![Pommes frites – rullerende 7-dagers salg per utsalgssted](plots/fig1_french_tidsserie.png){width=100%}
 
 *Figur 1: Pommes frites – rullerende 7-dagers salg (rullerende 7-dagers sum) per utsalgssted. Grått felt markerer valideringssettet (dag 95–101). Kilde: Egne beregninger.*
 
@@ -516,7 +516,7 @@ Pommes frites og Pølse utmerker seg med de høyeste standardavvikene på tvers 
 
 Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK Pommes frites gir MAPE = 1,5 % og HK Pølse MAPE = 2,0 %. Figur 2 illustrerer dette med et eksempel på et godt modelltilpasset tilfelle.
 
-![SARIMA-prognose HK – Pommes frites](plots/HK_French.png)
+![SARIMA-prognose HK – Pommes frites](plots/HK_French.png){width=100%}
 
 *Figur 2: SARIMA-prognose for Pommes frites ved Hell's Kitchen (MAPE = 1,5 %). Blå linje: treningsdata. Grå stiplet: faktisk validering. Oransje: prognose med 95 % prediksjonsintervall. Kilde: Egne beregninger.*
 
@@ -530,7 +530,7 @@ Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fu
 
 Figur 3 viser SARIMA-prognosen for MH Pommes frites, der det tydelig fremgår at prognosen (oransje) systematisk ligger under de faktiske valideringsverdiene (grå stiplet).
 
-![SARIMA-prognose MH – Pommes frites](plots/MH_French.png)
+![SARIMA-prognose MH – Pommes frites](plots/MH_French.png){width=100%}
 
 *Figur 3: SARIMA-prognose for Pommes frites ved Murray Hill (MAPE = 21,6 %). Prognosen (oransje) undervurderer systematisk de faktiske valideringsverdiene (grå stiplet), noe som reflekterer den oppadgående salgstendensen. Kilde: Egne beregninger.*
 
@@ -641,7 +641,7 @@ Alle 32 SARIMA-modeller leverte konkrete lagernivåanbefalinger. For majoriteten
 
 Figur 4 gir en visuell oppsummering av lagernivåanbefalingene for alle 32 kombinasjoner. Den blå delen av hver søyle representerer punktprognosen og den oransje bufferen utgjør sikkerhetslageret.
 
-![Anbefalt ukentlig bestilling per produkt per utsalgssted](plots/fig2_anbefalt_bestilling.png)
+![Anbefalt ukentlig bestilling per produkt per utsalgssted](plots/fig2_anbefalt_bestilling.png){width=100%}
 
 *Figur 4: Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad. Blå: etterspørselsprognose. Oransje: sikkerhetslager. Kilde: Egne beregninger.*
 

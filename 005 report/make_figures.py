@@ -63,7 +63,7 @@ def load_series(store: str, product: str) -> tuple[list[int], list[str]]:
 # ---------------------------------------------------------------------------
 # Figur 1 – French fries: rullerende 7-dagers salg, alle utsalgssteder
 # ---------------------------------------------------------------------------
-fig, ax = plt.subplots(figsize=(13, 5))
+fig, ax = plt.subplots(figsize=(16, 7))
 
 for store in STORES:
     vals, _ = load_series(store, "French")
@@ -78,20 +78,21 @@ ax.fill_betweenx(
     color="#f5f5f5", zorder=0, label="Valideringssett (dag 95–101)"
 )
 
-ax.set_xlabel("Dag", fontsize=10)
-ax.set_ylabel("Enheter (rullerende 7-dagers sum)", fontsize=10)
+ax.set_xlabel("Dag", fontsize=13)
+ax.set_ylabel("Enheter (rullerende 7-dagers sum)", fontsize=13)
 ax.set_title(
     "Figur 1: Pommes frites – rullerende 7-dagers salg per utsalgssted",
-    fontsize=11, fontweight="bold"
+    fontsize=14, fontweight="bold"
 )
 ax.yaxis.set_major_formatter(fmt_int)
-ax.legend(fontsize=9, loc="upper left")
+ax.tick_params(axis="both", labelsize=12)
+ax.legend(fontsize=12, loc="upper left")
 ax.grid(True, alpha=0.25)
 ax.set_xlim(1, 101)
 
 plt.tight_layout()
 out1 = os.path.join(PLOTS_DIR, "fig1_french_tidsserie.png")
-plt.savefig(out1, dpi=130)
+plt.savefig(out1, dpi=180)
 plt.close()
 print(f"Lagret: {out1}")
 
@@ -102,7 +103,7 @@ print(f"Lagret: {out1}")
 with open(RESULTS_FILE, encoding="utf-8") as f:
     results = json.load(f)
 
-fig, axes = plt.subplots(2, 2, figsize=(14, 9))
+fig, axes = plt.subplots(2, 2, figsize=(18, 12))
 axes = axes.flatten()
 
 COLOR_FC = "#4C72B0"
@@ -119,30 +120,31 @@ for idx, store in enumerate(STORES):
     bars2 = ax.bar(x, safety,   color=COLOR_SS, width=0.6,
                    bottom=prognose, label="Sikkerhetslager")
 
-    ax.set_title(store, fontsize=12, fontweight="bold")
+    ax.set_title(store, fontsize=14, fontweight="bold")
     ax.set_xticks(x)
-    ax.set_xticklabels(prod_labels, fontsize=8.5)
-    ax.set_ylabel("Enheter per uke", fontsize=9)
+    ax.set_xticklabels(prod_labels, fontsize=11)
+    ax.set_ylabel("Enheter per uke", fontsize=12)
+    ax.tick_params(axis="y", labelsize=11)
     ax.yaxis.set_major_formatter(fmt_int)
     ax.grid(True, axis="y", alpha=0.25)
 
     # Vis totalt anbefalt ordre over hver søyle
     for xi, (fc, ss) in enumerate(zip(prognose, safety)):
         ax.text(xi, fc + ss + 15, f"{int(fc+ss):,}".replace(",", " "),
-                ha="center", va="bottom", fontsize=7, color="#333333")
+                ha="center", va="bottom", fontsize=9, color="#333333")
 
 handles = [
     mpatches.Patch(color=COLOR_FC, label="Prognose 7d"),
     mpatches.Patch(color=COLOR_SS, label="Sikkerhetslager (95 % servicegrad)"),
 ]
-fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=10, frameon=True)
+fig.legend(handles=handles, loc="lower center", ncol=2, fontsize=12, frameon=True)
 fig.suptitle(
     "Figur 4: Anbefalt ukentlig bestilling per produkt per utsalgssted (95 % servicegrad)",
-    fontsize=12, fontweight="bold"
+    fontsize=14, fontweight="bold"
 )
 plt.tight_layout(rect=[0, 0.06, 1, 0.97])
 
 out2 = os.path.join(PLOTS_DIR, "fig2_anbefalt_bestilling.png")
-plt.savefig(out2, dpi=130)
+plt.savefig(out2, dpi=180)
 plt.close()
 print(f"Lagret: {out2}")

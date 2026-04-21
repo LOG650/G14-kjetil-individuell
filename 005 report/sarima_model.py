@@ -164,11 +164,11 @@ def make_plot(store, product, train, test, fc, ci, info):
     xt = range(1, n + 1)
     xf = range(n + 1, n + FORECAST_DAYS + 1)
 
-    fig, ax = plt.subplots(figsize=(13, 4))
+    fig, ax = plt.subplots(figsize=(16, 6))
 
-    ax.plot(xt, train, color="#4C72B0", lw=0.9, label="Historisk salg (treningsdata)")
-    ax.plot(xf, test,  color="#555555", lw=1.5, ls="--", label="Faktisk salg (validering)")
-    ax.plot(xf, fc,    color="#DD8452", lw=2,   marker="o", ms=4, label="SARIMA-prognose")
+    ax.plot(xt, train, color="#4C72B0", lw=1.2, label="Historisk salg (treningsdata)")
+    ax.plot(xf, test,  color="#555555", lw=2,   ls="--", label="Faktisk salg (validering)")
+    ax.plot(xf, fc,    color="#DD8452", lw=2.5, marker="o", ms=6, label="SARIMA-prognose")
     ax.fill_between(
         xf, ci[:, 0], ci[:, 1],
         color="#DD8452", alpha=0.2,
@@ -182,16 +182,17 @@ def make_plot(store, product, train, test, fc, ci, info):
         f"MAPE = {info['validation_mape_pct']} %  |  "
         f"Naiv = {info['naive_baseline_mape_pct']} %"
     )
-    ax.set_title(title, fontsize=9.5)
-    ax.set_xlabel("Dag")
-    ax.set_ylabel("Salgsvolum")
+    ax.set_title(title, fontsize=12)
+    ax.set_xlabel("Dag", fontsize=13)
+    ax.set_ylabel("Salgsvolum", fontsize=13)
+    ax.tick_params(axis="both", labelsize=12)
     ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{int(x):,}"))
-    ax.legend(fontsize=8, loc="upper left")
+    ax.legend(fontsize=11, loc="upper left")
     ax.grid(True, alpha=0.25)
 
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"{store}_{product.replace(' ', '_')}.png")
-    plt.savefig(out, dpi=130)
+    plt.savefig(out, dpi=180)
     plt.close()
 
 
