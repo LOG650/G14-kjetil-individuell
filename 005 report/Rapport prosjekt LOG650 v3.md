@@ -291,6 +291,12 @@ Valget av SARIMA som prognosemodell ble motivert av to analyser gjennomført på
 
 Samlet sett gir ADF-testen grunnlag for differensiering og ACF-analysen grunnlag for sesongkomponenten. SARIMA(p, d, q)(P, D, Q, 7) ble valgt som modellklasse for alle 32 kombinasjoner av produkt og utsalgssted.
 
+Figur 1 viser ACF og PACF for HK Pommes frites etter førstedifferensiering. Signifikante korrelasjoner ved lag 7 (og multipler) i begge plottene bekrefter den ukentlige sesongstrukturen visuelt og underbygger valget av *s* = 7 i SARIMA-modellen.
+
+![ACF og PACF – HK Pommes frites](plots/fig_acf_pacf.png){width=100%}
+
+*Figur 1: ACF og PACF for Pommes frites ved Hell's Kitchen (førstedifferensiert serie). Røde stiplete linjer markerer lag 7 og multipler. Blå skravert felt angir 95 % konfidensgrenser. Kilde: Egne beregninger.*
+
 **Begrunnelse for SARIMA fremfor alternativer:** Som gjennomgått i kapittel 2.4 finnes det tre relevante alternativer. Holt-Winters ble fravalgt fordi prosjektets sikkerhetslagerberegning er direkte avhengig av statistisk velfunderte prediksjonsintervaller; SARIMA leverer slike gjennom eksplisitt residualvariansestimering, mens Holt-Winters' konfidensintervaller hviler på enklere antakelser som gir dårligere kalibrering ved sesongmønstre av den typen som er observert her (Hyndman & Athanasopoulos, 2021). SARIMAX ble fravalgt fordi datagrunnlaget ikke inneholder registrerte eksternt forklaringsvariabler – spillet eksponerer ikke kampanje- eller værdata systematisk. Maskinlæringsmetoder ble fravalgt på grunn av utilstrekkelig datamengde: med 87–94 treningsobservasjoner er stabilt regularisert trening av gradientboosting- eller LSTM-modeller ikke realistisk.
 
 **Metodiske implikasjoner av rullerende sumstruktur for prediksjonsintervaller**
@@ -572,19 +578,19 @@ Alle 32 modeller fikk automatisk valgt en sesongkomponent (*P* > 0 eller *Q* > 0
 
 ### 7.3 Pommes frites og Pølse: høy variasjon og heterogen modellytelse
 
-Figur 1 viser den rullerende 7-dagers salgsutviklingen for Pommes frites ved alle fire utsalgssteder gjennom hele observasjonsperioden. Det fremgår tydelig at HK har det høyeste salgsvolumet for dette produktet, og at alle fire seriene har en oppadgående tendens mot slutten av perioden – med MH som den mest markante.
+Figur 2 viser den rullerende 7-dagers salgsutviklingen for Pommes frites ved alle fire utsalgssteder gjennom hele observasjonsperioden. Det fremgår tydelig at HK har det høyeste salgsvolumet for dette produktet, og at alle fire seriene har en oppadgående tendens mot slutten av perioden – med MH som den mest markante.
 
 ![Pommes frites – rullerende 7-dagers salg per utsalgssted](plots/fig1_french_tidsserie.png){width=100%}
 
-*Figur 1: Pommes frites – rullerende 7-dagers salg (rullerende 7-dagers sum) per utsalgssted. Grått felt markerer valideringssettet (dag 95–101). Kilde: Egne beregninger.*
+*Figur 2: Pommes frites – rullerende 7-dagers salg (rullerende 7-dagers sum) per utsalgssted. Lys grå sone: V1-valideringsvindu (dag 88–94). Mørkere grå sone: V2-valideringsvindu (dag 95–101). Kilde: Egne beregninger.*
 
 Pommes frites og Pølse utmerker seg med de høyeste standardavvikene på tvers av utsalgsstedene (jf. Tabellene 4–7). Denne grunnleggende variasjonen i salgsvolum gjenspeiles direkte i modellresultatene. For GM gir Pommes frites V2-MAPE = 16,0 % og Pølse V2-MAPE = 19,9 %, noe som skyldes at det faktiske salgsnivået i valideringsperioden var i en oppadgående trend som modellen ikke fanget fullt ut. Det er verdt å merke seg at V1-MAPE for de samme produktene er henholdsvis 3,2 % og 1,8 %, noe som bekrefter at den høye V2-feilen skyldes en trend i siste periode fremfor iboende modellsvakhet. Tilsvarende mønster ses for MH Pommes frites (V2-MAPE = 21,6 %, V1 = 11,3 %) og MH Salat (V2-MAPE = 16,4 %, V1 = 2,8 %).
 
-Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK Pommes frites gir MAPE = 1,5 % og HK Pølse MAPE = 2,0 %. Figur 2 illustrerer dette med et eksempel på et godt modelltilpasset tilfelle.
+Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK Pommes frites gir MAPE = 1,5 % og HK Pølse MAPE = 2,0 %. Figur 3 illustrerer dette med et eksempel på et godt modelltilpasset tilfelle.
 
 ![SARIMA-prognose HK – Pommes frites](plots/HK_French.png){width=100%}
 
-*Figur 2: SARIMA-prognose for Pommes frites ved Hell's Kitchen (MAPE = 1,5 %). Blå linje: treningsdata. Grå stiplet: faktisk validering. Oransje: prognose med 95 % prediksjonsintervall. Kilde: Egne beregninger.*
+*Figur 3: SARIMA-prognose for Pommes frites ved Hell's Kitchen (V1-MAPE = 0,6 %, V2-MAPE = 1,5 %). Blå linje: treningsdata. Grå stiplet: faktisk validering. Oransje: prognose med 95 % prediksjonsintervall. Grå sone: valideringsperiode (dag 95–101). Kilde: Egne beregninger.*
 
 Dette indikerer at den høye MAPE-en ikke er iboende for produktet alene, men er et resultat av samspillet mellom produkt og utsalgssted i den konkrete observasjonsperioden – spesielt der salgsserien hadde en mer utpreget trend mot slutten av observasjonsperioden.
 
@@ -594,11 +600,11 @@ Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige u
 
 Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fullt etablert over de foregående 94 treningsdagene. SARIMA-modellene er designet for stasjonære eller svakt trendende serier, og har begrenset evne til å ekstrapolere en akselererende veksttrend over det historiske nivået. Dette er en klar begrensning som vil bli adressert i diskusjonskapittelet.
 
-Figur 3 viser SARIMA-prognosen for MH Pommes frites, der det tydelig fremgår at prognosen (oransje) systematisk ligger under de faktiske valideringsverdiene (grå stiplet).
+Figur 4 viser SARIMA-prognosen for MH Pommes frites, der det tydelig fremgår at prognosen (oransje) systematisk ligger under de faktiske valideringsverdiene (grå stiplet).
 
 ![SARIMA-prognose MH – Pommes frites](plots/MH_French.png){width=100%}
 
-*Figur 3: SARIMA-prognose for Pommes frites ved Murray Hill (MAPE = 21,6 %). Prognosen (oransje) undervurderer systematisk de faktiske valideringsverdiene (grå stiplet), noe som reflekterer den oppadgående salgstendensen. Kilde: Egne beregninger.*
+*Figur 4: SARIMA-prognose for Pommes frites ved Murray Hill (V1-MAPE = 11,3 %, V2-MAPE = 21,6 %). Prognosen (oransje) undervurderer systematisk de faktiske valideringsverdiene (grå stiplet), noe som reflekterer den oppadgående salgstendensen i slutten av observasjonsperioden. Grå sone: valideringsperiode (dag 95–101). Kilde: Egne beregninger.*
 
 Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i den forstand at de høye prediksjonsintervallene reflekterer den store usikkerheten, og anbefalt bestillingsmengde inkluderer en relativt større buffer for de produktene der MAPE er høy.
 
@@ -622,6 +628,12 @@ For å verifisere at SARIMA-modellene har fanget opp all systematisk struktur i 
 *\* p < 0,05: mulig gjenværende autokorrelasjon i residualene.*
 
 For 31 av 32 modeller er Ljung-Box p-verdien ved lag 7 godt over 0,05, noe som betyr at nullhypotesen om ingen gjenværende autokorrelasjon ikke forkastes. Residualene fremstår dermed som hvit støy for nesten alle modellene, og modellspesifikasjonene er tilfredsstillende. Unntaket er HK Iskrem (p = 0,0148), der testen indikerer at noe struktur er igjen i residualene. For dette produktet bør prediksjonsintervallet tolkes med noe forsiktighet.
+
+Figur 5 illustrerer residualdiagnostikken visuelt for et representativt eksempel – GM Brus, som har Ljung-Box p = 0,98 og er en av de mest stabile seriene i datasettet. Venstre panel viser at de standardiserte residualene er tilnærmet tilfeldige rundt null, uten systematiske mønstre. Høyre panel viser ACF av residualene, der ingen lag er statistisk signifikante – et tydelig kjennetegn på hvit støy.
+
+![Residualdiagnostikk – GM Brus](plots/fig_residuals.png){width=100%}
+
+*Figur 5: Residualdiagnostikk for Brus ved Garment District. Venstre: standardiserte residualer over tid med ±2 std.avvik-grenser. Høyre: ACF av residualer med 95 % konfidensgrenser – ingen signifikante lag bekrefter hvit støy. Kilde: Egne beregninger.*
 
 ---
 
@@ -705,11 +717,11 @@ MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgssted
 
 Alle 32 SARIMA-modeller leverte konkrete lagernivåanbefalinger. For majoriteten av produkt-utsalgsstedskombinasjonene (24 av 32) ble MAPE under 8 % oppnådd, noe som gir god tillit til at prognosene er representative for forventet etterspørsel. Sikkerhetslageret utgjør 10–14 % av total ukentlig prognose per utsalgssted, med størst buffer for produkter med høy salgsvariasjon (Pommes frites, Pølse, Kebab ved utvalgte steder).
 
-Figur 4 gir en visuell oppsummering av lagernivåanbefalingene for alle 32 kombinasjoner. Den blå delen av hver søyle representerer punktprognosen og den oransje bufferen utgjør sikkerhetslageret.
+Figur 6 gir en visuell oppsummering av lagernivåanbefalingene for alle 32 kombinasjoner. Den blå delen av hver søyle representerer punktprognosen og den oransje bufferen utgjør sikkerhetslageret. Produkter merket med * har V2-MAPE > 15 % og bør justeres manuelt.
 
 ![Anbefalt ukentlig bestilling per produkt per utsalgssted](plots/fig2_anbefalt_bestilling.png){width=100%}
 
-*Figur 4: Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad. Blå: etterspørselsprognose. Oransje: sikkerhetslager. Kilde: Egne beregninger.*
+*Figur 6: Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad. Blå: etterspørselsprognose. Oransje: sikkerhetslager. * = V2-MAPE > 15 %, anbefalt ordre bør justeres manuelt. Kilde: Egne beregninger.*
 
 Produkter som Iskrem og Brus kjennetegnes ved svært stabile salgsvolumer og lav MAPE, og krever minimalt sikkerhetslager. Disse produktene er enkle å styre fra et lagerperspektiv. Pommes frites representerer det motsatte: høy salgsvariasjon, store prediksjonsintervaller og – avhengig av utsalgssted – moderat til høy modellusikkerhet. For dette produktet er en konservativ tilnærming til lagernivå særlig viktig for å unngå stockout.
 

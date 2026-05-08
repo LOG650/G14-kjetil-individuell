@@ -169,39 +169,67 @@ def fit_and_forecast(series: list[int], store: str, product: str) -> tuple:
     return result, train, test, fc, ci
 
 
+# Norske produktnavn for plott-titler
+_PRODUCT_LABELS = {
+    "Pizza": "Pizza", "Salad": "Salat", "French": "Pommes frites",
+    "Burger": "Hamburger", "Hotdog": "Pølse", "Soda": "Brus",
+    "Ice Cream": "Iskrem", "Kebaba": "Kebab",
+}
+_STORE_NAMES = {
+    "GM": "Garment District", "HK": "Hell's Kitchen",
+    "LM": "Lower Manhattan",  "MH": "Murray Hill",
+}
+
 # ---------------------------------------------------------------------------
 # Plott
 # ---------------------------------------------------------------------------
 def make_plot(store, product, train, test, fc, ci, info):
+    prod_label  = _PRODUCT_LABELS.get(product, product)
+    store_label = _STORE_NAMES.get(store, store)
+
     n  = len(train)
     xt = range(1, n + 1)
     xf = range(n + 1, n + FORECAST_DAYS + 1)
 
+    all_vals = np.concatenate([train, test, fc])
+    ymin = min(all_vals) * 0.93
+    ymax = max(all_vals) * 1.08
+
     fig, ax = plt.subplots(figsize=(16, 6))
 
+    # Valideringssone: grå bakgrunn for V2 (dag 95-101)
+    ax.axvspan(n + 0.5, n + FORECAST_DAYS + 0.5,
+               color="#dddddd", alpha=0.45, zorder=0, label="Valideringssone (dag 95–101)")
+    ax.axvline(x=n + 0.5, color="#999999", ls=":", lw=1.0)
+
     ax.plot(xt, train, color="#4C72B0", lw=1.2, label="Historisk salg (treningsdata)")
-    ax.plot(xf, test,  color="#555555", lw=2,   ls="--", label="Faktisk salg (validering)")
+    ax.plot(xf, test,  color="#333333", lw=2,   ls="--", label="Faktisk salg (validering)")
     ax.plot(xf, fc,    color="#DD8452", lw=2.5, marker="o", ms=6, label="SARIMA-prognose")
     ax.fill_between(
         xf, ci[:, 0], ci[:, 1],
-        color="#DD8452", alpha=0.2,
+        color="#DD8452", alpha=0.22,
         label=f"{int(SERVICE_LEVEL*100)} % prediksjonsintervall",
     )
 
-    title = (
-        f"{store} – {product}  |  "
-        f"SARIMA{info['arima_order']}×{info['seasonal_order']}  |  "
-        f"AIC = {info['aic']}  |  "
-        f"MAPE = {info['validation_mape_pct']} %  |  "
-        f"Naiv = {info['naive_baseline_mape_pct']} %"
-    )
-    ax.set_title(title, fontsize=12)
+    ax.set_title(f"{prod_label} – {store_label}", fontsize=14, fontweight="bold")
     ax.set_xlabel("Dag", fontsize=13)
-    ax.set_ylabel("Salgsvolum", fontsize=13)
+    ax.set_ylabel("Salgsvolum (rullerende 7-dagers sum)", fontsize=13)
+    ax.set_ylim(ymin, ymax)
     ax.tick_params(axis="both", labelsize=12)
     ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f"{int(x):,}"))
     ax.legend(fontsize=11, loc="upper left")
     ax.grid(True, alpha=0.25)
+
+    # Modellinfo som liten fotnote nederst i figuren
+    mape_w1 = info.get("validation_mape_w1_pct", "–")
+    mape_w2 = info.get("validation_mape_pct", "–")
+    note = (f"SARIMA{info['arima_order']}×{info['seasonal_order']}  "
+            f"| AIC = {info['aic']}  "
+            f"| MAPE V1 = {mape_w1} %  V2 = {mape_w2} %  "
+            f"| Naiv = {info['naive_baseline_mape_pct']} %")
+    ax.annotate(note, xy=(0.01, 0.02), xycoords="axes fraction",
+                fontsize=9, color="#555555", va="bottom",
+                bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.75, ec="none"))
 
     plt.tight_layout()
     out = os.path.join(PLOTS_DIR, f"{store}_{product.replace(' ', '_')}.png")
