@@ -80,6 +80,45 @@ Results show that SARIMA models predict demand with high accuracy for most produ
 11. [Bibliografi](#11-bibliografi)
 12. [Vedlegg](#12-vedlegg)
 
+[Figurliste](#figurliste) | [Tabelliste](#tabelliste)
+
+---
+
+## Figurliste
+
+| Figur | Beskrivelse | Kapittel |
+|-------|-------------|----------|
+| Figur 1 | ACF og PACF for Pommes frites ved Hell's Kitchen – motiverer valg av sesongperiode *s* = 7 | 5.1 |
+| Figur 2 | Pommes frites – rullerende 7-dagers salg per utsalgssted med begge valideringsvinduer | 7.3 |
+| Figur 3 | SARIMA-prognose for Pommes frites ved Hell's Kitchen (V2-MAPE = 1,5 %) | 7.3 |
+| Figur 4 | SARIMA-prognose for Pommes frites ved Murray Hill (V2-MAPE = 21,6 %) | 7.4 |
+| Figur 5 | Residualdiagnostikk for Brus ved Garment District – standardiserte residualer og ACF | 7.5 |
+| Figur 6 | Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad | 8.5 |
+
+---
+
+## Tabelliste
+
+| Tabell | Beskrivelse | Kapittel |
+|--------|-------------|----------|
+| Tabell 1 | Oversikt over BiteBursts utsalgssteder | 4 |
+| Tabell 2 | Ukentlig prognose per utsalgssted – alle produkter summert | 4 |
+| Tabell 3 | Identifiserte og korrigerte registreringsfeil | 5.2 |
+| Tabell 4 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – GM | 5.2 |
+| Tabell 5 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – HK | 5.2 |
+| Tabell 6 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – LM | 5.2 |
+| Tabell 7 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – MH | 5.2 |
+| Tabell 8 | Oversikt over tilpassede SARIMA-modeller med modellorden og AIC | 6.3 |
+| Tabell 9a | SARIMA MAPE (%) – Valideringsvindu V1 (dag 88–94) | 7.1 |
+| Tabell 9b | SARIMA MAPE (%) – Valideringsvindu V2 (dag 95–101) | 7.1 |
+| Tabell 9c | SARIMA MAPE (%) – Gjennomsnitt V1 og V2 | 7.1 |
+| Tabell 9d | Naiv referanseprognose MAPE (%) – V2-vinduet | 7.1 |
+| Tabell 9e | Ljung-Box p-verdi (lag 7) per produkt og utsalgssted | 7.5 |
+| Tabell 10 | Anbefalte lagernivåer for Garment District ved 95 % servicegrad | 8.1 |
+| Tabell 11 | Anbefalte lagernivåer for Hell's Kitchen ved 95 % servicegrad | 8.2 |
+| Tabell 12 | Anbefalte lagernivåer for Lower Manhattan ved 95 % servicegrad | 8.3 |
+| Tabell 13 | Anbefalte lagernivåer for Murray Hill ved 95 % servicegrad | 8.4 |
+
 ---
 
 ## 1 Innledning
