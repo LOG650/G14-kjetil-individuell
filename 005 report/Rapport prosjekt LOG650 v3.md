@@ -295,7 +295,12 @@ Modellparametrene (*p*, *d*, *q*, *P*, *D*, *Q*) ble valgt automatisk ved hjelp 
 
 #### Trenings- og valideringsopplegg
 
-For å evaluere modellenes prediktive nøyaktighet ble de siste syv dagene (dag 95–101) holdt tilbake som valideringssett. Modellen ble tilpasset på treningsdataene (dag 1–94) og deretter benyttet til å prognostisere de syv påfølgende dagene. Gjennomsnittlig absolutt prosentfeil (MAPE) mellom prognose og faktisk valideringssett ble beregnet som mål på modellnøyaktighet:
+For å evaluere modellenes prediktive nøyaktighet ble det benyttet en rullerende prognosevalidering (*rolling-origin validation*) med to vinduer, slik at MAPE-estimatene ikke hviler på et enkelt holdout-sett alene:
+
+- **Valideringsvindu 2 (V2, primært):** Modellen tilpasses på treningsdataene (dag 1–94) og prognostiserer dag 95–101.
+- **Valideringsvindu 1 (V1, tillegg):** Modellen tilpasses på dag 1–87 og prognostiserer dag 88–94.
+
+To vinduer er valgt som et pragmatisk kompromiss gitt datamengden: et tredje vindu ville gitt et treningssett fra dag 1–80 (80 observasjoner), som er i nedre grense for stabil parameterestimering av SARIMA(p,d,q)(P,D,Q,7)-modeller med opp til ni frie parametre. Anbefalt lagernivå og sikkerhetslager er beregnet fra V2-modellen, da denne utnytter flest tilgjengelige observasjoner. MAPE rapporteres for begge vinduer samt som gjennomsnitt, noe som gir et mer robust bilde av modellytelsen enn et enkelt valideringspunkt. Gjennomsnittlig absolutt prosentfeil (MAPE) mellom prognose og faktisk valideringssett ble beregnet som mål på modellnøyaktighet:
 
 $$\text{MAPE} = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{y_t - \hat{y}_t}{y_t} \right| \times 100 \%$$
 
@@ -472,9 +477,22 @@ Anbefalt bestillingsmengde for én uke settes lik den øvre 95 %-prediksjonsgren
 
 ### 7.1 Modellnøyaktighet
 
-Tabell 9 sammenfatter MAPE-verdiene fra valideringssettet (siste syv dager) for alle 32 modeller. Verdiene reflekterer modellenes evne til å predikere den faktiske etterspørselen på et produkt-utsalgsstedspar som ikke var benyttet i tilpasningen.
+Tabellene 9a–9c sammenfatter MAPE-verdiene fra den rullerende prognosevalideringen med to vinduer for alle 32 modeller. V1 = dag 88–94 (modell tilpasset dag 1–87), V2 = dag 95–101 (modell tilpasset dag 1–94). Gjennomsnittlig MAPE over begge vinduene gir et mer robust mål på modellytelsen enn ett enkelt valideringspunkt.
 
-**Tabell 9a: SARIMA MAPE (%) fra valideringssettet per produkt og utsalgssted**
+**Tabell 9a: SARIMA MAPE (%) – Valideringsvindu V1 (dag 88–94)**
+
+| Produkt       | GM   | HK   | LM   | MH   |
+|---------------|------|------|------|------|
+| Pizza         | 3,3  | 1,8  | 3,4  | 0,8  |
+| Salat         | 3,1  | 1,8  | 1,3  | 2,8  |
+| Pommes frites | 3,2  | 0,6  | 11,8 | 11,3 |
+| Hamburger     | 1,5  | 0,6  | 1,5  | 1,1  |
+| Pølse         | 1,8  | 3,3  | 11,0 | 6,6  |
+| Brus          | 2,7  | 2,1  | 2,7  | 4,0  |
+| Iskrem        | 1,0  | 2,7  | 2,5  | 1,4  |
+| Kebab         | 3,1  | 2,8  | 6,4  | 5,9  |
+
+**Tabell 9b: SARIMA MAPE (%) – Valideringsvindu V2 (dag 95–101)**
 
 | Produkt       | GM   | HK   | LM  | MH   |
 |---------------|------|------|-----|------|
@@ -487,9 +505,22 @@ Tabell 9 sammenfatter MAPE-verdiene fra valideringssettet (siste syv dager) for 
 | Iskrem        | 2,6  | 5,0  | 4,3 | 1,8  |
 | Kebab         | 1,1  | 3,1  | 5,1 | 2,2  |
 
-For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modellenes MAPE sammenlignet mot en naiv prognose der den siste observerte rullerende 7-dagerssummen brukes uendret som prognose for alle syv fremtidige steg. Tabell 9b viser de tilsvarende MAPE-verdiene for den naive baselines, og Tabell 9c i seksjon 7.5 rapporterer Ljung-Box residualdiagnostikk.
+**Tabell 9c: SARIMA MAPE (%) – Gjennomsnitt V1 og V2**
 
-**Tabell 9b: Naiv baseline MAPE (%) – siste observasjon fremskrevet per produkt og utsalgssted**
+| Produkt       | GM   | HK   | LM  | MH   |
+|---------------|------|------|-----|------|
+| Pizza         | 3,2  | 1,3  | 2,8 | 5,0  |
+| Salat         | 3,6  | 8,8  | 1,4 | 9,6  |
+| Pommes frites | 9,6  | 1,1  | 6,9 | 16,4 |
+| Hamburger     | 3,4  | 0,7  | 1,1 | 5,0  |
+| Pølse         | 10,9 | 2,7  | 9,2 | 7,2  |
+| Brus          | 2,0  | 3,5  | 2,1 | 2,4  |
+| Iskrem        | 1,8  | 3,9  | 3,4 | 1,6  |
+| Kebab         | 2,1  | 2,9  | 5,8 | 4,1  |
+
+For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modellenes MAPE sammenlignet mot en naiv prognose der den siste observerte rullerende 7-dagerssummen brukes uendret som prognose for alle syv fremtidige steg. Tabell 9d viser de tilsvarende MAPE-verdiene for den naive baselines (V2-vinduet), og Tabell 9e i seksjon 7.5 rapporterer Ljung-Box residualdiagnostikk.
+
+**Tabell 9d: Naiv baseline MAPE (%) – siste observasjon fremskrevet per produkt og utsalgssted (V2)**
 
 | Produkt       | GM   | HK   | LM  | MH   |
 |---------------|------|------|-----|------|
@@ -502,11 +533,18 @@ For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modell
 | Iskrem        | 2,0  | 3,0  | 4,0 | 2,3  |
 | Kebab         | 1,9  | 1,2  | 1,9 | 2,2  |
 
-Sammenligningen viser at SARIMA gjennomgående gir lavere MAPE enn den naive baselines: for 24 av 32 kombinasjoner er SARIMA-MAPE lavere. De tydeligste forbedringene finnes for produkter med strukturert sesongmønster, som GM Salat (SARIMA 4,2 % mot naiv 10,4 %) og LM Pommes frites (SARIMA 2,0 % mot naiv 5,5 %). I åtte tilfeller er den naive baselines marginalt bedre eller likeverdig, og disse sammenfaller stort sett med produkter der etterspørselen var relativt flat i valideringsperioden, slik at siste observasjon tilfeldigvis var et godt estimat.
+Sammenligningen viser at SARIMA gjennomgående gir lavere MAPE enn den naive baselines: for 24 av 32 kombinasjoner i V2-vinduet er SARIMA-MAPE lavere. De tydeligste forbedringene finnes for produkter med strukturert sesongmønster, som GM Salat (SARIMA 4,2 % mot naiv 10,4 %) og LM Pommes frites (SARIMA 2,0 % mot naiv 5,5 %). I åtte tilfeller er den naive baselines marginalt bedre eller likeverdig, og disse sammenfaller stort sett med produkter der etterspørselen var relativt flat i valideringsperioden, slik at siste observasjon tilfeldigvis var et godt estimat.
 
-For et klart flertall av modellene (24 av 32) er MAPE under 8 %, noe som generelt regnes som god prognoseytelse (Hyndman & Athanasopoulos, 2021). Åtte modeller har MAPE over 8 %, og av disse har fem MAPE over 15 %. Disse tilhører hovedsakelig to produktkategorier – Pommes frites og Salat – og ett utsalgssted – Murray Hill (MH).
+En sammenligning av V1- og V2-MAPE-verdiene (Tabell 9a og 9b) gir viktig tilleggsinformasjon: for de fleste produkter er ytelsen relativt stabil mellom de to periodene, noe som styrker tilliten til modellene. Det mest slående unntaket er Murray Hill, der V2-MAPE konsekvent er vesentlig høyere enn V1-MAPE for Pizza (V1: 0,8 %, V2: 9,2 %), Salat (2,8 % mot 16,4 %), Pommes frites (11,3 % mot 21,6 %) og Hamburger (1,1 % mot 8,9 %). Dette bekrefter at salget ved MH akselererte spesielt mot slutten av observasjonsperioden og at V2-MAPE-tallene dermed reflekterer et trendskifte snarere enn generell modellsvakhet. Det gjennomsnittlige MAPE over begge vinduene (Tabell 9c) gir et mer balansert bilde enn V2 alene.
 
-For de to produktene med høyest MAPE – GM Pølse (19,9 %) og MH Pommes frites (21,6 %) – er prognosenøyaktigheten i et område som i operasjonell sammenheng normalt betegnes som utilstrekkelig for direkte bruk (Hyndman & Athanasopoulos, 2021). Lagernivåanbefalingene for disse produktene bør ikke benyttes ukritisk uten manuell vurdering. Som et praktisk retningslinje anbefales et erfaringspåslag på 15–20 % på anbefalt bestillingsmengde for produkter med MAPE > 15 %, inntil modellen er reestimert på et lengre og mer stabilt datagrunnlag. Tilsvarende forsiktighet gjelder for HK Salat (MAPE = 15,7 %) og MH Salat (MAPE = 16,4 %), der valideringsresultatene indikerer at SARIMA-modellen ikke har fanget opp den underliggende etterspørselsstrukturen tilstrekkelig godt.
+For et klart flertall av modellene (24 av 32) er V2-MAPE under 8 %, noe som generelt regnes som god prognoseytelse (Hyndman & Athanasopoulos, 2021). Åtte modeller har MAPE over 8 %, og av disse har fem MAPE over 15 %. Disse tilhører hovedsakelig to produktkategorier – Pommes frites og Salat – og ett utsalgssted – Murray Hill (MH).
+
+For produkter der V2-MAPE overstiger 15 % er prognosenøyaktigheten i et område som i operasjonell sammenheng normalt betegnes som utilstrekkelig for direkte bruk (Hyndman & Athanasopoulos, 2021). Her er det imidlertid nyttig å skille mellom to mønstre basert på to-vinduvalideringen:
+
+- **Begge vinduer høye** – indikerer strukturell modellsvakhet: MH Pommes frites (V1: 11,3 %, V2: 21,6 %, snitt: 16,4 %) og GM Pølse (V1: 1,8 %, V2: 19,9 %, snitt: 10,9 %). For disse anbefales et erfaringspåslag på 15–20 % på anbefalt bestillingsmengde, inntil modellen er reestimert på et lengre og mer stabilt datagrunnlag.
+- **Kun V2 høy, V1 lav** – indikerer et trendskifte i siste periode snarere enn generell modellsvakhet: MH Salat (V1: 2,8 %, V2: 16,4 %, snitt: 9,6 %) og HK Salat (V1: 1,8 %, V2: 15,7 %, snitt: 8,8 %). For disse er gjennomsnitts-MAPE under 10 %, og et fullt erfaringspåslag er ikke nødvendigvis berettiget. En viss årvåkenhet overfor trendskifter i siste periode er likevel anbefalt.
+
+Lagernivåanbefalingene for produkter i den første kategorien bør ikke benyttes ukritisk uten manuell vurdering.
 
 De produktene som gjennomgående gir lav MAPE (Brus, Iskrem, Kebab, Hamburger) kjennetegnes av relativt lav standardavvik i salgsvolum (jf. Tabellene 4–7) og stabil etterspørselsstruktur. Disse er dermed de enkleste å prognostisere. Produkter med høy standardavvik – Pommes frites og i noen grad Pølse – gir mer varierende MAPE, avhengig av utsalgssted.
 
@@ -522,7 +560,7 @@ Figur 1 viser den rullerende 7-dagers salgsutviklingen for Pommes frites ved all
 
 *Figur 1: Pommes frites – rullerende 7-dagers salg (rullerende 7-dagers sum) per utsalgssted. Grått felt markerer valideringssettet (dag 95–101). Kilde: Egne beregninger.*
 
-Pommes frites og Pølse utmerker seg med de høyeste standardavvikene på tvers av utsalgsstedene (jf. Tabellene 4–7). Denne grunnleggende variasjonen i salgsvolum gjenspeiles direkte i modellresultatene. For GM gir Pommes frites MAPE = 16,0 % og Pølse MAPE = 19,9 %, noe som skyldes at det faktiske salgsnivået i valideringsperioden var i en oppadgående trend som modellen ikke fanget fullt ut. Tilsvarende mønster ses for MH Pommes frites (MAPE = 21,6 %) og MH Salat (MAPE = 16,4 %).
+Pommes frites og Pølse utmerker seg med de høyeste standardavvikene på tvers av utsalgsstedene (jf. Tabellene 4–7). Denne grunnleggende variasjonen i salgsvolum gjenspeiles direkte i modellresultatene. For GM gir Pommes frites V2-MAPE = 16,0 % og Pølse V2-MAPE = 19,9 %, noe som skyldes at det faktiske salgsnivået i valideringsperioden var i en oppadgående trend som modellen ikke fanget fullt ut. Det er verdt å merke seg at V1-MAPE for de samme produktene er henholdsvis 3,2 % og 1,8 %, noe som bekrefter at den høye V2-feilen skyldes en trend i siste periode fremfor iboende modellsvakhet. Tilsvarende mønster ses for MH Pommes frites (V2-MAPE = 21,6 %, V1 = 11,3 %) og MH Salat (V2-MAPE = 16,4 %, V1 = 2,8 %).
 
 Interessant nok presterer de samme produktene svært godt ved andre utsalgssteder: HK Pommes frites gir MAPE = 1,5 % og HK Pølse MAPE = 2,0 %. Figur 2 illustrerer dette med et eksempel på et godt modelltilpasset tilfelle.
 
@@ -534,7 +572,7 @@ Dette indikerer at den høye MAPE-en ikke er iboende for produktet alene, men er
 
 ### 7.4 Trendeffekter i Murray Hill
 
-Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene konsekvent overstiger SARIMA-prognosen for Pizza, Pommes frites, Hamburger og Salat. Eksempel: for MH Pommes frites er prognosen for siste 7-dagersvindu 1 511 enheter, mens faktisk siste rullerende 7-dagerssum er 2 236 – et avvik på nær 48 % for denne enkeltobservasjonen (MAPE på 21,6 % er gjennomsnittet over alle syv valideringsdager).
+Murray Hill (MH) skiller seg ut med gjennomgående høyere MAPE enn de øvrige utsalgsstedene i V2-vinduet. En systematisk gjennomgang av de faktiske valideringsverdiene mot prognosen viser at faktisk salg i de siste syv dagene (dag 95–101) konsekvent overstiger SARIMA-prognosen for Pizza, Pommes frites, Hamburger og Salat. Eksempel: for MH Pommes frites er prognosen for siste 7-dagersvindu 1 511 enheter, mens faktisk siste rullerende 7-dagerssum er 2 236 – et avvik på nær 48 % for denne enkeltobservasjonen (V2-MAPE på 21,6 % er gjennomsnittet over alle syv valideringsdager). Til sammenligning er V1-MAPE for MH Pommes frites 11,3 %, noe som viser at problemet eskalerte mot periodens slutt.
 
 Dette mønsteret er forenlig med en oppadgående salgsandel i MH som ikke var fullt etablert over de foregående 94 treningsdagene. SARIMA-modellene er designet for stasjonære eller svakt trendende serier, og har begrenset evne til å ekstrapolere en akselererende veksttrend over det historiske nivået. Dette er en klar begrensning som vil bli adressert i diskusjonskapittelet.
 
@@ -550,7 +588,7 @@ Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i d
 
 For å verifisere at SARIMA-modellene har fanget opp all systematisk struktur i dataene, ble Ljung-Box-testen for gjenværende autokorrelasjon gjennomført på residualene fra hver av de 32 modellene. Testen tester nullhypotesen om at residualene er uavhengige (hvit støy) mot alternativet om at det er gjenværende autokorrelasjon. En p-verdi over 0,05 innebærer at nullhypotesen ikke forkastes, noe som er ønsket.
 
-**Tabell 9c: Ljung-Box p-verdi (lag 7) per produkt og utsalgssted**
+**Tabell 9e: Ljung-Box p-verdi (lag 7) per produkt og utsalgssted**
 
 | Produkt       | GM     | HK       | LM     | MH     |
 |---------------|--------|----------|--------|--------|
@@ -687,7 +725,7 @@ Beregningen av sikkerhetslager direkte fra SARIMA-prediksjonsintervallet forutse
 
 En praktisk begrensning er at prediksjonsintervallene fra SARIMA kan bli svært vide for modeller med høy residualvarians, noe som fører til store sikkerhetslagre. For Pommes frites ved MH er sikkerhetslageret 531 enheter (35 % av prognosen), noe som reflekterer den reelle usikkerheten, men som også kan bidra til overlagring dersom trenden stabiliserer seg. Det er derfor hensiktsmessig å revurdere lagernivåanbefalingene periodisk, fremfor å behandle dem som statiske referansestørrelser.
 
-Ljung-Box-testen for gjenværende autokorrelasjon i residualene er gjennomført for alle 32 modeller og rapportert i Tabell 9c (seksjon 7.5). For 31 av 32 modeller er p-verdien godt over 0,05, noe som støtter normalfordelingsantagelsen og gir tillit til prediksjonsintervallene. Det ene unntaket er HK Iskrem (p = 0,0148), der prediksjonsintervallet potensielt er noe undervurdert. Sikkerhetslageret for dette produktet (38 enheter ved HK) er lavt i absolutt forstand, og konsekvensen av undervurderingen er dermed begrenset i praktisk kontekst.
+Ljung-Box-testen for gjenværende autokorrelasjon i residualene er gjennomført for alle 32 modeller og rapportert i Tabell 9e (seksjon 7.5). For 31 av 32 modeller er p-verdien godt over 0,05, noe som støtter normalfordelingsantagelsen og gir tillit til prediksjonsintervallene. Det ene unntaket er HK Iskrem (p = 0,0148), der prediksjonsintervallet potensielt er noe undervurdert. Sikkerhetslageret for dette produktet (38 enheter ved HK) er lavt i absolutt forstand, og konsekvensen av undervurderingen er dermed begrenset i praktisk kontekst.
 
 En ytterligere begrensning som bør fremheves, er knyttet til den rullerende 7-dagers sumstrukturen som er diskutert i kap. 5.1. Overlappende summer medfører at SARIMA-modellens residualvarians potensielt er undervurdert, fordi den mekaniske korrelasjonen mellom påfølgende observasjoner delvis absorberes som modellforklart struktur. Konsekvensen er at prediksjonsintervallene – og dermed sikkerhetslageret – kan være noe smalere enn de ville vært på ikke-overlappende daglige data. Sikkerhetslagernivåene i Tabellene 10–13 bør forstås i lys av dette: de representerer nedre estimater for reell usikkerhet, og et forsiktig tillegg utover de beregnede intervallene vil i de fleste tilfeller være en fornuftig operasjonell beslutning.
 
@@ -703,7 +741,7 @@ SARIMA er langt fra den eneste tilgjengelige metoden for etterspørselsprognoser
 
 For situasjoner med tilgang til ekstra forklaringsvariabler – slik som kampanjekalender, værdata eller trafikktelling – ville en SARIMAX-modell (SARIMA med eksternt forklaringsvariabel) være et naturlig neste skritt. Maskinlæringsmetoder som gradient boosting og rekurrente nevrale nettverk (LSTM) har vist lovende resultater for prognoser på store datasett med mange produkter, men krever betydelig mer data enn de 101 observasjonene som er tilgjengelig her for å gi reliable estimater. Med et datasett av denne størrelsen er SARIMA et velegnet valg som balanserer metodisk robusthet med tilgjengelig datavolum.
 
-For å dokumentere at SARIMA tilfører verdi utover en triviell metode, er SARIMA-resultatene sammenlignet mot en naiv baseline der siste observerte rullerende 7-dagerssum fremskrives uendret for alle syv prognosetrinn. Sammenligningen er presentert i Tabell 9b (seksjon 7.1). SARIMA gir lavere MAPE enn den naive baselines for 24 av 32 kombinasjoner, og forbedringen er størst for produkter med tydelig sesongstruktur og trend – eksempelvis GM Salat (4,2 % mot 10,4 %) og LM Pommes frites (2,0 % mot 5,5 %). For de åtte kombinasjonene der naive er likeverdig eller marginalt bedre, er salgsserien i valideringsperioden relativt flat, slik at siste observasjon tilfeldigvis er et godt estimat. Dette bekrefter at SARIMA utnytter den historiske strukturen, men at metodefordelen er størst der etterspørselen har tydelig autokorrelasjon og sesongmønster.
+For å dokumentere at SARIMA tilfører verdi utover en triviell metode, er SARIMA-resultatene sammenlignet mot en naiv baseline der siste observerte rullerende 7-dagerssum fremskrives uendret for alle syv prognosetrinn. Sammenligningen er presentert i Tabell 9d (seksjon 7.1). SARIMA gir lavere MAPE enn den naive baselines for 24 av 32 kombinasjoner, og forbedringen er størst for produkter med tydelig sesongstruktur og trend – eksempelvis GM Salat (4,2 % mot 10,4 %) og LM Pommes frites (2,0 % mot 5,5 %). For de åtte kombinasjonene der naive er likeverdig eller marginalt bedre, er salgsserien i valideringsperioden relativt flat, slik at siste observasjon tilfeldigvis er et godt estimat. Dette bekrefter at SARIMA utnytter den historiske strukturen, men at metodefordelen er størst der etterspørselen har tydelig autokorrelasjon og sesongmønster.
 
 ---
 
@@ -711,7 +749,7 @@ For å dokumentere at SARIMA tilfører verdi utover en triviell metode, er SARIM
 
 Rapporten undersøkte hvordan SARIMA-basert etterspørselsprognose kan benyttes til å fastsette optimalt lagernivå per produkt per utsalgssted for hurtigmatbedriften BiteBurst, slik at hvert utsalgssted kan operere i syv dager uten levering fra sentrallager.
 
-**Delspørsmål 1 – Modellvalg:** For alle 32 kombinasjoner av produkt og utsalgssted ble det identifisert en SARIMA-modell med sesongperiode *s* = 7 som den best tilpassede modellen etter AIC-kriteriet. Sesongkomponenten ble valgt automatisk for samtlige modeller, noe som bekrefter at en statistisk målbar ukentlig salgssyklus er til stede i dataene på tvers av alle produkter og utsalgssteder. Modellordene varierer betydelig mellom kombinasjonene – fra enkle random walk-modeller med sesong-MA-ledd til mer komplekse modeller med høyere AR- og MA-orden – noe som understreker behovet for individuelle modeller fremfor én felles modell. Valideringen mot de siste syv dagenes faktiske salg viser at 24 av 32 modeller oppnår MAPE under 8 %, noe som klassifiseres som god prognoseytelse.
+**Delspørsmål 1 – Modellvalg:** For alle 32 kombinasjoner av produkt og utsalgssted ble det identifisert en SARIMA-modell med sesongperiode *s* = 7 som den best tilpassede modellen etter AIC-kriteriet. Sesongkomponenten ble valgt automatisk for samtlige modeller, noe som bekrefter at en statistisk målbar ukentlig salgssyklus er til stede i dataene på tvers av alle produkter og utsalgssteder. Modellordene varierer betydelig mellom kombinasjonene – fra enkle random walk-modeller med sesong-MA-ledd til mer komplekse modeller med høyere AR- og MA-orden – noe som understreker behovet for individuelle modeller fremfor én felles modell. Valideringen med to rullerende prognosevinduer viser at 24 av 32 modeller oppnår MAPE under 8 % i det primære valideringsvinduet (V2: dag 95–101), noe som klassifiseres som god prognoseytelse. Det gjennomsnittlige MAPE over begge vinduene bekrefter at ytelsen er stabil for de fleste produkt-utsalgsstedskombinasjonene, med tydelig unntaksstruktur knyttet til Murray Hills veksttrendperiode.
 
 **Delspørsmål 2 – Lagernivåer:** Basert på 7-dagers SARIMA-prognoser og 95 %-prediksjonsintervaller er det beregnet konkrete lagernivåanbefalinger for alle 32 produkt-utsalgsstedskombinasjonene. Anbefalt ukentlig bestillingsmengde per utsalgssted er 11 548 enheter for GM, 12 669 for HK, 14 724 for LM og 12 373 for MH. Sikkerhetslageret utgjør 10–14 % av total prognosesum per utsalgssted, med størst buffer for produkter med høy salgsvariasjon (Pommes frites, Pølse og Kebab). Produktene Iskrem og Brus er de enkleste å styre: lav variasjon, lav MAPE og minimalt sikkerhetslager.
 

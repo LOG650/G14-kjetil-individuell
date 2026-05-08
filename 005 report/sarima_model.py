@@ -69,20 +69,27 @@ def load_store(store: str) -> dict[str, list[int]]:
 # ---------------------------------------------------------------------------
 def fit_and_forecast(series: list[int], store: str, product: str) -> tuple:
     """
-    Deler serien i trenings- og valideringssett (siste 7 dager).
-    Tilpasser SARIMA automatisk med auto_arima (sesong s=7).
+    Rolling-origin validering med to vinduer:
+      W1: treningsdata dag 1-87, validering dag 88-94
+      W2: treningsdata dag 1-94, validering dag 95-101  (primær, brukes til anbefalinger)
+    Tilpasser SARIMA automatisk med auto_arima (sesong s=7) for hvert vindu.
     Beregner Ljung-Box residualdiagnostikk og naiv baseline-MAPE.
-    Returnerer (result_dict, train, test, fc_point, fc_upper).
+    Returnerer (result_dict, train_w2, test_w2, fc_w2, ci_w2).
     """
-    arr   = np.array(series, dtype=float)
+    arr = np.array(series, dtype=float)
+
+    # Primær trenings-/valideringssplit (W2): dag 1-94 / dag 95-101
     train = arr[:-FORECAST_DAYS]
     test  = arr[-FORECAST_DAYS:]
 
-    model = auto_arima(
-        train,
+    # Ekstra valideringsvindu (W1): dag 1-87 / dag 88-94
+    train_w1 = arr[:-2 * FORECAST_DAYS]
+    test_w1  = arr[-2 * FORECAST_DAYS:-FORECAST_DAYS]
+
+    arima_kwargs = dict(
         start_p=0, max_p=3,
         start_q=0, max_q=3,
-        d=None,                 # auto-velg differensieringsgrad
+        d=None,
         seasonal=True, m=7,
         start_P=0, max_P=2,
         start_Q=0, max_Q=2,
@@ -94,31 +101,36 @@ def fit_and_forecast(series: list[int], store: str, product: str) -> tuple:
         trace=False,
     )
 
+    # --- Primær modell (W2) ---
+    model = auto_arima(train, **arima_kwargs)
     fc, ci = model.predict(
         n_periods=FORECAST_DAYS,
         return_conf_int=True,
-        alpha=1 - SERVICE_LEVEL,    # 95 % PI
+        alpha=1 - SERVICE_LEVEL,
     )
     fc = np.maximum(fc, 0)
 
-    # --- Nøkkeltall ---
-    # Dataene er rullerende 7-dagerssummer fra spillet ("sold last 7 days").
-    # Det 7. prognosesteget gir direkte den predikerte 7-dagerssummen for
-    # de neste 7 dagene – det er dette vi vil bestille.
-    fc_sum   = float(fc[-1])                   # 7. steg = prognose neste 7 dager
-    fc_upper = float(ci[-1, 1])                # øvre PI for samme steg
+    # --- Ekstra modell (W1) – kun for MAPE-beregning ---
+    model_w1 = auto_arima(train_w1, **arima_kwargs)
+    fc_w1, _ = model_w1.predict(
+        n_periods=FORECAST_DAYS,
+        return_conf_int=True,
+        alpha=1 - SERVICE_LEVEL,
+    )
+    fc_w1 = np.maximum(fc_w1, 0)
 
-    # Sikkerhetslager = øvre PI-grense minus punktprognose (7-dagersnivå)
+    # --- Nøkkeltall fra primær modell ---
+    fc_sum   = float(fc[-1])
+    fc_upper = float(ci[-1, 1])
     safety_stock = max(fc_upper - fc_sum, 0)
+    recommended  = fc_sum + safety_stock
 
-    # Anbefalt bestillingsmengde = punktprognose + sikkerhetslager
-    recommended = fc_sum + safety_stock        # = fc_upper (ved 95 %)
+    # --- MAPE per vindu og gjennomsnitt ---
+    mape_w2  = float(np.mean(np.abs((test    - fc)    / np.where(test    == 0, 1, test)))    * 100)
+    mape_w1  = float(np.mean(np.abs((test_w1 - fc_w1) / np.where(test_w1 == 0, 1, test_w1))) * 100)
+    mape_avg = (mape_w1 + mape_w2) / 2
 
-    # MAPE på valideringssettet
-    mape = float(np.mean(np.abs((test - fc) / np.where(test == 0, 1, test))) * 100)
-
-    # --- Ljung-Box residualdiagnostikk ---
-    # H0: ingen autokorrelasjon i residualene (ønsket: p > 0.05)
+    # --- Ljung-Box residualdiagnostikk (primær modell) ---
     residuals = model.resid()
     lb = acorr_ljungbox(residuals, lags=[7, 14], return_df=True)
     lb_pvalue_lag7  = round(float(lb["lb_pvalue"].iloc[0]), 4)
@@ -126,31 +138,32 @@ def fit_and_forecast(series: list[int], store: str, product: str) -> tuple:
     lb_stat_lag7    = round(float(lb["lb_stat"].iloc[0]), 2)
     lb_stat_lag14   = round(float(lb["lb_stat"].iloc[1]), 2)
 
-    # --- Naiv baselineprognose ---
-    # Siste observerte verdi brukes som prognose for alle 7 steg
+    # --- Naiv baselineprognose (W2) ---
     naive_fc   = np.full(FORECAST_DAYS, train[-1])
     naive_mape = float(np.mean(
         np.abs((test - naive_fc) / np.where(test == 0, 1, test))
     ) * 100)
 
     result = {
-        "arima_order":          str(model.order),
-        "seasonal_order":       str(model.seasonal_order),
-        "aic":                  round(model.aic(), 2),
-        "validation_mape_pct":  round(mape, 1),
-        "naive_baseline_mape_pct": round(naive_mape, 1),
-        "ljung_box_lag7_stat":  lb_stat_lag7,
-        "ljung_box_lag7_pvalue": lb_pvalue_lag7,
-        "ljung_box_lag14_stat": lb_stat_lag14,
-        "ljung_box_lag14_pvalue": lb_pvalue_lag14,
-        "forecast_daily":       [round(v, 1) for v in fc.tolist()],
-        "forecast_sum_7d":      round(fc_sum, 0),
-        "forecast_ci_lower_7d": round(float(ci[:, 0].sum()), 0),
-        "forecast_ci_upper_7d": round(fc_upper, 0),
-        "safety_stock":         round(safety_stock, 0),
-        "recommended_order_7d": round(recommended, 0),
-        "actual_last_7d":       [int(v) for v in test.tolist()],
-        "service_level":        SERVICE_LEVEL,
+        "arima_order":               str(model.order),
+        "seasonal_order":            str(model.seasonal_order),
+        "aic":                       round(model.aic(), 2),
+        "validation_mape_pct":       round(mape_w2, 1),       # W2: dag 95-101
+        "validation_mape_w1_pct":    round(mape_w1, 1),       # W1: dag 88-94
+        "rolling_mape_avg_pct":      round(mape_avg, 1),      # gjennomsnitt W1+W2
+        "naive_baseline_mape_pct":   round(naive_mape, 1),
+        "ljung_box_lag7_stat":       lb_stat_lag7,
+        "ljung_box_lag7_pvalue":     lb_pvalue_lag7,
+        "ljung_box_lag14_stat":      lb_stat_lag14,
+        "ljung_box_lag14_pvalue":    lb_pvalue_lag14,
+        "forecast_daily":            [round(v, 1) for v in fc.tolist()],
+        "forecast_sum_7d":           round(fc_sum, 0),
+        "forecast_ci_lower_7d":      round(float(ci[:, 0].sum()), 0),
+        "forecast_ci_upper_7d":      round(fc_upper, 0),
+        "safety_stock":              round(safety_stock, 0),
+        "recommended_order_7d":      round(recommended, 0),
+        "actual_last_7d":            [int(v) for v in test.tolist()],
+        "service_level":             SERVICE_LEVEL,
     }
 
     return result, train, test, fc, ci
@@ -201,12 +214,12 @@ def make_plot(store, product, train, test, fc, ci, info):
 # ---------------------------------------------------------------------------
 def summary_table(store: str, store_results: dict) -> str:
     lines = [
-        f"\n{'='*90}",
+        f"\n{'='*105}",
         f"  {store} – Anbefalt bestilling neste 7 dager (servicegrad {int(SERVICE_LEVEL*100)} %)",
-        f"{'='*90}",
+        f"{'='*105}",
         f"  {'Produkt':<12} {'Prognose':>10} {'Sikkerl.':>10} {'Bestilling':>10} "
-        f"{'MAPE%':>7} {'Naiv%':>7}  {'LB-p(7)':>9}  Modell",
-        f"  {'-'*86}",
+        f"{'W1%':>7} {'W2%':>7} {'Snitt%':>7} {'Naiv%':>7}  {'LB-p(7)':>9}  Modell",
+        f"  {'-'*101}",
     ]
     for p, r in store_results.items():
         lb_flag = "*" if r["ljung_box_lag7_pvalue"] < 0.05 else " "
@@ -214,13 +227,15 @@ def summary_table(store: str, store_results: dict) -> str:
             f"  {p:<12} {r['forecast_sum_7d']:>10,.0f} "
             f"{r['safety_stock']:>10,.0f} "
             f"{r['recommended_order_7d']:>10,.0f} "
+            f"{r['validation_mape_w1_pct']:>7.1f} "
             f"{r['validation_mape_pct']:>7.1f} "
+            f"{r['rolling_mape_avg_pct']:>7.1f} "
             f"{r['naive_baseline_mape_pct']:>7.1f}  "
             f"{r['ljung_box_lag7_pvalue']:>8.4f}{lb_flag}  "
             f"SARIMA{r['arima_order']}×{r['seasonal_order']}"
         )
-    lines.append(f"  {'*'} = LB p < 0.05: mulig gjenværende autokorrelasjon i residualene")
-    lines.append(f"{'='*90}")
+    lines.append(f"  W1=dag 88-94  W2=dag 95-101  * = LB p < 0.05")
+    lines.append(f"{'='*105}")
     return "\n".join(lines)
 
 
