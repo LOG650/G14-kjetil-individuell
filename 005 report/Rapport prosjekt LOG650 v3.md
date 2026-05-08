@@ -88,9 +88,9 @@ Effektiv lagerstyring er en av de mest kritiske faktorene for lønnsomheten i de
 
 Tradisjonelle tilnærminger til lagerstyring baserer seg på gjennomsnittlig etterspørsel og statistiske mål for variasjon for å beregne sikkerhetslager og bestillingspunkter. I takt med økt datatilgjengelighet har imidlertid kvantitative prognosemetoder blitt stadig mer utbredt. Blant disse har tidsrekkemodeller som ARIMA og dens sesongbaserte utvidelse SARIMA vist seg å være godt egnet for etterspørselsprognoser i detaljhandelen, særlig der salgsdata viser sesongmønstre eller autokorrelasjon over tid (Hyndman & Athanasopoulos, 2021). En viktig fordel med slike statistiske modeller er at de kan fange opp strukturen i historiske data og produsere prognoser med tilhørende usikkerhetsintervaller, som kan benyttes direkte til å dimensjonere sikkerhetslager.
 
-Denne rapporten tar utgangspunkt i den fiktive hurtigmatbedriften BiteBurst, som opererer fire utsalgssteder i dataspillet Big Ambitions (Hovgaard & Hovgaard, 2022). Bruk av en forretningssimulator er et bevisst metodisk valg: spillets konsistente og transparente etterspørselslogikk gir et kontrollert testmiljø der metodikken kan isoleres og evalueres uten forstyrrende faktorer som kampanjer, sesongvariasjoner utenfor modellen eller konfidensialitetshensyn. Dette gjør det mulig å validere en generell analytisk pipeline for SARIMA-basert lagerdimensjonering under realistisk, men reproduserbare betingelser – noe som er vanskeligere å oppnå med reelle forretningsdata i et avgrenset prosjekt. Med 101 daglige observasjoner av rullerende 7-dagerssummer per utsalgssted for åtte produktkategorier danner datagrunnlaget en solid basis for tidsrekkeanalyse.
+Denne rapporten tar utgangspunkt i den fiktive hurtigmatbedriften BiteBurst, som opererer fire utsalgssteder i dataspillet Big Ambitions (Hovgaard & Hovgaard, 2022). Bruk av en forretningssimulator er et bevisst metodisk valg: spillets konsistente og transparente etterspørselslogikk gir et kontrollert testmiljø der metodikken kan isoleres og evalueres uten forstyrrende faktorer som kampanjer, sesongvariasjoner utenfor modellen eller konfidensialitetshensyn. Dette gjør det mulig å validere en generell analyserekke for SARIMA-basert lagerdimensjonering under realistisk, men reproduserbare betingelser – noe som er vanskeligere å oppnå med reelle forretningsdata i et avgrenset prosjekt. Med 101 daglige observasjoner av rullerende 7-dagerssummer per utsalgssted for åtte produktkategorier danner datagrunnlaget en solid basis for tidsrekkeanalyse.
 
-Formålet med rapporten er todelt. Det *substansielle* målet er å fastsette det optimale lagernivået hvert BiteBurst-utsalgssted må holde for å kunne operere i syv dager uten levering fra sentrallager – et nivå som er særlig relevant ved leveringsforsinkelser eller andre driftsforstyrrelser. Det *metodiske* målet er å demonstrere og evaluere en reproduserbar pipeline for SARIMA-basert etterspørselsprognose koblet direkte til sikkerhetslagerberegning via modellens prediksjonsintervaller, og å undersøke i hvilken grad denne tilnærmingen gir bedre prognosenøyaktighet enn en naiv referansemodell. Rapporten bidrar dermed med to typer innsikt: konkrete lagernivåanbefalinger for BiteBurst, og en overførbar metodikk for lageroptimalisering basert på historiske salgsdata der en åpen kildekode-løsning i Python automatiserer modellvalg og beregninger.
+Formålet med rapporten er todelt. Det *substansielle* målet er å fastsette det optimale lagernivået hvert BiteBurst-utsalgssted må holde for å kunne operere i syv dager uten levering fra sentrallager – et nivå som er særlig relevant ved leveringsforsinkelser eller andre driftsforstyrrelser. Det *metodiske* målet er å demonstrere og evaluere en reproduserbar analyserekke for SARIMA-basert etterspørselsprognose koblet direkte til sikkerhetslagerberegning via modellens prediksjonsintervaller, og å undersøke i hvilken grad denne tilnærmingen gir bedre prognosenøyaktighet enn en naiv referansemodell. Rapporten bidrar dermed med to typer innsikt: konkrete lagernivåanbefalinger for BiteBurst, og en overførbar metodikk for lageroptimalisering basert på historiske salgsdata der en åpen kildekode-løsning i Python automatiserer modellvalg og beregninger.
 
 Rapportens struktur følger en klassisk vitenskapelig oppbygning. Etter en gjennomgang av relevant litteratur og det teoretiske grunnlaget for SARIMA-modellering og sikkerhetslagerberegning beskrives casebedriften og datagrunnlaget i detalj. Metode- og modelleringskapitlene dokumenterer den analytiske prosessen, fulgt av resultater og diskusjon. Rapporten avsluttes med en konklusjon som besvarer problemstillingen.
 
@@ -213,7 +213,7 @@ Akaikes informasjonskriterium (AIC) er et mål for modellens tilpasning til data
 
 $$\text{AIC} = -2\ln(\hat{L}) + 2k$$
 
-der *L̂* er den maksimale likelihooden og *k* er antallet estimerte parametre. En lavere AIC-verdi indikerer en bedre balanse mellom modellens tilpasning til treningsdataene og dens kompleksitet. AIC penaliserer dermed overparametriserte modeller og hjelper til med å unngå overtilpasning.
+der *L̂* er den maksimale likelihood-verdien og *k* er antallet estimerte parametre. En lavere AIC-verdi indikerer en bedre balanse mellom modellens tilpasning til treningsdataene og dens kompleksitet. AIC penaliserer dermed overparametriserte modeller og hjelper til med å unngå overtilpasning.
 
 ### 3.5 Sikkerhetslager og servicegrad
 
@@ -273,7 +273,7 @@ Denne strukturen er direkte relevant for problemstillingen. Under normal drift f
 
 Bruk av Big Ambitions som datagrunnlag er et bevisst valg av et kontrollert testmiljø for den metodiske pipelinen. Simuleringen gir en konsistent og stabil etterspørselslogikk uten konfidensielle hensyn, ingen eksogene sjokk som kampanjer eller sesongavvik utenfor spillets logikk, og mulighet til å akkumulere data over en lengre periode enn det som normalt ville vært mulig å innhente fra en reell bedrift i et avgrenset prosjekt. Disse egenskapene gjør det mulig å evaluere metodikken under realistiske, men reproduserbare betingelser – en funksjon spillsimulatoren deler med laboratorieeksperimenter innen naturvitenskap. Datainnsamlingen foregår manuelt ved daglig avlesning av salgstall i spillgrensesnittet, noe som setter et praktisk tak på observasjonsperioden og kan introdusere enkeltfeil i registreringen.
 
-Det er viktig å understreke at Big Ambitions er et kommersielt underholdningsspill, og at den underliggende etterspørselslogikken ikke er transparent for spilleren. Hvorvidt spillets algoritmer gjenspeiler reelle etterspørselsmønstre i hurtigmatbransjen, er ikke mulig å verifisere direkte. Den metodiske pipelinen er likevel fullt overførbar til reelle data, og simuleringskonteksten begrenser primært den eksterne validiteten av de substansielle funnene, ikke verdien av selve metodikken.
+Det er viktig å understreke at Big Ambitions er et kommersielt underholdningsspill, og at den underliggende etterspørselslogikken ikke er transparent for spilleren. Hvorvidt spillets algoritmer gjenspeiler reelle etterspørselsmønstre i hurtigmatbransjen, er ikke mulig å verifisere direkte. Den metodiske analyserekken er likevel fullt overførbar til reelle data, og simuleringskonteksten begrenser primært den eksterne validiteten av de substansielle funnene, ikke verdien av selve metodikken.
 
 ---
 
@@ -319,7 +319,7 @@ Modellparametrene (*p*, *d*, *q*, *P*, *D*, *Q*) ble valgt automatisk ved hjelp 
 
 #### Trenings- og valideringsopplegg
 
-For å evaluere modellenes prediktive nøyaktighet ble det benyttet en rullerende prognosevalidering (*rolling-origin validation*) med to vinduer, slik at MAPE-estimatene ikke hviler på et enkelt holdout-sett alene:
+For å evaluere modellenes prediktive nøyaktighet ble det benyttet en rullerende prognosevalidering (*rolling-origin validation*) med to vinduer, slik at MAPE-estimatene ikke hviler på et enkelt valideringssett alene:
 
 - **Valideringsvindu 2 (V2, primært):** Modellen tilpasses på treningsdataene (dag 1–94) og prognostiserer dag 95–101.
 - **Valideringsvindu 1 (V1, tillegg):** Modellen tilpasses på dag 1–87 og prognostiserer dag 88–94.
@@ -374,55 +374,55 @@ Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per
 
 **Tabell 4: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – GM (etter datarensing)**
 
-| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
-|-----------|-------------|-----------|---------|----------|
-| Pizza     | 1 185       | 27        | 1 104   | 1 242    |
-| Salat     | 750         | 147       | 606     | 1 200    |
-| Pommes frites    | 1 752       | 398       | 1 275   | 2 421    |
-| Hamburger    | 2 187       | 63        | 2 043   | 2 376    |
-| Pølse    | 1 444       | 349       | 1 019   | 2 001    |
-| Brus      | 1 084       | 37        | 998     | 1 161    |
-| Iskrem | 576         | 20        | 516     | 620      |
-| Kebab    | 1 941       | 64        | 1 677   | 2 049    |
+| Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|---------------|-------------|-----------|---------|----------|
+| Pizza         | 1 185       | 27        | 1 104   | 1 242    |
+| Salat         | 750         | 147       | 606     | 1 200    |
+| Pommes frites | 1 752       | 398       | 1 275   | 2 421    |
+| Hamburger     | 2 187       | 63        | 2 043   | 2 376    |
+| Pølse         | 1 444       | 349       | 1 019   | 2 001    |
+| Brus          | 1 084       | 37        | 998     | 1 161    |
+| Iskrem        | 576         | 20        | 516     | 620      |
+| Kebab         | 1 941       | 64        | 1 677   | 2 049    |
 
 **Tabell 5: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – HK (etter datarensing)**
 
-| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
-|-----------|-------------|-----------|---------|----------|
-| Pizza     | 1 120       | 29        | 1 035   | 1 191    |
-| Salat     | 814         | 98        | 610     | 1 103    |
-| Pommes frites    | 1 989       | 261       | 1 575   | 2 306    |
-| Hamburger    | 2 042       | 82        | 1 760   | 2 205    |
-| Pølse    | 1 804       | 77        | 1 624   | 1 946    |
-| Brus      | 1 007       | 39        | 918     | 1 081    |
-| Iskrem | 545         | 22        | 483     | 586      |
-| Kebab    | 1 641       | 198       | 1 321   | 1 856    |
+| Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|---------------|-------------|-----------|---------|----------|
+| Pizza         | 1 120       | 29        | 1 035   | 1 191    |
+| Salat         | 814         | 98        | 610     | 1 103    |
+| Pommes frites | 1 989       | 261       | 1 575   | 2 306    |
+| Hamburger     | 2 042       | 82        | 1 760   | 2 205    |
+| Pølse         | 1 804       | 77        | 1 624   | 1 946    |
+| Brus          | 1 007       | 39        | 918     | 1 081    |
+| Iskrem        | 545         | 22        | 483     | 586      |
+| Kebab         | 1 641       | 198       | 1 321   | 1 856    |
 
 **Tabell 6: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – LM (etter datarensing)**
 
-| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
-|-----------|-------------|-----------|---------|----------|
-| Pizza     | 1 386       | 45        | 1 287   | 1 497    |
-| Salat     | 1 388       | 48        | 1 234   | 1 481    |
-| Pommes frites    | 1 877       | 376       | 1 244   | 2 625    |
-| Hamburger    | 2 555       | 96        | 2 181   | 2 736    |
-| Pølse    | 2 369       | 320       | 1 839   | 2 832    |
-| Brus      | 1 001       | 31        | 924     | 1 083    |
-| Iskrem | 627         | 86        | 517     | 766      |
-| Kebab    | 2 323       | 140       | 2 061   | 2 697    |
+| Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|---------------|-------------|-----------|---------|----------|
+| Pizza         | 1 386       | 45        | 1 287   | 1 497    |
+| Salat         | 1 388       | 48        | 1 234   | 1 481    |
+| Pommes frites | 1 877       | 376       | 1 244   | 2 625    |
+| Hamburger     | 2 555       | 96        | 2 181   | 2 736    |
+| Pølse         | 2 369       | 320       | 1 839   | 2 832    |
+| Brus          | 1 001       | 31        | 924     | 1 083    |
+| Iskrem        | 627         | 86        | 517     | 766      |
+| Kebab         | 2 323       | 140       | 2 061   | 2 697    |
 
 **Tabell 7: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – MH (etter datarensing)**
 
-| Produkt   | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
-|-----------|-------------|-----------|---------|----------|
-| Pizza     | 1 115       | 51        | 1 020   | 1 353    |
-| Salat     | 852         | 51        | 765     | 1 086    |
-| Pommes frites    | 1 775       | 415       | 1 074   | 2 320    |
-| Hamburger    | 2 072       | 102       | 1 734   | 2 463    |
-| Pølse    | 2 072       | 219       | 1 683   | 2 367    |
-| Brus      | 1 014       | 46        | 856     | 1 118    |
-| Iskrem | 546         | 17        | 515     | 587      |
-| Kebab    | 2 048       | 219       | 1 710   | 2 389    |
+| Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
+|---------------|-------------|-----------|---------|----------|
+| Pizza         | 1 115       | 51        | 1 020   | 1 353    |
+| Salat         | 852         | 51        | 765     | 1 086    |
+| Pommes frites | 1 775       | 415       | 1 074   | 2 320    |
+| Hamburger     | 2 072       | 102       | 1 734   | 2 463    |
+| Pølse         | 2 072       | 219       | 1 683   | 2 367    |
+| Brus          | 1 014       | 46        | 856     | 1 118    |
+| Iskrem        | 546         | 17        | 515     | 587      |
+| Kebab         | 2 048       | 219       | 1 710   | 2 389    |
 
 Det fremgår at det er stor variasjon i standardavvik mellom produktene, og at mønsteret er konsistent på tvers av utsalgsstedene. Pommes frites og Pølse har gjennomgående vesentlig høyere variasjon enn eksempelvis Iskrem og Brus. Kebab viser moderat til lav variasjon etter at registreringsfeilene ble korrigert. LM skiller seg ut med høyere absolutte salgstall for de fleste produkter, men har ikke nødvendigvis høyere relativ variasjon.
 
@@ -454,38 +454,38 @@ Tabell 8 gir en komplett oversikt over de 32 tilpassede SARIMA-modellene med mod
 
 | Utsalgssted | Produkt   | ARIMA-orden | Sesong-orden    | AIC    |
 |-------------|-----------|-------------|-----------------|--------|
-| GM          | Pizza     | (0,1,1)     | (0,0,1,7)       | 739,19 |
-| GM          | Salat     | (1,1,1)     | (0,0,1,7)       | 722,00 |
-| GM          | Pommes frites    | (1,1,1)     | (2,0,0,7)       | 901,01 |
-| GM          | Hamburger    | (1,0,0)     | (2,0,0,7)       | 893,48 |
-| GM          | Pølse    | (1,1,1)     | (0,0,2,7)       | 853,56 |
-| GM          | Brus      | (2,0,0)     | (2,0,0,7)       | 818,28 |
-| GM          | Iskrem | (1,0,0)     | (2,0,1,7)       | 661,06 |
-| GM          | Kebab    | (2,0,1)     | (2,0,0,7)       | 910,44 |
-| HK          | Pizza     | (2,0,1)     | (2,0,0,7)       | 767,09 |
-| HK          | Salat     | (1,1,3)     | (0,0,1,7)       | 702,27 |
-| HK          | Pommes frites    | (1,1,0)     | (2,0,1,7)       | 904,90 |
-| HK          | Hamburger    | (1,1,2)     | (0,0,1,7)       | 860,67 |
-| HK          | Pølse    | (0,1,0)     | (0,0,1,7)       | 855,94 |
-| HK          | Brus      | (1,0,0)     | (2,0,1,7)       | 784,70 |
-| HK          | Iskrem | (3,0,0)     | (2,0,0,7)       | 690,09 |
-| HK          | Kebab    | (1,1,0)     | (0,0,1,7)       | 869,14 |
-| LM          | Pizza     | (0,1,0)     | (0,0,1,7)       | 813,04 |
-| LM          | Salat     | (0,1,2)     | (0,0,1,7)       | 798,67 |
-| LM          | Pommes frites    | (1,1,1)     | (2,0,0,7)       | 967,05 |
-| LM          | Hamburger    | (3,1,1)     | (1,0,0,7)       | 907,53 |
-| LM          | Pølse    | (2,1,0)     | (0,0,1,7)       | 914,65 |
-| LM          | Brus      | (0,1,0)     | (0,0,1,7)       | 759,23 |
-| LM          | Iskrem | (1,1,1)     | (0,0,1,7)       | 699,98 |
-| LM          | Kebab    | (1,1,0)     | (0,0,1,7)       | 903,50 |
-| MH          | Pizza     | (0,1,0)     | (2,0,0,7)       | 755,14 |
-| MH          | Salat     | (1,0,0)     | (2,0,0,7)       | 743,50 |
-| MH          | Pommes frites    | (1,1,0)     | (2,0,0,7)       | 927,84 |
-| MH          | Hamburger    | (2,0,1)     | (2,0,0,7)       | 912,85 |
-| MH          | Pølse    | (0,1,3)     | (0,0,1,7)       | 891,18 |
-| MH          | Brus      | (0,1,0)     | (0,0,1,7)       | 818,97 |
-| MH          | Iskrem | (1,0,0)     | (2,0,1,7)       | 657,24 |
-| MH          | Kebab    | (1,1,0)     | (0,0,1,7)       | 906,58 |
+| GM          | Pizza         | (0,1,1)     | (0,0,1,7)       | 739,19 |
+| GM          | Salat         | (1,1,1)     | (0,0,1,7)       | 722,00 |
+| GM          | Pommes frites | (1,1,1)     | (2,0,0,7)       | 901,01 |
+| GM          | Hamburger     | (1,0,0)     | (2,0,0,7)       | 893,48 |
+| GM          | Pølse         | (1,1,1)     | (0,0,2,7)       | 853,56 |
+| GM          | Brus          | (2,0,0)     | (2,0,0,7)       | 818,28 |
+| GM          | Iskrem        | (1,0,0)     | (2,0,1,7)       | 661,06 |
+| GM          | Kebab         | (2,0,1)     | (2,0,0,7)       | 910,44 |
+| HK          | Pizza         | (2,0,1)     | (2,0,0,7)       | 767,09 |
+| HK          | Salat         | (1,1,3)     | (0,0,1,7)       | 702,27 |
+| HK          | Pommes frites | (1,1,0)     | (2,0,1,7)       | 904,90 |
+| HK          | Hamburger     | (1,1,2)     | (0,0,1,7)       | 860,67 |
+| HK          | Pølse         | (0,1,0)     | (0,0,1,7)       | 855,94 |
+| HK          | Brus          | (1,0,0)     | (2,0,1,7)       | 784,70 |
+| HK          | Iskrem        | (3,0,0)     | (2,0,0,7)       | 690,09 |
+| HK          | Kebab         | (1,1,0)     | (0,0,1,7)       | 869,14 |
+| LM          | Pizza         | (0,1,0)     | (0,0,1,7)       | 813,04 |
+| LM          | Salat         | (0,1,2)     | (0,0,1,7)       | 798,67 |
+| LM          | Pommes frites | (1,1,1)     | (2,0,0,7)       | 967,05 |
+| LM          | Hamburger     | (3,1,1)     | (1,0,0,7)       | 907,53 |
+| LM          | Pølse         | (2,1,0)     | (0,0,1,7)       | 914,65 |
+| LM          | Brus          | (0,1,0)     | (0,0,1,7)       | 759,23 |
+| LM          | Iskrem        | (1,1,1)     | (0,0,1,7)       | 699,98 |
+| LM          | Kebab         | (1,1,0)     | (0,0,1,7)       | 903,50 |
+| MH          | Pizza         | (0,1,0)     | (2,0,0,7)       | 755,14 |
+| MH          | Salat         | (1,0,0)     | (2,0,0,7)       | 743,50 |
+| MH          | Pommes frites | (1,1,0)     | (2,0,0,7)       | 927,84 |
+| MH          | Hamburger     | (2,0,1)     | (2,0,0,7)       | 912,85 |
+| MH          | Pølse         | (0,1,3)     | (0,0,1,7)       | 891,18 |
+| MH          | Brus          | (0,1,0)     | (0,0,1,7)       | 818,97 |
+| MH          | Iskrem        | (1,0,0)     | (2,0,1,7)       | 657,24 |
+| MH          | Kebab         | (1,1,0)     | (0,0,1,7)       | 906,58 |
 
 Modellordene varierer mellom produkt og utsalgssted, noe som reflekterer at de individuelle salgsseriene har ulik korrelasjonstruktur. Enklere modeller som SARIMA(0,1,0)(0,0,1,7) – som tilsvarer en sesongmessig random walk med MA-ledd – er valgt for produkter med lite systematisk autokorrelasjon utover sesongmønsteret, mens mer komplekse modeller med høyere *p*- og *q*-verdier er valgt der dataene viser sterkere avhengighetsstruktur.
 
@@ -542,9 +542,9 @@ Tabellene 9a–9c sammenfatter MAPE-verdiene fra den rullerende prognosevalideri
 | Iskrem        | 1,8  | 3,9  | 3,4 | 1,6  |
 | Kebab         | 2,1  | 2,9  | 5,8 | 4,1  |
 
-For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modellenes MAPE sammenlignet mot en naiv prognose der den siste observerte rullerende 7-dagerssummen brukes uendret som prognose for alle syv fremtidige steg. Tabell 9d viser de tilsvarende MAPE-verdiene for den naive baselines (V2-vinduet), og Tabell 9e i seksjon 7.5 rapporterer Ljung-Box residualdiagnostikk.
+For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modellenes MAPE sammenlignet mot en naiv prognose der den siste observerte rullerende 7-dagerssummen brukes uendret som prognose for alle syv fremtidige steg. Tabell 9d viser de tilsvarende MAPE-verdiene for den naive referanseprognosen (V2-vinduet), og Tabell 9e i seksjon 7.5 rapporterer Ljung-Box residualdiagnostikk.
 
-**Tabell 9d: Naiv baseline MAPE (%) – siste observasjon fremskrevet per produkt og utsalgssted (V2)**
+**Tabell 9d: Naiv referanseprognose MAPE (%) – siste observasjon fremskrevet per produkt og utsalgssted (V2)**
 
 | Produkt       | GM   | HK   | LM  | MH   |
 |---------------|------|------|-----|------|
@@ -557,7 +557,7 @@ For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modell
 | Iskrem        | 2,0  | 3,0  | 4,0 | 2,3  |
 | Kebab         | 1,9  | 1,2  | 1,9 | 2,2  |
 
-Sammenligningen viser at SARIMA gjennomgående gir lavere MAPE enn den naive baselines: for 24 av 32 kombinasjoner i V2-vinduet er SARIMA-MAPE lavere. De tydeligste forbedringene finnes for produkter med strukturert sesongmønster, som GM Salat (SARIMA 4,2 % mot naiv 10,4 %) og LM Pommes frites (SARIMA 2,0 % mot naiv 5,5 %). I åtte tilfeller er den naive baselines marginalt bedre eller likeverdig, og disse sammenfaller stort sett med produkter der etterspørselen var relativt flat i valideringsperioden, slik at siste observasjon tilfeldigvis var et godt estimat.
+Sammenligningen viser at SARIMA gjennomgående gir lavere MAPE enn den naive referanseprognosen: for 24 av 32 kombinasjoner i V2-vinduet er SARIMA-MAPE lavere. De tydeligste forbedringene finnes for produkter med strukturert sesongmønster, som GM Salat (SARIMA 4,2 % mot naiv 10,4 %) og LM Pommes frites (SARIMA 2,0 % mot naiv 5,5 %). I åtte tilfeller er den naive referanseprognosen marginalt bedre eller likeverdig, og disse sammenfaller stort sett med produkter der etterspørselen var relativt flat i valideringsperioden, slik at siste observasjon tilfeldigvis var et godt estimat.
 
 En sammenligning av V1- og V2-MAPE-verdiene (Tabell 9a og 9b) gir viktig tilleggsinformasjon: for de fleste produkter er ytelsen relativt stabil mellom de to periodene, noe som styrker tilliten til modellene. Det mest slående unntaket er Murray Hill, der V2-MAPE konsekvent er vesentlig høyere enn V1-MAPE for Pizza (V1: 0,8 %, V2: 9,2 %), Salat (2,8 % mot 16,4 %), Pommes frites (11,3 % mot 21,6 %) og Hamburger (1,1 % mot 8,9 %). Dette bekrefter at salget ved MH akselererte spesielt mot slutten av observasjonsperioden og at V2-MAPE-tallene dermed reflekterer et trendskifte snarere enn generell modellsvakhet. Det gjennomsnittlige MAPE over begge vinduene (Tabell 9c) gir et mer balansert bilde enn V2 alene.
 
@@ -645,17 +645,17 @@ Kapitlet presenterer det sentrale resultatet av analysen: anbefalt ukentlig best
 
 **Tabell 10: Anbefalte lagernivåer for GM – uke (enheter, 95 % servicegrad)**
 
-| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
-|-----------|------------|-----------------|----------------|
-| Pizza     | 1 219      | 55              | 1 273          |
-| Salat     | 1 108      | 111             | 1 219          |
-| Pommes frites    | 1 381      | 312             | 1 694          |
-| Hamburger    | 2 172      | 98              | 2 270          |
-| Pølse    | 995        | 264             | 1 259          |
-| Brus      | 1 088      | 76              | 1 164          |
-| Iskrem | 568        | 29              | 596            |
-| Kebab    | 1 938      | 136             | 2 073          |
-| **Totalt**| **10 469** | **1 081**       | **11 548**     |
+| Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|---------------|------------|-----------------|----------------|
+| Pizza         | 1 219      | 55              | 1 273          |
+| Salat         | 1 108      | 111             | 1 219          |
+| Pommes frites | 1 381      | 312             | 1 694          |
+| Hamburger     | 2 172      | 98              | 2 270          |
+| Pølse         | 995        | 264             | 1 259          |
+| Brus          | 1 088      | 76              | 1 164          |
+| Iskrem        | 568        | 29              | 596            |
+| Kebab         | 1 938      | 136             | 2 073          |
+| **Totalt**    | **10 469** | **1 081**       | **11 548**     |
 
 GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgsvolum. Hamburger og Kebab dominerer sortimentet volumsmessig. Sikkerhetslageret er relativt lite for stabile produkter som Iskrem (29 enheter, 5 % av prognosen) og forholdsmessig stort for Pommes frites (312 enheter, 23 % av prognosen) og Pølse (264 enheter, 27 %) som følge av høy salgsvariasjon. For GM Pølse, som har MAPE = 19,9 % i valideringssettet, bør anbefalt ordre betraktes med forsiktighet; et erfaringspåslag på 15–20 % gir en justert anbefaling på omtrent 1 450–1 510 enheter (mot beregnede 1 259 enheter).
 
@@ -663,17 +663,17 @@ GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgs
 
 **Tabell 11: Anbefalte lagernivåer for HK – uke (enheter, 95 % servicegrad)**
 
-| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
-|-----------|------------|-----------------|----------------|
-| Pizza     | 1 113      | 67              | 1 180          |
-| Salat     | 843        | 108             | 951            |
-| Pommes frites    | 2 250      | 371             | 2 621          |
-| Hamburger    | 2 034      | 166             | 2 200          |
-| Pølse    | 1 811      | 123             | 1 935          |
-| Brus      | 980        | 60              | 1 039          |
-| Iskrem | 536        | 38              | 574            |
-| Kebab    | 1 835      | 334             | 2 169          |
-| **Totalt**| **11 402** | **1 267**       | **12 669**     |
+| Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|---------------|------------|-----------------|----------------|
+| Pizza         | 1 113      | 67              | 1 180          |
+| Salat         | 843        | 108             | 951            |
+| Pommes frites | 2 250      | 371             | 2 621          |
+| Hamburger     | 2 034      | 166             | 2 200          |
+| Pølse         | 1 811      | 123             | 1 935          |
+| Brus          | 980        | 60              | 1 039          |
+| Iskrem        | 536        | 38              | 574            |
+| Kebab         | 1 835      | 334             | 2 169          |
+| **Totalt**    | **11 402** | **1 267**       | **12 669**     |
 
 HK skiller seg ut ved at Pommes frites er det klart mest solgte produktet med 2 250 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (1 381). Sikkerhetslageret for Pommes frites (371) og Kebab (334) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK Pommes frites en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
 
@@ -681,17 +681,17 @@ HK skiller seg ut ved at Pommes frites er det klart mest solgte produktet med 2 
 
 **Tabell 12: Anbefalte lagernivåer for LM – uke (enheter, 95 % servicegrad)**
 
-| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
-|-----------|------------|-----------------|----------------|
-| Pizza     | 1 388      | 99              | 1 487          |
-| Salat     | 1 435      | 90              | 1 525          |
-| Pommes frites    | 1 646      | 457             | 2 103          |
-| Hamburger    | 2 651      | 134             | 2 785          |
-| Pølse    | 2 010      | 362             | 2 373          |
-| Brus      | 1 016      | 74              | 1 090          |
-| Iskrem | 516        | 94              | 610            |
-| Kebab    | 2 496      | 255             | 2 751          |
-| **Totalt**| **13 158** | **1 565**       | **14 724**     |
+| Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|---------------|------------|-----------------|----------------|
+| Pizza         | 1 388      | 99              | 1 487          |
+| Salat         | 1 435      | 90              | 1 525          |
+| Pommes frites | 1 646      | 457             | 2 103          |
+| Hamburger     | 2 651      | 134             | 2 785          |
+| Pølse         | 2 010      | 362             | 2 373          |
+| Brus          | 1 016      | 74              | 1 090          |
+| Iskrem        | 516        | 94              | 610            |
+| Kebab         | 2 496      | 255             | 2 751          |
+| **Totalt**    | **13 158** | **1 565**       | **14 724**     |
 
 Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en 7-dagersanbefaling på 14 724 enheter – om lag 27 % mer enn GM. Som beskrevet i casebeskrivelsen skyldes dette bydelens høyere innebygde etterspørsel i spillsimulasjonen, ikke trafikkscoren alene. Pommes frites har det høyeste sikkerhetslageret absolutt (457 enheter, 28 % av prognosen), mens Hamburger er det volumsmessig største enkeltproduktet med 2 651 enheter i prognosen.
 
@@ -699,17 +699,17 @@ Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en
 
 **Tabell 13: Anbefalte lagernivåer for MH – uke (enheter, 95 % servicegrad)**
 
-| Produkt   | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
-|-----------|------------|-----------------|----------------|
-| Pizza     | 1 115      | 73              | 1 188          |
-| Salat     | 821        | 54              | 875            |
-| Pommes frites    | 1 511      | 531             | 2 042          |
-| Hamburger    | 2 055      | 145             | 2 199          |
-| Pølse    | 1 895      | 261             | 2 157          |
-| Brus      | 1 008      | 103             | 1 111          |
-| Iskrem | 550        | 29              | 579            |
-| Kebab    | 1 877      | 346             | 2 222          |
-| **Totalt**| **10 832** | **1 542**       | **12 373**     |
+| Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
+|---------------|------------|-----------------|----------------|
+| Pizza         | 1 115      | 73              | 1 188          |
+| Salat         | 821        | 54              | 875            |
+| Pommes frites | 1 511      | 531             | 2 042          |
+| Hamburger     | 2 055      | 145             | 2 199          |
+| Pølse         | 1 895      | 261             | 2 157          |
+| Brus          | 1 008      | 103             | 1 111          |
+| Iskrem        | 550        | 29              | 579            |
+| Kebab         | 1 877      | 346             | 2 222          |
+| **Totalt**    | **10 832** | **1 542**       | **12 373**     |
 
 MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgsstedene (14,2 % av total prognosesum), noe som gjenspeiler den høyere etterspørselsusikkerheten for dette stedet i observasjonsperioden. Pommes frites alene har et sikkerhetslager på 531 enheter – det høyeste av alle 32 modeller. Som vist i analysekapittelet hadde MH en oppadgående salgstendens i slutten av observasjonsperioden, og de faktiske siste rullerende 7-dagerssummene overskrider prognosen for flere produkter. Anbefalingene i Tabell 13 bør tolkes med dette forbeholdet. For produkter med MAPE > 15 % – spesielt Pommes frites (MAPE = 21,6 %) – anbefales et erfaringspåslag på 15–20 % på anbefalt bestillingsmengde. For MH Pommes frites tilsvarer dette en justert anbefalt ordre på omtrent 2 350–2 450 enheter (mot de beregnet 2 042 enhetene i Tabell 13), og bør revurderes etter at en lengre og mer stabil observasjonsperiode er tilgjengelig.
 
@@ -763,7 +763,7 @@ En ytterligere begrensning som bør fremheves, er knyttet til den rullerende 7-d
 
 En åpenbar innvending mot prosjektets datagrunnlag er at Big Ambitions er et dataspill, og at etterspørselslogikken i spillet ikke nødvendigvis gjenspeiler dynamikken i reelle hurtigmatrestauranter. Det er rimelig å forvente at reelle data vil ha mer eksogene påvirkningsfaktorer – vær, kampanjer, konkurrenter, lokale hendelser – som ikke er representert i spillets simulering. I tillegg er selve registreringsprosessen manuell, noe som introduserer risiko for enkeltfeil (jf. datarensingskapittelet).
 
-Disse forbeholdene til tross, er metodikken som er utviklet i rapporten fullt overførbar til reelle forretningsdata. Den sentrale metodiske pipelinen – stasjonæritetstest, ACF-analyse, automatisk SARIMA-tilpasning med AIC, prediksjonsintervallbasert sikkerhetslager – fungerer uavhengig av om dataene er simulerte eller reelle. Det som ville endre seg ved overgang til reelle data, er (1) behovet for mer robust datarensing og håndtering av manglende verdier, (2) muligheten for å inkludere eksternt påvirkende variabler som kampanjer via SARIMAX-utvidelsen, og (3) periodisk reestimering av modellparametrene etter hvert som nye data akkumuleres. Simuleringskonteksten har dermed fungert som et kontrollert testmiljø for metodikken, uten de konfidensialitetshensyn som ville fulgt med reelle bedriftsdata.
+Disse forbeholdene til tross, er metodikken som er utviklet i rapporten fullt overførbar til reelle forretningsdata. Den sentrale metodiske analyserekken – stasjonæritetstest, ACF-analyse, automatisk SARIMA-tilpasning med AIC, prediksjonsintervallbasert sikkerhetslager – fungerer uavhengig av om dataene er simulerte eller reelle. Det som ville endre seg ved overgang til reelle data, er (1) behovet for mer robust datarensing og håndtering av manglende verdier, (2) muligheten for å inkludere eksternt påvirkende variabler som kampanjer via SARIMAX-utvidelsen, og (3) periodisk reestimering av modellparametrene etter hvert som nye data akkumuleres. Simuleringskonteksten har dermed fungert som et kontrollert testmiljø for metodikken, uten de konfidensialitetshensyn som ville fulgt med reelle bedriftsdata.
 
 ### 9.6 Alternative metoder
 
@@ -771,7 +771,7 @@ De tre hovedalternativene til SARIMA – Holt-Winters, SARIMAX og maskinlærings
 
 Holt-Winters' egenskap om å vekte nylige observasjoner høyere fremstår som særlig relevant i lys av Murray Hill-problematikken: en modell som reagerer raskere på akselererende vekst ville potensielt gitt lavere MAPE for MH i V2-vinduet. For steder med stabil etterspørsel (HK, LM, GM for de fleste produkter) er imidlertid denne fordelen liten, mens SARIMA-prediksjonsintervallene gir en direkte kobling til sikkerhetslagerberegningen som Holt-Winters ikke tilbyr like direkte. SARIMAX fremstår som det mest naturlige neste steget dersom kampanje- eller hendelsesdata gjøres tilgjengelige – Arunraj et al. (2016) viser at utvidelsen er særlig virksom for volatile produktkategorier, og Pommes frites og Pølse ville vært åpenbare kandidater. ML-metoders datakrav er ikke innfridd med 101 observasjoner, men ville vært aktuelle ved overgang til reelle forretningsdata med flere år historikk.
 
-For å dokumentere at SARIMA tilfører verdi utover en triviell metode, er SARIMA-resultatene sammenlignet mot en naiv baseline der siste observerte rullerende 7-dagerssum fremskrives uendret for alle syv prognosetrinn. Sammenligningen er presentert i Tabell 9d (seksjon 7.1). SARIMA gir lavere MAPE enn den naive baselines for 24 av 32 kombinasjoner, og forbedringen er størst for produkter med tydelig sesongstruktur og trend – eksempelvis GM Salat (4,2 % mot 10,4 %) og LM Pommes frites (2,0 % mot 5,5 %). For de åtte kombinasjonene der naive er likeverdig eller marginalt bedre, er salgsserien i valideringsperioden relativt flat, slik at siste observasjon tilfeldigvis er et godt estimat. Dette bekrefter at SARIMA utnytter den historiske strukturen, men at metodefordelen er størst der etterspørselen har tydelig autokorrelasjon og sesongmønster.
+For å dokumentere at SARIMA tilfører verdi utover en triviell metode, er SARIMA-resultatene sammenlignet mot en naiv referanseprognose der siste observerte rullerende 7-dagerssum fremskrives uendret for alle syv prognosetrinn. Sammenligningen er presentert i Tabell 9d (seksjon 7.1). SARIMA gir lavere MAPE enn den naive referanseprognosen for 24 av 32 kombinasjoner, og forbedringen er størst for produkter med tydelig sesongstruktur og trend – eksempelvis GM Salat (4,2 % mot 10,4 %) og LM Pommes frites (2,0 % mot 5,5 %). For de åtte kombinasjonene der naive er likeverdig eller marginalt bedre, er salgsserien i valideringsperioden relativt flat, slik at siste observasjon tilfeldigvis er et godt estimat. Dette bekrefter at SARIMA utnytter den historiske strukturen, men at metodefordelen er størst der etterspørselen har tydelig autokorrelasjon og sesongmønster.
 
 ---
 
