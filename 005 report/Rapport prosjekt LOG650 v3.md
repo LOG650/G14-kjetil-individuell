@@ -143,7 +143,9 @@ Det metodologiske fundamentet for ARIMA-modellering ble lagt av Box, Jenkins, Re
 
 Hyndman og Athanasopoulos (2021) gir i *Forecasting: Principles and Practice* en bred og tilgjengelig gjennomgang av hele spekteret fra eksponentiell utjevning til ARIMA-modeller, og er en sentral kilde for vurderingen av AIC som informasjonskriterium samt for tolkning av ACF og PACF-diagnostikk. Forfatterne understreker at automatiske modellvalgsalgoritmer – som stepwise-søket i `auto_arima` – i praksis gir resultater på linje med manuell modellvalg for de fleste datasett, mens beregningstiden reduseres dramatisk når et stort antall modeller skal tilpasses. Dette er direkte relevant for dette prosjektet der 32 individuelle modeller ble tilpasset.
 
-Bruken av SARIMA for daglige salgsdata i mat- og detaljhandel er dokumentert i litteraturen. Fellesnevneren er at daglige salgsdata fra serveringssteder og dagligvarehandel nesten alltid viser en signifikant ukentlig sesongkomponent, siden handlevanene til forbrukerne er tett koblet til ukesrytmen med toppunkter i helgene og lavere aktivitet midt i uken (Hyndman & Athanasopoulos, 2021). SARIMA med sesongperiode *s* = 7 er dermed et naturlig valg for slike data, noe som bekreftes av at alle 32 modeller i dette prosjektet fikk valgt en sesongkomponent automatisk.
+Bruken av SARIMA for daglige salgsdata i mat- og detaljhandel er dokumentert i empirisk litteratur. Arunraj og Ahrens (2015) benytter SARIMA i kombinasjon med kvantilregresjon for å prognostisere daglig salg av ferskvarer i en dagligvarebutikk, og bekrefter at SARIMA-komponenten fanger opp den ukentlige sesongstrukturen godt. Studien peker samtidig på at rene SARIMA-modeller kan komme til kort for produkter med sterk ikke-lineær variasjon – et funn som er gjenkjennbart i dette prosjektets resultater for Pommes frites og Pølse. Fattah et al. (2018) demonstrerer tilsvarende at ARIMA-basert prognose gir stabil ytelse i et matvareforetak og underbygger modellklassens praktiske anvendbarhet på daglige salgsdata. Fellesnevneren på tvers av disse studiene er at daglige salgsdata fra serveringssteder og dagligvarehandel nesten alltid viser en signifikant ukentlig sesongkomponent, siden handlevanene til forbrukerne er tett koblet til ukesrytmen med toppunkter i helgene og lavere aktivitet midt i uken (Hyndman & Athanasopoulos, 2021). SARIMA med sesongperiode *s* = 7 er dermed et naturlig valg for slike data, noe som bekreftes av at alle 32 modeller i dette prosjektet fikk valgt en sesongkomponent automatisk.
+
+Arunraj et al. (2016) utvider rammen til SARIMAX ved å inkludere eksternt forklaringsvariabler som kampanjer og temperatur i daglige matvaresalgsdata, og finner at dette ytterligere reduserer prognosefeil for volatile produktkategorier. Denne utvidelsen er relevant som neste metodeskritt for BiteBurst-dataene dersom kampanje- eller sesongdata blir tilgjengelige (jf. kapittel 9.6), men forutsetter at slike variabler faktisk registreres systematisk.
 
 ### 2.2 Lagerstyring og sikkerhetslager
 
@@ -154,6 +156,20 @@ Chopra og Meindl (2019) setter lagerstyringen inn i et bredere forsyningskjedepe
 ### 2.3 Integrering av prognose og lagerstyring
 
 En viktig utvikling i litteraturen er koblingen mellom statistiske prognosemodeller og sikkerhetslagerberegning. Fremfor å bruke historisk standardavvik som en separat inputparameter til sikkerhetslageret, utnytter den tilnærmingen som er benyttet i denne rapporten – direkte avlesning av prediksjonsintervaller fra SARIMA-modellen – den modellspesifikke usikkerheten slik den er estimert av modellen selv. Fordelen er at sikkerhetslageret automatisk vil være høyere for produkter og perioder der modellen er usikker, og lavere der modellen er presis, uten at dette krever separate vurderinger for hvert produkt (Silver et al., 2017). Denne tilnærmingen er i tråd med prinsippet om at prognose og lagerdimensjonering bør behandles som en integrert prosess fremfor to adskilte trinn.
+
+Babai et al. (2013) analyserer empirisk sammenhengen mellom prognosenøyaktighet og lagerytelse i en to-trinns forsyningskjede med ARIMA(0,1,1)-etterspørsel, basert på 329 vareenheter fra en stor europeisk dagligvareaktør. Studien finner at bedre prognosenøyaktighet konsekvent gir lavere sikkerhetslagerbehov og færre stockout-hendelser, og gir dermed direkte empirisk støtte til motivasjonen for å benytte SARIMA fremfor naive prognosemetoder. Sammenligningen mot naiv baseline i dette prosjektet (Tabell 9d) kan ses som en praktisk replikasjon av denne logikken på BiteBurst-data. Gilbert (2005) viser fra et teoretisk perspektiv at ARIMA-modellering av etterspørsel kan redusere bullwhip-effekten sammenlignet med glidende gjennomsnitt i flerleddede forsyningskjeder – relevant for BiteBurst der utsalgsstedenes etterspørsel propagerer oppstrøms til sentrallageret. Begge studier understreker at valget av prognosemodell ikke bare påvirker prognosenøyaktigheten isolert, men også de samlede lagerkostnadene og servicegradens pålitelighet i hele forsyningskjeden.
+
+### 2.4 Alternative prognosemodeller
+
+Tre klasser av modeller er særlig relevante som alternativer til SARIMA for etterspørselsprognoser med sesongkomponenter, og er inkludert her for å begrunne metodevalget i kapittel 5.1.
+
+**Eksponentiell utjevning – Holt-Winters:** Holt-Winters-metoden (også kalt ETS – Error, Trend, Seasonality) modellerer trend og sesong direkte gjennom glattingsparametere og krever ingen stasjonæritetstransformasjoner (Hyndman & Athanasopoulos, 2021). En sentral fordel er at nylige observasjoner vektes høyere enn eldre, noe som gjør metoden mer responsiv overfor trendskifter – en egenskap som ville vært nyttig for Murray Hills vekstsituasjon i dette prosjektet. Svakheten er at Holt-Winters ikke produserer like statistisk velfunderte prediksjonsintervaller som SARIMA, og at den ikke fanger opp kompleks autokorrelasjonsstruktur utover trend og sesong.
+
+**SARIMAX:** En direkte utvidelse av SARIMA der eksternt forklaringsvariabler inkluderes. Arunraj et al. (2016) viser empirisk at SARIMAX reduserer prognosefeil for volatile produktkategorier i matvarebransjen sammenlignet med ren SARIMA, særlig der kampanjer og sesongvariabler påvirker etterspørselen. Metoden er aktuell der slike variabler er tilgjengelige og målbare, men introduserer økt modellkompleksitet og krav til datakvalitet for de eksternt forklaringsvariablene.
+
+**Maskinlæringsmetoder:** Gradient boosting og rekurrente nevrale nettverk (LSTM) har vist lovende resultater for etterspørselsprognoser på store datasett med mange produkter og komplekse ikke-lineære mønstre (Hyndman & Athanasopoulos, 2021). Disse metodene krever imidlertid typisk vesentlig større datamengder for stabil parameterestimering, er vanskeligere å tolke og validere med korte tidsrekker, og produserer ikke prediksjonsintervaller av samme statistiske kvalitet som SARIMA uten tilleggsmetodikk.
+
+Sammenligningen av disse alternativene danner grunnlaget for valget av SARIMA i metodekapittelet og for diskusjonen av metodens begrensninger i kapittel 9.6.
 
 ---
 
@@ -274,6 +290,8 @@ Valget av SARIMA som prognosemodell ble motivert av to analyser gjennomført på
 **Autokorrelasjonsanalyse (ACF):** For alle 32 serier ble ACF-koeffisienten ved lag 1 beregnet og funnet svært høy (0,77–0,99). Det bemerkes at deler av denne høye lag-1-korrelasjonen er et konstruert artefakt av den rullerende 7-dagers sumstrukturen, der seks av syv dager overlapper mellom påfølgende observasjoner. Denne overlappingen alene vil mekanisk generere høy autokorrelasjon ved korte lag, uavhengig av den underliggende etterspørselsstrukturen. Av særlig interesse er lag 7: signifikante ACF-koeffisienter (|r| > 0,20) ved forsinkelse 7 ble observert eksplisitt for Pommes frites, Pølse, Kebab og Salat på tvers av utsalgsstedene. For øvrige produkter (Pizza, Hamburger, Brus, Iskrem) var lag-7-verdiene lavere, men sesongkomponenten ble likevel valgt av auto_arima for samtlige – noe som reflekterer at søket var begrenset til *s* = 7 som fast sesongperiode. Resultatene er dermed betinget på dette valget, og sesongkomponentens statistiske styrke varierer mellom produktgrupper. Samlet sett støtter ACF-analysen valget av SARIMA med ukessyklus, og det er det syvende prognosestegets prediksjonsintervall som benyttes i sikkerhetslagerberegningen.
 
 Samlet sett gir ADF-testen grunnlag for differensiering og ACF-analysen grunnlag for sesongkomponenten. SARIMA(p, d, q)(P, D, Q, 7) ble valgt som modellklasse for alle 32 kombinasjoner av produkt og utsalgssted.
+
+**Begrunnelse for SARIMA fremfor alternativer:** Som gjennomgått i kapittel 2.4 finnes det tre relevante alternativer. Holt-Winters ble fravalgt fordi prosjektets sikkerhetslagerberegning er direkte avhengig av statistisk velfunderte prediksjonsintervaller; SARIMA leverer slike gjennom eksplisitt residualvariansestimering, mens Holt-Winters' konfidensintervaller hviler på enklere antakelser som gir dårligere kalibrering ved sesongmønstre av den typen som er observert her (Hyndman & Athanasopoulos, 2021). SARIMAX ble fravalgt fordi datagrunnlaget ikke inneholder registrerte eksternt forklaringsvariabler – spillet eksponerer ikke kampanje- eller værdata systematisk. Maskinlæringsmetoder ble fravalgt på grunn av utilstrekkelig datamengde: med 87–94 treningsobservasjoner er stabilt regularisert trening av gradientboosting- eller LSTM-modeller ikke realistisk.
 
 **Metodiske implikasjoner av rullerende sumstruktur for prediksjonsintervaller**
 
@@ -737,9 +755,9 @@ Disse forbeholdene til tross, er metodikken som er utviklet i rapporten fullt ov
 
 ### 9.6 Alternative metoder
 
-SARIMA er langt fra den eneste tilgjengelige metoden for etterspørselsprognoser i detaljhandelen. Eksponentiell utjevning med Holt-Winters sesongkomponent er en enklere og mer robust metode som er spesielt god på kortere serier og stabile sesongmønstre (Hyndman & Athanasopoulos, 2021). Sammenlignet med SARIMA krever Holt-Winters ingen stasjonæritetstransformasjoner og er ofte lettere å tolke for ikke-statistikere.
+De tre hovedalternativene til SARIMA – Holt-Winters, SARIMAX og maskinlæringsmetoder – er presentert og sammenlignet i kapittel 2.4. Resultatene i denne rapporten kaster ytterligere lys over når disse alternativene ville vært mer hensiktsmessige.
 
-For situasjoner med tilgang til ekstra forklaringsvariabler – slik som kampanjekalender, værdata eller trafikktelling – ville en SARIMAX-modell (SARIMA med eksternt forklaringsvariabel) være et naturlig neste skritt. Maskinlæringsmetoder som gradient boosting og rekurrente nevrale nettverk (LSTM) har vist lovende resultater for prognoser på store datasett med mange produkter, men krever betydelig mer data enn de 101 observasjonene som er tilgjengelig her for å gi reliable estimater. Med et datasett av denne størrelsen er SARIMA et velegnet valg som balanserer metodisk robusthet med tilgjengelig datavolum.
+Holt-Winters' egenskap om å vekte nylige observasjoner høyere fremstår som særlig relevant i lys av Murray Hill-problematikken: en modell som reagerer raskere på akselererende vekst ville potensielt gitt lavere MAPE for MH i V2-vinduet. For steder med stabil etterspørsel (HK, LM, GM for de fleste produkter) er imidlertid denne fordelen liten, mens SARIMA-prediksjonsintervallene gir en direkte kobling til sikkerhetslagerberegningen som Holt-Winters ikke tilbyr like direkte. SARIMAX fremstår som det mest naturlige neste steget dersom kampanje- eller hendelsesdata gjøres tilgjengelige – Arunraj et al. (2016) viser at utvidelsen er særlig virksom for volatile produktkategorier, og Pommes frites og Pølse ville vært åpenbare kandidater. ML-metoders datakrav er ikke innfridd med 101 observasjoner, men ville vært aktuelle ved overgang til reelle forretningsdata med flere år historikk.
 
 For å dokumentere at SARIMA tilfører verdi utover en triviell metode, er SARIMA-resultatene sammenlignet mot en naiv baseline der siste observerte rullerende 7-dagerssum fremskrives uendret for alle syv prognosetrinn. Sammenligningen er presentert i Tabell 9d (seksjon 7.1). SARIMA gir lavere MAPE enn den naive baselines for 24 av 32 kombinasjoner, og forbedringen er størst for produkter med tydelig sesongstruktur og trend – eksempelvis GM Salat (4,2 % mot 10,4 %) og LM Pommes frites (2,0 % mot 5,5 %). For de åtte kombinasjonene der naive er likeverdig eller marginalt bedre, er salgsserien i valideringsperioden relativt flat, slik at siste observasjon tilfeldigvis er et godt estimat. Dette bekrefter at SARIMA utnytter den historiske strukturen, men at metodefordelen er størst der etterspørselen har tydelig autokorrelasjon og sesongmønster.
 
@@ -761,9 +779,19 @@ Et viktig forbehold er knyttet til Murray Hill, der en oppadgående salgstendens
 
 ## 11 Bibliografi
 
+Arunraj, N. S., & Ahrens, D. (2015). A hybrid seasonal autoregressive integrated moving average and quantile regression for daily food sales forecasting. *International Journal of Production Economics*, *170*, 321–335. https://doi.org/10.1016/j.ijpe.2015.09.039
+
+Arunraj, N. S., Ahrens, D., & Fernandes, M. (2016). Application of SARIMAX model to forecast daily sales in food retail industry. *International Journal of Operations Research and Information Systems*, *7*(2), 1–21. https://doi.org/10.4018/IJORIS.2016040101
+
+Babai, M. Z., Ali, M. M., Boylan, J. E., & Syntetos, A. A. (2013). Forecasting and inventory performance in a two-stage supply chain with ARIMA(0,1,1) demand: Theory and empirical analysis. *International Journal of Production Economics*, *143*(2), 463–471. https://doi.org/10.1016/j.ijpe.2011.09.004
+
 Box, G. E. P., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M. (2015). *Time series analysis: Forecasting and control* (5. utg.). Wiley.
 
 Chopra, S., & Meindl, P. (2019). *Supply chain management: Strategy, planning, and operation* (7. utg.). Pearson.
+
+Fattah, J., Ezzine, L., Aman, Z., El Moussami, H., & Lachhab, A. (2018). Forecasting of demand using ARIMA model. *International Journal of Engineering Business Management*, *10*. https://doi.org/10.1177/1847979018808673
+
+Gilbert, K. (2005). An ARIMA supply chain model. *Management Science*, *51*(2), 305–310. https://doi.org/10.1287/mnsc.1040.0308
 
 Hovgaard, M., & Hovgaard, S. (2022). *Big Ambitions* [PC-spill]. Hovgaard Games.
 
