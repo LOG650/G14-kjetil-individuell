@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(python make_figures.py)",
-      "Bash(python regen_report_plots.py)"
+      "Bash(python regen_report_plots.py)",
+      "Bash(cp \"c:/Users/kjtro/Studie/LOG650 V26/G14-kjetil-individuell/005 report/Rapport prosjekt LOG650 v2.md\" \"c:/Users/kjtro/Studie/LOG650 V26/G14-kjetil-individuell/005 report/Rapport prosjekt LOG650 v3.md\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\kjtro\\Studie\\LOG650 V26\\G14-kjetil-individuell\\005 report"
     ]
   }
 }
