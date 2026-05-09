@@ -21,6 +21,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib.ticker as mticker
 import numpy as np
+from scipy.stats import norm, shapiro
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 
 warnings.filterwarnings("ignore")
@@ -198,6 +199,63 @@ out_res = os.path.join(PLOTS_DIR, "fig_residuals.png")
 plt.savefig(out_res, dpi=180)
 plt.close()
 print(f"  Lagret: {out_res}")
+
+
+# ---------------------------------------------------------------------------
+# Figur 7 – Residualhistogram: GM Brus (stabil) vs. MH Pommes frites (volatil)
+# ---------------------------------------------------------------------------
+print("Genererer Figur 7: Residualhistogram ...")
+
+# GM Brus: gjenbruk model_s fra Figur 5
+resid_gm_soda = model_s.resid()
+std_gm_soda = (resid_gm_soda - resid_gm_soda.mean()) / resid_gm_soda.std()
+_, sw_p_gm = shapiro(std_gm_soda)
+
+# MH Pommes frites: tilpass ny modell
+mh_data = load_store("MH")
+mh_french = np.array(mh_data["French"], dtype=float)
+train_mh_f = mh_french[:-7]
+model_mh_f = auto_arima(
+    train_mh_f,
+    start_p=0, max_p=3, start_q=0, max_q=3, d=None,
+    seasonal=True, m=7,
+    start_P=0, max_P=2, start_Q=0, max_Q=2, D=None,
+    information_criterion="aic", stepwise=True,
+    suppress_warnings=True, error_action="ignore", trace=False,
+)
+resid_mh_french = model_mh_f.resid()
+std_mh_french = (resid_mh_french - resid_mh_french.mean()) / resid_mh_french.std()
+_, sw_p_mh = shapiro(std_mh_french)
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 5))
+
+for ax, std_r, label, sw_p in [
+    (ax1, std_gm_soda,   "Brus – Garment District",    sw_p_gm),
+    (ax2, std_mh_french, "Pommes frites – Murray Hill", sw_p_mh),
+]:
+    x_range = np.linspace(std_r.min() - 0.5, std_r.max() + 0.5, 200)
+    ax.hist(std_r, bins=15, density=True, color="#4C72B0", alpha=0.65,
+            edgecolor="white", label="Standardiserte residualer")
+    ax.plot(x_range, norm.pdf(x_range), color="#C44E52", lw=2.0, label="N(0, 1)")
+    ax.set_title(label, fontsize=13, fontweight="bold")
+    ax.set_xlabel("Standardiserte residualer", fontsize=12)
+    ax.set_ylabel("Tetthet", fontsize=12)
+    ax.annotate(f"Shapiro-Wilk  p = {sw_p:.3f}", xy=(0.97, 0.95),
+                xycoords="axes fraction", ha="right", va="top", fontsize=11,
+                color="#333333",
+                bbox=dict(boxstyle="round,pad=0.3", fc="white", alpha=0.85, ec="#cccccc"))
+    ax.legend(fontsize=11)
+    ax.grid(True, alpha=0.25)
+    ax.tick_params(labelsize=11)
+
+fig.suptitle("Residualfordeling – normalitetssjekk for to kontrasterende kombinasjoner",
+             fontsize=14, fontweight="bold")
+plt.tight_layout()
+out_hist = os.path.join(PLOTS_DIR, "fig_residual_hist.png")
+plt.savefig(out_hist, dpi=180)
+plt.close()
+print(f"  Lagret: {out_hist}")
+print(f"  Shapiro-Wilk: GM Brus p={sw_p_gm:.4f}  |  MH Pommes frites p={sw_p_mh:.4f}")
 
 
 # ---------------------------------------------------------------------------
