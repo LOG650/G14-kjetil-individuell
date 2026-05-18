@@ -80,48 +80,6 @@ Results show that SARIMA models predict demand with high accuracy for most produ
 11. [Bibliografi](#11-bibliografi)
 12. [Vedlegg](#12-vedlegg)
 
-[Figurliste](#figurliste) | [Tabelliste](#tabelliste)
-
----
-
-## Figurliste
-
-| Figur | Beskrivelse | Kapittel |
-|-------|-------------|----------|
-| Figur 1 | ACF og PACF for pommes frites ved Hell's Kitchen – motiverer valg av sesongperiode *s* = 7 | 5.1 |
-| Figur 2 | pommes frites – rullerende 7-dagers salg per utsalgssted med begge valideringsvinduer | 7.3 |
-| Figur 3 | SARIMA-prognose for pommes frites ved Hell's Kitchen (V2-MAPE = 1,5 %) | 7.3 |
-| Figur 4 | SARIMA-prognose for pommes frites ved Murray Hill (V2-MAPE = 21,6 %) | 7.4 |
-| Figur 5 | Residualdiagnostikk for brus ved Garment District – standardiserte residualer og ACF | 7.5 |
-| Figur 6 | Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad | 8.5 |
-| Figur 7 | Residualfordeling for brus (GM) og pommes frites (MH) med normalfordeling N(0, 1) og Shapiro-Wilk-test | 9.4 |
-
----
-
-## Tabelliste
-
-| Tabell | Beskrivelse | Kapittel |
-|--------|-------------|----------|
-| Tabell 1 | Oversikt over BiteBursts utsalgssteder | 4 |
-| Tabell 2 | Ukentlig prognose per utsalgssted – alle produkter summert | 4 |
-| Tabell 3 | Identifiserte og korrigerte registreringsfeil | 5.2 |
-| Tabell 4 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – GM | 5.2 |
-| Tabell 5 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – HK | 5.2 |
-| Tabell 6 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – LM | 5.2 |
-| Tabell 7 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – MH | 5.2 |
-| Tabell 8 | Oversikt over tilpassede SARIMA-modeller med modellorden og AIC | 6.3 |
-| Tabell 9a | SARIMA MAPE (%) – Valideringsvindu V1 (dag 88–94) | 7.1 |
-| Tabell 9b | SARIMA MAPE (%) – Valideringsvindu V2 (dag 95–101) | 7.1 |
-| Tabell 9c | SARIMA MAPE (%) – Gjennomsnitt V1 og V2 | 7.1 |
-| Tabell 9d | Naiv referanseprognose MAPE (%) – V2-vinduet | 7.1 |
-| Tabell 9e | Ljung-Box p-verdi (lag 7) per produkt og utsalgssted | 7.5 |
-| Tabell 10 | Anbefalte lagernivåer for Garment District ved 95 % servicegrad | 8.1 |
-| Tabell 11 | Anbefalte lagernivåer for Hell's Kitchen ved 95 % servicegrad | 8.2 |
-| Tabell 12 | Anbefalte lagernivåer for Lower Manhattan ved 95 % servicegrad | 8.3 |
-| Tabell 13 | Anbefalte lagernivåer for Murray Hill ved 95 % servicegrad | 8.4 |
-
----
-
 ## 1 Innledning
 
 Effektiv lagerstyring er en av de mest kritiske faktorene for lønnsomheten i detaljhandel og serveringsbransjen. En stockout, eller mangelsituasjon, innebærer at et produkt ikke er tilgjengelig når kundene etterspør det, noe som resulterer i tapte inntekter, redusert kundetilfredshet og i verste fall varig tap av kunder. På den andre siden medfører overlagring unødvendig kapitalbinding, økte lagerkostnader og risiko for at ferskvarer ikke kan benyttes. Den grunnleggende utfordringen for enhver varehandler er å balansere disse to motsigende hensynene ved å opprettholde et lagernivå som er høyt nok til å dekke etterspørselen, men lavt nok til at kapitalen utnyttes effektivt (Silver et al., 2017).
@@ -275,8 +233,6 @@ BiteBurst er en fiktiv hurtigmatkjede som driftes av én eier i dataspillet Big 
 
 BiteBurst opererer fire hurtigmatutsalgssteder lokalisert i ulike bydeler i New York slik de fremstår i spillet. Tabell 1 gir en oversikt over stedene med forkortelse, bydel og trafikkscore.
 
-**Tabell 1: Oversikt over BiteBursts utsalgssteder**
-
 | Forkortelse | Bydel           | Trafikkscore | Maks. kapasitet |
 |-------------|-----------------|-------------|-----------------|
 | GM          | Garment District | 46          | 30 kunder/time  |
@@ -284,11 +240,11 @@ BiteBurst opererer fire hurtigmatutsalgssteder lokalisert i ulike bydeler i New 
 | LM          | Lower Manhattan  | 40          | 30 kunder/time  |
 | MH          | Murray Hill      | 38          | 30 kunder/time  |
 
+*Tabell 1: Oversikt over BiteBursts utsalgssteder*
+
 Trafikkscore i Big Ambitions er et mål på potensiell kundestrøm til en eiendom basert på bydelens fottrafikk. Alle fire utsalgsstedene har identisk lokal kapasitet på maksimalt 30 kunder i timen, like store lokaler og identiske åpningstider. Utsalgsstedene er konfigurert uten bruk av spillfunksjoner som reklame eller kampanjer for å minimere eksterne påvirkningsfaktorer på salget.
 
 Til tross for relativt sammenlignbare trafikkscore-verdier selger Lower Manhattan (LM) vesentlig mer enn de tre øvrige stedene, noe Tabell 2 illustrerer. Tallene i tabellen er hentet fra SARIMA-prognosene presentert i kapittel 8 og er inkludert her for å gi kontekst til de utsalgsstedsrelaterte forskjellene.
-
-**Tabell 2: Ukentlig prognose per utsalgssted (alle produkter summert)**
 
 | Utsalgssted | Prognose per uke (enheter) | Relativt til GM |
 |-------------|---------------------------|-----------------|
@@ -296,6 +252,8 @@ Til tross for relativt sammenlignbare trafikkscore-verdier selger Lower Manhatta
 | HK          | 11 402                    | 109 %           |
 | LM          | 13 158                    | 126 %           |
 | MH          | 10 832                    | 103 %           |
+
+*Tabell 2: Ukentlig prognose per utsalgssted (alle produkter summert)*
 
 Forklaringen ligger ikke i trafikkscoren alene, men i at Big Ambitions også opererer med en bydelsspesifikk *etterspørsel* som varierer mellom områder i spillet. Lower Manhattan er et høyaktivitetsområde i spillet med høyere innebygd etterspørsel etter hurtigmatprodukter enn de øvrige bydelene, noe som driver det høyere salgsvolumet. Dette skillet mellom trafikkscore og bydeletterspørsel er en viktig egenskap ved spillets simulering. For modelleringen innebærer det at individuelle SARIMA-modeller per utsalgssted er nødvendige, fremfor én felles modell for alle.
 
@@ -392,8 +350,6 @@ Ved innledende dataanalyse ble det identifisert et antall verdier som avvek mark
 
 Følgende registreringsfeil ble identifisert og korrigert av datainnhenter:
 
-**Tabell 3: Identifiserte og korrigerte registreringsfeil**
-
 | Fil | Produkt | Opprinnelig verdi | Vurdering               |
 |-----|---------|-------------------|-------------------------|
 | LM  | pommes frites  | 23 330            | Trolig tastefeil        |
@@ -404,6 +360,8 @@ Følgende registreringsfeil ble identifisert og korrigert av datainnhenter:
 | MH  | kebab  | 198               | Manglende siffer        |
 | GM  | pommes frites  | 356               | Manglende siffer        |
 
+*Tabell 3: Identifiserte og korrigerte registreringsfeil*
+
 Sentrallagerdata hadde noe høyere leveransevolum de første tre dagene (dag 1–3) for pizza, brus og iskrem. Dette ble bekreftet som korrekte verdier som skyldes innledende opplasting av lagerkapasitet ved simuleringens oppstart, og ble ikke korrigert. Tilsvarende ble to forhøyede enkeltdagsverdier for salat og kebab på dag 7 bekreftet korrekte etter manuell gjennomgang av originalregistreringen.
 
 Etter datarensing er alle fem CSV-filer komplette med 101 sammenhengende observasjoner og uten gjenværende isolerte utliggere.
@@ -411,8 +369,6 @@ Etter datarensing er alle fem CSV-filer komplette med 101 sammenhengende observa
 #### Deskriptiv statistikk
 
 Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per utsalgssted. Verdiene er basert på de registrerte rullerende 7-dagerssummene («sold last 7 days»), ikke enkeltdagssalg. Tabellene 4–7 presenterer nøkkeltall per utsalgssted.
-
-**Tabell 4: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – GM (etter datarensing)**
 
 | Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
 |---------------|-------------|-----------|---------|----------|
@@ -425,7 +381,7 @@ Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per
 | iskrem        | 576         | 20        | 516     | 620      |
 | kebab         | 1 941       | 64        | 1 677   | 2 049    |
 
-**Tabell 5: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – HK (etter datarensing)**
+*Tabell 4: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – GM (etter datarensing)*
 
 | Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
 |---------------|-------------|-----------|---------|----------|
@@ -438,7 +394,7 @@ Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per
 | iskrem        | 545         | 22        | 483     | 586      |
 | kebab         | 1 641       | 198       | 1 321   | 1 856    |
 
-**Tabell 6: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – LM (etter datarensing)**
+*Tabell 5: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – HK (etter datarensing)*
 
 | Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
 |---------------|-------------|-----------|---------|----------|
@@ -451,7 +407,7 @@ Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per
 | iskrem        | 627         | 86        | 517     | 766      |
 | kebab         | 2 323       | 140       | 2 061   | 2 697    |
 
-**Tabell 7: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – MH (etter datarensing)**
+*Tabell 6: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – LM (etter datarensing)*
 
 | Produkt       | Gjennomsnitt | Std.avvik | Minimum | Maksimum |
 |---------------|-------------|-----------|---------|----------|
@@ -464,9 +420,27 @@ Etter datarensing ble det beregnet beskrivende statistikk for alle produkter per
 | iskrem        | 546         | 17        | 515     | 587      |
 | kebab         | 2 048       | 219       | 1 710   | 2 389    |
 
+*Tabell 7: Deskriptiv statistikk for rullerende 7-dagers salgsvolum – MH (etter datarensing)*
+
 Det fremgår at det er stor variasjon i standardavvik mellom produktene, og at mønsteret er konsistent på tvers av utsalgsstedene. pommes frites og pølse har gjennomgående vesentlig høyere variasjon enn eksempelvis iskrem og brus. kebab viser moderat til lav variasjon etter at registreringsfeilene ble korrigert. LM skiller seg ut med høyere absolutte salgstall for de fleste produkter, men har ikke nødvendigvis høyere relativ variasjon.
 
 Høy standardavvik innebærer større usikkerhet i etterspørselsprognosene og dermed et høyere nødvendig sikkerhetslager. Dette vil være en gjennomgående observasjon i resultatkapittelet: produkter med høy variasjon krever en forholdsmessig større buffer utover selve prognosen for å oppnå ønsket servicegrad.
+
+### 5.3 Bruk av kunstig intelligens i prosjektet
+
+Kunstig intelligens, i form av språkmodellen Claude (Anthropic, 2025), har hatt en sentral rolle i gjennomføringen av dette prosjektet og beskrives her i tråd med anbefalingene om faglig transparens i LOG650.
+
+**Verktøy og omfang:** Claude ble benyttet som primærverktøy gjennom hele prosjektprosessen. Rapporten er skrevet gjennom en iterativ dialog der studenten har gitt faglig retning, input og tilbakemeldinger, og Claude har formulert og strukturert teksten basert på dette. Python-koden for SARIMA-modellering (vedlegg C) ble utviklet av Claude på bakgrunn av studentens metodiske valg og datakontekst.
+
+**Formål:** KI-bruken dekket tre hovedfunksjoner: (1) rapportskriving og faglig formidling, (2) utvikling av analysekode for databehandling, modellering og visualisering, og (3) støtte til metodiske vurderinger som valg av modellklasse, valideringsopplegg og sikkerhetslagerberegning.
+
+**Data og gjennomføring:** Alle salgsdata ble samlet inn manuelt av studenten og utgjør prosjektets primære datagrunnlag. Dataene ble vasket og korrigert for registreringsfeil av studenten (jf. kapittel 5.2) og deretter overlevert til Claude i CSV-format som grunnlag for analyse og kodeskriving. Metodiske valg – herunder valg av SARIMA, sesongperiode *s* = 7, AIC som informasjonskriterium og 95 % servicegrad – ble fattet av studenten, og Claude implementerte og begrunnet disse i tekst og kode.
+
+**Kvalitetsvurdering:** All tekst og alle resultater er gjennomgått og godkjent av studenten. Prognosekvaliteten er evaluert kvantitativt via MAPE på to uavhengige valideringsvinduer og sammenlignet mot en naiv referanseprognose, slik det er beskrevet i kapittel 5.1 og 7.1. Residualdiagnostikk er gjennomført for alle 32 modeller.
+
+**Begrensninger:** Siden rapporten i stor grad er formulert av en språkmodell, er det en risiko for at nyanser i faglig skjønn eller tolkning gjenspeiler modellens treningsdata snarere enn studentens selvstendige analyse. Studenten har søkt å motvirke dette gjennom aktiv involvering i alle metodiske beslutninger og løpende gjennomlesning av innhold.
+
+KI-bruken er dokumentert i dette avsnittet og i vedlegg C slik at arbeidet kan etterprøves faglig.
 
 ---
 
@@ -489,8 +463,6 @@ For å unngå manuell identifisering av SARIMA-ordre for alle 32 produkt-utsalgs
 ### 6.3 Tilpassede modeller – oversikt
 
 Tabell 8 gir en komplett oversikt over de 32 tilpassede SARIMA-modellene med modellordre og AIC-verdi. Alle modeller fikk en sesongkomponent (*P* > 0 eller *Q* > 0 med *s* = 7), noe som bekrefter at ukessyklusen er statistisk vesentlig på tvers av alle produkt-utsalgsstedskombinasjoner.
-
-**Tabell 8: Oversikt over tilpassede SARIMA-modeller**
 
 | Utsalgssted | Produkt   | ARIMA-orden | Sesong-orden    | AIC    |
 |-------------|-----------|-------------|-----------------|--------|
@@ -527,6 +499,8 @@ Tabell 8 gir en komplett oversikt over de 32 tilpassede SARIMA-modellene med mod
 | MH          | iskrem        | (1,0,0)     | (2,0,1,7)       | 657,24 |
 | MH          | kebab         | (1,1,0)     | (0,0,1,7)       | 906,58 |
 
+*Tabell 8: Oversikt over tilpassede SARIMA-modeller med modellorden og AIC*
+
 Modellordene varierer mellom produkt og utsalgssted, noe som reflekterer at de individuelle salgsseriene har ulik korrelasjonstruktur. SARIMA(0,1,0)(0,0,1,7) er en sesongmessig random walk med MA-ledd og er valgt for produkter med lite systematisk autokorrelasjon utover sesongmønsteret. Modeller med høyere *p*- og *q*-verdier er valgt der dataene viser sterkere avhengighetsstruktur.
 
 ### 6.4 Beregning av sikkerhetslager og anbefalt ordre
@@ -543,8 +517,6 @@ Anbefalt bestillingsmengde for én uke settes lik den øvre 95 %-prediksjonsgren
 
 Tabellene 9a–9c sammenfatter MAPE-verdiene fra den rullerende prognosevalideringen med to vinduer for alle 32 modeller. V1 = dag 88–94 (modell tilpasset dag 1–87), V2 = dag 95–101 (modell tilpasset dag 1–94). Gjennomsnittlig MAPE over begge vinduene gir et mer robust mål på modellytelsen enn ett enkelt valideringspunkt.
 
-**Tabell 9a: SARIMA MAPE (%) – Valideringsvindu V1 (dag 88–94)**
-
 | Produkt       | GM   | HK   | LM   | MH   |
 |---------------|------|------|------|------|
 | pizza         | 3,3  | 1,8  | 3,4  | 0,8  |
@@ -556,7 +528,7 @@ Tabellene 9a–9c sammenfatter MAPE-verdiene fra den rullerende prognosevalideri
 | iskrem        | 1,0  | 2,7  | 2,5  | 1,4  |
 | kebab         | 3,1  | 2,8  | 6,4  | 5,9  |
 
-**Tabell 9b: SARIMA MAPE (%) – Valideringsvindu V2 (dag 95–101)**
+*Tabell 9a: SARIMA MAPE (%) – Valideringsvindu V1 (dag 88–94)*
 
 | Produkt       | GM   | HK   | LM  | MH   |
 |---------------|------|------|-----|------|
@@ -569,7 +541,7 @@ Tabellene 9a–9c sammenfatter MAPE-verdiene fra den rullerende prognosevalideri
 | iskrem        | 2,6  | 5,0  | 4,3 | 1,8  |
 | kebab         | 1,1  | 3,1  | 5,1 | 2,2  |
 
-**Tabell 9c: SARIMA MAPE (%) – Gjennomsnitt V1 og V2**
+*Tabell 9b: SARIMA MAPE (%) – Valideringsvindu V2 (dag 95–101)*
 
 | Produkt       | GM   | HK   | LM  | MH   |
 |---------------|------|------|-----|------|
@@ -582,9 +554,9 @@ Tabellene 9a–9c sammenfatter MAPE-verdiene fra den rullerende prognosevalideri
 | iskrem        | 1,8  | 3,9  | 3,4 | 1,6  |
 | kebab         | 2,1  | 2,9  | 5,8 | 4,1  |
 
-For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modellenes MAPE sammenlignet mot en naiv prognose der den siste observerte rullerende 7-dagerssummen brukes uendret som prognose for alle syv fremtidige steg. Tabell 9d viser de tilsvarende MAPE-verdiene for den naive referanseprognosen (V2-vinduet), og Tabell 9e i seksjon 7.5 rapporterer Ljung-Box residualdiagnostikk.
+*Tabell 9c: SARIMA MAPE (%) – Gjennomsnitt V1 og V2*
 
-**Tabell 9d: Naiv referanseprognose MAPE (%) – siste observasjon fremskrevet per produkt og utsalgssted (V2)**
+For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modellenes MAPE sammenlignet mot en naiv prognose der den siste observerte rullerende 7-dagerssummen brukes uendret som prognose for alle syv fremtidige steg. Tabell 9d viser de tilsvarende MAPE-verdiene for den naive referanseprognosen (V2-vinduet), og Tabell 9e i seksjon 7.5 rapporterer Ljung-Box residualdiagnostikk.
 
 | Produkt       | GM   | HK   | LM  | MH   |
 |---------------|------|------|-----|------|
@@ -596,6 +568,8 @@ For å dokumentere verdien SARIMA tilfører utover en triviell metode, er modell
 | brus          | 2,4  | 2,8  | 4,1 | 2,9  |
 | iskrem        | 2,0  | 3,0  | 4,0 | 2,3  |
 | kebab         | 1,9  | 1,2  | 1,9 | 2,2  |
+
+*Tabell 9d: Naiv referanseprognose MAPE (%) – siste observasjon fremskrevet per produkt og utsalgssted (V2)*
 
 Sammenligningen viser at SARIMA gjennomgående gir lavere MAPE enn den naive referanseprognosen: for 24 av 32 kombinasjoner i V2-vinduet er SARIMA-MAPE lavere. De tydeligste forbedringene finnes for produkter med strukturert sesongmønster, som GM salat (SARIMA 4,2 % mot naiv 10,4 %) og LM pommes frites (SARIMA 2,0 % mot naiv 5,5 %). I åtte tilfeller er den naive referanseprognosen marginalt bedre eller likeverdig, og disse sammenfaller stort sett med produkter der etterspørselen var relativt flat i valideringsperioden, slik at siste observasjon tilfeldigvis var et godt estimat.
 
@@ -652,8 +626,6 @@ Til tross for denne svakheten er sikkerhetslageranbefalingene for MH robuste i d
 
 For å verifisere at SARIMA-modellene har fanget opp all systematisk struktur i dataene, ble Ljung-Box-testen for gjenværende autokorrelasjon gjennomført på residualene fra hver av de 32 modellene. Testen tester nullhypotesen om at residualene er uavhengige (hvit støy) mot alternativet om at det er gjenværende autokorrelasjon. En p-verdi over 0,05 innebærer at nullhypotesen ikke forkastes, noe som er ønsket.
 
-**Tabell 9e: Ljung-Box p-verdi (lag 7) per produkt og utsalgssted**
-
 | Produkt       | GM     | HK       | LM     | MH     |
 |---------------|--------|----------|--------|--------|
 | pizza         | 1,0000 | 0,3715   | 1,0000 | 1,0000 |
@@ -666,6 +638,8 @@ For å verifisere at SARIMA-modellene har fanget opp all systematisk struktur i 
 | kebab         | 0,8786 | 0,9999   | 1,0000 | 1,0000 |
 
 *\* p < 0,05: mulig gjenværende autokorrelasjon i residualene.*
+
+*Tabell 9e: Ljung-Box p-verdi (lag 7) per produkt og utsalgssted*
 
 For 31 av 32 modeller er Ljung-Box p-verdien ved lag 7 godt over 0,05, noe som betyr at nullhypotesen om ingen gjenværende autokorrelasjon ikke forkastes. Residualene fremstår dermed som hvit støy for nesten alle modellene, og modellspesifikasjonene er tilfredsstillende. Unntaket er HK iskrem (p = 0,0148), der testen indikerer at noe struktur er igjen i residualene. For dette produktet bør prediksjonsintervallet tolkes med noe forsiktighet.
 
@@ -683,8 +657,6 @@ Kapitlet presenterer det sentrale resultatet av analysen: anbefalt ukentlig best
 
 ### 8.1 Garment District (GM)
 
-**Tabell 10: Anbefalte lagernivåer for GM – uke (enheter, 95 % servicegrad)**
-
 | Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |---------------|------------|-----------------|----------------|
 | pizza         | 1 219      | 55              | 1 273          |
@@ -697,11 +669,11 @@ Kapitlet presenterer det sentrale resultatet av analysen: anbefalt ukentlig best
 | kebab         | 1 938      | 136             | 2 073          |
 | **Totalt**    | **10 469** | **1 081**       | **11 548**     |
 
+*Tabell 10: Anbefalte lagernivåer for GM – uke (enheter, 95 % servicegrad)*
+
 GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgsvolum. hamburger og kebab dominerer sortimentet volumsmessig. Sikkerhetslageret er relativt lite for stabile produkter som iskrem (29 enheter, 5 % av prognosen) og forholdsmessig stort for pommes frites (312 enheter, 23 % av prognosen) og pølse (264 enheter, 27 %) som følge av høy salgsvariasjon. For GM pølse, som har MAPE = 19,9 % i valideringssettet, bør anbefalt ordre betraktes med forsiktighet; et erfaringspåslag på 15–20 % gir en justert anbefaling på omtrent 1 450–1 510 enheter (mot beregnede 1 259 enheter).
 
 ### 8.2 Hell's Kitchen (HK)
-
-**Tabell 11: Anbefalte lagernivåer for HK – uke (enheter, 95 % servicegrad)**
 
 | Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |---------------|------------|-----------------|----------------|
@@ -715,11 +687,11 @@ GM er utsalgsstedet med høyest trafikkscore (46), men ikke høyest samlet salgs
 | kebab         | 1 835      | 334             | 2 169          |
 | **Totalt**    | **11 402** | **1 267**       | **12 669**     |
 
+*Tabell 11: Anbefalte lagernivåer for HK – uke (enheter, 95 % servicegrad)*
+
 HK skiller seg ut ved at pommes frites er det klart mest solgte produktet med 2 250 enheter i 7-dagersprognosen – merkbart høyere enn de øvrige produktene og vesentlig høyere enn tilsvarende verdi for GM (1 381). Sikkerhetslageret for pommes frites (371) og kebab (334) er de to høyeste enkeltpostene. Til tross for dette gir SARIMA-modellen for HK pommes frites en svært lav MAPE på 1,5 %, noe som indikerer at det høye sikkerhetslagerbehovet skyldes iboende etterspørselsusikkerhet over 7-dagershorisonten, ikke modellusikkerhet.
 
 ### 8.3 Lower Manhattan (LM)
-
-**Tabell 12: Anbefalte lagernivåer for LM – uke (enheter, 95 % servicegrad)**
 
 | Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |---------------|------------|-----------------|----------------|
@@ -733,11 +705,11 @@ HK skiller seg ut ved at pommes frites er det klart mest solgte produktet med 2 
 | kebab         | 2 496      | 255             | 2 751          |
 | **Totalt**    | **13 158** | **1 565**       | **14 724**     |
 
+*Tabell 12: Anbefalte lagernivåer for LM – uke (enheter, 95 % servicegrad)*
+
 Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en 7-dagersanbefaling på 14 724 enheter, om lag 27 % mer enn GM. Som beskrevet i casebeskrivelsen skyldes dette bydelens høyere innebygde etterspørsel i spillsimulasjonen, ikke trafikkscoren alene. pommes frites har det høyeste sikkerhetslageret absolutt (457 enheter, 28 % av prognosen), mens hamburger er det volumsmessig største enkeltproduktet med 2 651 enheter i prognosen.
 
 ### 8.4 Murray Hill (MH)
-
-**Tabell 13: Anbefalte lagernivåer for MH – uke (enheter, 95 % servicegrad)**
 
 | Produkt       | Prognose 7d | Sikkerhetslager | Anbefalt ordre |
 |---------------|------------|-----------------|----------------|
@@ -750,6 +722,8 @@ Lower Manhattan er klart det utsalgsstedet med høyest totalt salgsvolum, med en
 | iskrem        | 550        | 29              | 579            |
 | kebab         | 1 877      | 346             | 2 222          |
 | **Totalt**    | **10 832** | **1 542**       | **12 373**     |
+
+*Tabell 13: Anbefalte lagernivåer for MH – uke (enheter, 95 % servicegrad)*
 
 MH har det høyeste sikkerhetslageret relativt til prognosen av alle utsalgsstedene (14,2 % av total prognosesum), noe som gjenspeiler den høyere etterspørselsusikkerheten for dette stedet i observasjonsperioden. pommes frites alene har et sikkerhetslager på 531 enheter – det høyeste av alle 32 modeller. Som vist i analysekapittelet hadde MH en oppadgående salgstendens i slutten av observasjonsperioden, og de faktiske siste rullerende 7-dagerssummene overskrider prognosen for flere produkter. Anbefalingene i Tabell 13 bør tolkes med dette forbeholdet. For produkter med MAPE > 15 % – spesielt pommes frites (MAPE = 21,6 %) – anbefales et erfaringspåslag på 15–20 % på anbefalt bestillingsmengde. For MH pommes frites tilsvarer dette en justert anbefalt ordre på omtrent 2 350–2 450 enheter (mot de beregnet 2 042 enhetene i Tabell 13), og bør revurderes etter at en lengre og mer stabil observasjonsperiode er tilgjengelig.
 
@@ -839,6 +813,8 @@ Et viktig forbehold er knyttet til Murray Hill, der en oppadgående salgstendens
 
 ## 11 Bibliografi
 
+Anthropic. (2025). *Claude* (claude-sonnet) [stort språkmodell]. https://claude.ai
+
 Arunraj, N. S., & Ahrens, D. (2015). A hybrid seasonal autoregressive integrated moving average and quantile regression for daily food sales forecasting. *International Journal of Production Economics*, *170*, 321–335. https://doi.org/10.1016/j.ijpe.2015.09.039
 
 Arunraj, N. S., Ahrens, D., & Fernandes, M. (2016). Application of SARIMAX model to forecast daily sales in food retail industry. *International Journal of Operations Research and Information Systems*, *7*(2), 1–21. https://doi.org/10.4018/IJORIS.2016040101
@@ -861,6 +837,44 @@ Silver, E. A., Pyke, D. F., & Thomas, D. J. (2017). *Inventory and production ma
 
 ---
 
+## Figurliste
+
+| Figur | Beskrivelse | Kapittel |
+|-------|-------------|----------|
+| Figur 1 | ACF og PACF for pommes frites ved Hell's Kitchen – motiverer valg av sesongperiode *s* = 7 | 5.1 |
+| Figur 2 | pommes frites – rullerende 7-dagers salg per utsalgssted med begge valideringsvinduer | 7.3 |
+| Figur 3 | SARIMA-prognose for pommes frites ved Hell's Kitchen (V2-MAPE = 1,5 %) | 7.3 |
+| Figur 4 | SARIMA-prognose for pommes frites ved Murray Hill (V2-MAPE = 21,6 %) | 7.4 |
+| Figur 5 | Residualdiagnostikk for brus ved Garment District – standardiserte residualer og ACF | 7.5 |
+| Figur 6 | Anbefalt ukentlig bestillingsmengde per produkt per utsalgssted ved 95 % servicegrad | 8.5 |
+| Figur 7 | Residualfordeling for brus (GM) og pommes frites (MH) med normalfordeling N(0, 1) og Shapiro-Wilk-test | 9.4 |
+
+---
+
+## Tabelliste
+
+| Tabell | Beskrivelse | Kapittel |
+|--------|-------------|----------|
+| Tabell 1 | Oversikt over BiteBursts utsalgssteder | 4 |
+| Tabell 2 | Ukentlig prognose per utsalgssted – alle produkter summert | 4 |
+| Tabell 3 | Identifiserte og korrigerte registreringsfeil | 5.2 |
+| Tabell 4 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – GM | 5.2 |
+| Tabell 5 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – HK | 5.2 |
+| Tabell 6 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – LM | 5.2 |
+| Tabell 7 | Deskriptiv statistikk for rullerende 7-dagers salgsvolum – MH | 5.2 |
+| Tabell 8 | Oversikt over tilpassede SARIMA-modeller med modellorden og AIC | 6.3 |
+| Tabell 9a | SARIMA MAPE (%) – Valideringsvindu V1 (dag 88–94) | 7.1 |
+| Tabell 9b | SARIMA MAPE (%) – Valideringsvindu V2 (dag 95–101) | 7.1 |
+| Tabell 9c | SARIMA MAPE (%) – Gjennomsnitt V1 og V2 | 7.1 |
+| Tabell 9d | Naiv referanseprognose MAPE (%) – V2-vinduet | 7.1 |
+| Tabell 9e | Ljung-Box p-verdi (lag 7) per produkt og utsalgssted | 7.5 |
+| Tabell 10 | Anbefalte lagernivåer for Garment District ved 95 % servicegrad | 8.1 |
+| Tabell 11 | Anbefalte lagernivåer for Hell's Kitchen ved 95 % servicegrad | 8.2 |
+| Tabell 12 | Anbefalte lagernivåer for Lower Manhattan ved 95 % servicegrad | 8.3 |
+| Tabell 13 | Anbefalte lagernivåer for Murray Hill ved 95 % servicegrad | 8.4 |
+
+---
+
 ## 12 Vedlegg
 
 ### Vedlegg A – Deskriptiv statistikk alle utsalgssteder
@@ -873,4 +887,4 @@ Fullstendige modellresultater (modellorden, AIC, MAPE, prognose, sikkerhetslager
 
 ### Vedlegg C – Python-kode
 
-Kildekoden for SARIMA-modelleringen er tilgjengelig i `005 report/sarima_model.py`.
+Kildekoden for SARIMA-modelleringen er tilgjengelig i `005 report/sarima_model.py`. Koden ble utviklet med assistanse fra Claude (Anthropic, 2025).
